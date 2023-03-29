@@ -1,20 +1,829 @@
-<h1>Hello World</h1>
-<!DOCTYPE html>
-<html>
-<body>
-
-<h2>HTML Forms</h2>
-
-<form action="/action_page.php">
-  <label for="fname">First name:</label><br>
-  <input type="text" id="fname" name="fname" value="John"><br>
-  <label for="lname">Last name:</label><br>
-  <input type="text" id="lname" name="lname" value="Doe"><br><br>
-  <input type="submit" value="Submit">
-</form> 
-
-<p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
-
-</body>
-</html>
+# Beispiel Formular
+<div>
+      <div>
+         <div>
+            <div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: order">Patient</span><span style="color: red" title="Mandatory">*</span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order</li>
+                     <li style="font-size: 10px">Definition: <a href="StructureDefinition-ch-orf-document.html#Bundle">Bundle</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Anrede</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Name</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Vorname</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Geburtsdatum</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" type="date"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Geschlecht</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Adresse</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">PLZ, Ort</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Land</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">AHV-Nummer</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Nationalität</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Mobiltelefon-Nummer</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Festnetz-Nummer</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                 <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">E-Mail-Adresse</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Aktueller Beruf</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Name Arbeitgeber</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Adresse Arbeitgeber</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Name Berufsunfallversicherung bei Arbeitgeber</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Name und Adresse Kranken-kasse</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Versicherten-KARTEN-Nummer</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: order">Notfallkontakt</span><span style="color: red" title="Mandatory">*</span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order</li>
+                     <li style="font-size: 10px">Definition: <a href="StructureDefinition-ch-orf-document.html#Bundle">Bundle</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.title">Beziehung (z.B. Vater, Tochter, Ehefrau, Arzt, Sozialarbeiter, etc.)</span> <input size="60" name="order.notificationContactDocument.practitioner.title" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.title</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.prefix">Practitioner.name.prefix</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.title">Welche Entscheidungsbefugnis hat dieser Notfallkontakt?</span> <input size="60" name="order.notificationContactDocument.practitioner.title" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.title</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.prefix">Practitioner.name.prefix</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.title">Wo ist diese Entscheidungsbe-fugnis dokumentiert?</span> <input size="60" name="order.notificationContactDocument.practitioner.title" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.title</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.prefix">Practitioner.name.prefix</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.title">Anrede</span> <input size="60" name="order.notificationContactDocument.practitioner.title" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.title</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.prefix">Practitioner.name.prefix</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.familyName">Name</span> <input size="60" name="order.notificationContactDocument.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.givenName">Vorname</span> <input size="60" name="order.notificationContactDocument.practitioner.givenName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.givenName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.given">Practitioner.name.given</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.givenName">Adresse (Strasse, Nr.)</span> <input size="60" name="order.notificationContactDocument.practitioner.givenName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.givenName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.given">Practitioner.name.given</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.givenName">PLZ, Ort</span> <input size="60" name="order.notificationContactDocument.practitioner.givenName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.givenName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.given">Practitioner.name.given</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.givenName">Land</span> <input size="60" name="order.notificationContactDocument.practitioner.givenName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.givenName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.given">Practitioner.name.given</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.phone">Mobiltelefon-Nummer</span> <input size="60" name="order.notificationContactDocument.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.phone">Festnetz-Nummer</span> <input size="60" name="order.notificationContactDocument.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.phone">Telefon-Nummer Büro</span> <input size="60" name="order.notificationContactDocument.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 30px">
+               <div style="display: inline-block; width: 470px">
+                  <p><span title="linkId: order.notificationContactDocument.practitioner.email">E-Mail-Adresse</span> <input size="60" name="order.notificationContactDocument.practitioner.email" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.notificationContactDocument.practitioner.email</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>        
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 10px">
+               <div style="display: inline-block; width: 490px">
+                  <p>
+                     <span title="linkId: order.priority">Auftragspriorität</span>
+                     <select size="1" name="order.priority">
+                        <a name="opt-item.order.priority"> </a>
+                  <p><b>Answer options for order.priority</b></p><ul><li style="font-size: 11px"><img src="icon-selected.png"/><a href="http://hl7.org/fhir/R4/codesystem-request-priority.html">http://hl7.org/fhir/request-priority</a>: routine ("Die Anfrage hat normale Priorität.")</li><li style="font-size: 11px"><img src="icon-not-selected.png"/><a href="http://hl7.org/fhir/R4/codesystem-request-priority.html">http://hl7.org/fhir/request-priority</a>: urgent ("Die Anfrage sollte dringend bearbeitet werden - höhere Priorität als normal.")</li><li style="font-size: 11px"><img src="icon-not-selected.png"/><a href="http://hl7.org/fhir/R4/codesystem-request-priority.html">http://hl7.org/fhir/request-priority</a>: asap ("Die Anfrage sollte so schnell wie möglich bearbeitet werden - höhere Priorität als dringend.")</li><li style="font-size: 11px"><img src="icon-not-selected.png"/><a href="http://hl7.org/fhir/R4/codesystem-request-priority.html">http://hl7.org/fhir/request-priority</a>: stat ("Die Anfrage sollte sofort bearbeitet werden - höchstmögliche Priorität. Z.B. bei einem Notfall.")</li></ul><option value="a" selected="false">??</option></select></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: order.priority</li>
+                     <li style="font-size: 10px">Definition: <a href="StructureDefinition-ch-orf-servicerequest.html#ServiceRequest.priority">ServiceRequest.priority</a></li>
+                     <li style="font-size: 10px"><a name="l671"></a><a href="null#item.order.priority">Answers: 4 options</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: receiver">Behandelnde Gesundheits-Fachperson</span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver</li>
+                     <li style="font-size: 10px"><a name="l684"></a>Definition: <a href="StructureDefinition-ch-orf-composition.html#Composition.extension:receiver">Composition.extension:receiver</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.familyName">Rolle (z.B. Hausarzt, Spezialarzt, Therapeut, Spitex etc.)</span> <input size="60" name="receiver.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.familyName">Spezialisierung, Fachrichtung, Facharzttitel</span> <input size="60" name="receiver.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.familyName">Anrede</span> <input size="60" name="receiver.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>            
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.familyName">Name</span> <input size="60" name="receiver.practitioner.familyName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.familyName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.family">Practitioner.name.family</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.givenName">Vorname</span> <input size="60" name="receiver.practitioner.givenName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.givenName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.given">Practitioner.name.given</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.givenName">Adresse (Strasse, Nr.)</span> <input size="60" name="receiver.practitioner.givenName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.givenName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.given">Practitioner.name.given</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.givenName">PLZ, Ort</span> <input size="60" name="receiver.practitioner.givenName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.givenName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.given">Practitioner.name.given</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.givenName">Land</span> <input size="60" name="receiver.practitioner.givenName" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.givenName</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.name.given">Practitioner.name.given</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Mobiltelefon-Nummer</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Festnetz-Nummer</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Telefon-Nummer Büro</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">E-Mail-Adresse</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 10px">
+               <div style="display: inline-block; width: 490px">
+                  <p>
+                     <span title="linkId: patient.gender">Geschlecht</span>
+                     <select size="1" name="patient.gender">
+                        <a name="opt-item.patient.gender"> </a>
+                  <p><b>Answer options for patient.gender</b></p><ul><li style="font-size: 11px"><img src="icon-selected.png"/><a href="http://hl7.org/fhir/R4/codesystem-administrative-gender.html">http://hl7.org/fhir/administrative-gender</a>: male ("Männlich")</li><li style="font-size: 11px"><img src="icon-not-selected.png"/><a href="http://hl7.org/fhir/R4/codesystem-administrative-gender.html">http://hl7.org/fhir/administrative-gender</a>: female ("Weiblich")</li><li style="font-size: 11px"><img src="icon-not-selected.png"/><a href="http://hl7.org/fhir/R4/codesystem-administrative-gender.html">http://hl7.org/fhir/administrative-gender</a>: other ("Anderes")</li></ul><option value="a" selected="false">??</option></select></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: patient.gender</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-patient.html#Patient.gender">Patient.gender</a></li>
+                     <li style="font-size: 10px"><a name="l1058"></a><a href="null#item.patient.gender">Answers: 3 options</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 890px; border-top: 1px #eeeeee solid; margin-left: 10px">
+               <div style="display: inline-block; width: 490px">
+                  <p>
+                     <span title="linkId: patient.languageOfCorrespondance">Korrespondenssprache</span>
+                     <select size="1" name="patient.languageOfCorrespondance">
+                        <option value="ar" selected="false">Arabisch</option>
+                        <option value="bn" selected="false">Bengalisch</option>
+                        <option value="cs" selected="false">Tschechisch</option>
+                        <option value="da" selected="false">Dänisch</option>
+                        <option value="de" selected="false">Deutsch</option>
+                        <option value="de-AT" selected="false">Deutsch (Österreich)</option>
+                        <option value="de-CH" selected="false">Deutsch (Schweiz)</option>
+                        <option value="de-DE" selected="false">Deutsch (Deutschland)</option>
+                        <option value="el" selected="false">Griechisch</option>
+                        <option value="en" selected="false">Englisch</option>
+                        <option value="en-AU" selected="false">Englisch (Australien)</option>
+                        <option value="en-CA" selected="false">Englisch (Kanada)</option>
+                        <option value="en-GB" selected="false">Englisch (Grossbritannien)</option>
+                        <option value="en-IN" selected="false">Englisch (Indien)</option>
+                        <option value="en-NZ" selected="false">Englisch (Neuseeland)</option>
+                        <option value="en-SG" selected="false">Englisch (Singapur)</option>
+                        <option value="en-US" selected="false">Englisch (USA)</option>
+                        <option value="es" selected="false">Spanisch</option>
+                        <option value="es-AR" selected="false">Spanisch (Argentinien)</option>
+                        <option value="es-ES" selected="false">Spanisch (Spanien)</option>
+                        <option value="es-UY" selected="false">Spanisch (Uruguay)</option>
+                        <option value="fi" selected="false">Finnisch</option>
+                        <option value="fr" selected="false">Französisch</option>
+                        <option value="fr-BE" selected="false">Französisch (Belgien)</option>
+                        <option value="fr-CH" selected="false">Französisch (Schweiz)</option>
+                        <option value="fr-FR" selected="false">Französisch (Frankreich)</option>
+                        <option value="fy" selected="false">Friesisch</option>
+                        <option value="fy-NL" selected="false">Friesisch (Niederlande)</option>
+                        <option value="hi" selected="false">Hindi</option>
+                        <option value="hr" selected="false">Kroatisch</option>
+                        <option value="it" selected="false">Italienisch</option>
+                        <option value="it-CH" selected="false">Italienisch (Schweiz)</option>
+                        <option value="it-IT" selected="false">Italienisch (Italien)</option>
+                        <option value="ja" selected="false">Japanisch</option>
+                        <option value="ko" selected="false">Koreanisch</option>
+                        <option value="nl" selected="false">Niederländisch</option>
+                        <option value="nl-BE" selected="false">Niederländisch (Belgien)</option>
+                        <option value="nl-NL" selected="false">Niederländisch (Niederlande)</option>
+                        <option value="no" selected="false">Norwegisch</option>
+                        <option value="no-NO" selected="false">Norwegisch (Norwegen)</option>
+                        <option value="pa" selected="false">Panjabi</option>
+                        <option value="pl" selected="false">Polnisch</option>
+                        <option value="pt" selected="false">Portugiesisch</option>
+                        <option value="pt-BR" selected="false">Portugiesisch (Brasilien)</option>
+                        <option value="rm" selected="false">Rätoromanisch</option>
+                        <option value="ru" selected="false">Russisch</option>
+                        <option value="ru-RU" selected="false">Russisch (Russland)</option>
+                        <option value="sr" selected="false">Serbisch</option>
+                        <option value="sr-RS" selected="false">Serbisch (Serbien)</option>
+                        <option value="sv" selected="false">Schwedisch</option>
+                        <option value="sv-SE" selected="false">Schwedisch (Schweden)</option>
+                        <option value="te" selected="false">Telugu</option>
+                        <option value="zh" selected="false">Chinesisch</option>
+                        <option value="zh-CN" selected="false">Chinesisch (China)</option>
+                        <option value="zh-HK" selected="false">Chinesisch (Hong Kong)</option>
+                        <option value="zh-SG" selected="false">Chinesisch (Singapur)</option>
+                        <option value="zh-TW" selected="false">Chinesisch (Taiwan)</option>
+                        <option value="OTHER" selected="false">Other language</option>
+                     </select>
+                  </p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: patient.languageOfCorrespondance</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-patient.html#Patient.communication:languageOfCorrespondance">Patient.communication:languageOfCorrespondance</a></li>
+                     <li style="font-size: 10px">Answers: <a href="http://fhir.ch/ig/ch-epr-term/ValueSet-DocumentEntry.languageCode.html">DocumentEntry.languageCode</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: receiver">Blutgruppe</span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver</li>
+                     <li style="font-size: 10px"><a name="l684"></a>Definition: <a href="StructureDefinition-ch-orf-composition.html#Composition.extension:receiver">Composition.extension:receiver</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Blutgruppe und Rhesusfaktor</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: receiver">Allergien oder Unverträglichkeiten </span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver</li>
+                     <li style="font-size: 10px"><a name="l684"></a>Definition: <a href="StructureDefinition-ch-orf-composition.html#Composition.extension:receiver">Composition.extension:receiver</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Bezeichnung der Allergie oder Unverträglichkeit</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Beschreibung der Reaktion bei Eintritt der Allergie oder Unver-träglichkeit</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Bemerkungen</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: receiver">Risikofaktoren</span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver</li>
+                     <li style="font-size: 10px"><a name="l684"></a>Definition: <a href="StructureDefinition-ch-orf-composition.html#Composition.extension:receiver">Composition.extension:receiver</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Titel und Beschreibung</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Gibt es weitere Dokumente im EPD zu diesem Risikofaktor?</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: receiver">Krankheiten und Unfallfolgen</span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver</li>
+                     <li style="font-size: 10px"><a name="l684"></a>Definition: <a href="StructureDefinition-ch-orf-composition.html#Composition.extension:receiver">Composition.extension:receiver</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Titel und Beschreibung</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Gibt es weitere Dokumente im EPD zu dieser Krankheit oder Unfallfolge</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: receiver">Gesundheitsausweise</span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver</li>
+                     <li style="font-size: 10px"><a name="l684"></a>Definition: <a href="StructureDefinition-ch-orf-composition.html#Composition.extension:receiver">Composition.extension:receiver</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Gibt es Gesundheitsausweise in Ihrem EPD (z. B. Brillenpass, Organspendenausweis, Blut-spendenausweis; Impfdaten etc.)?</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: receiver">Patientenverfügungen</span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver</li>
+                     <li style="font-size: 10px"><a name="l684"></a>Definition: <a href="StructureDefinition-ch-orf-composition.html#Composition.extension:receiver">Composition.extension:receiver</a></li>
+                  </ul>
+               </div>
+            </div>
+			<div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Gibt es Patientenverfügungen in Ihrem EPD?</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div> 
+			<div style="width: 900px; border-top: 1px #eeeeee solid">
+               <div style="display: inline-block; width: 500px">
+                  <p><b><span title="linkId: receiver">Weitere Bemerkungen</span></b></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver</li>
+                     <li style="font-size: 10px"><a name="l684"></a>Definition: <a href="StructureDefinition-ch-orf-composition.html#Composition.extension:receiver">Composition.extension:receiver</a></li>
+                  </ul>
+               </div>
+            </div>
+            <div style="width: 880px; border-top: 1px #eeeeee solid; margin-left: 20px">
+               <div style="display: inline-block; width: 480px">
+                  <p><span title="linkId: receiver.practitioner.phone">Welche wichtigen gesundheitsrelevanten Informationen gibt es noch zu Ihrer Person?</span> <input size="60" name="receiver.practitioner.phone" placeholder="String" type="text"/></p>
+               </div>
+               <div style="border: 1px #ccccff solid; padding: 2px; display: inline-block; background-color: #fefce7; width: 380px">
+                  <ul>
+                     <li style="font-size: 10px">linkId: receiver.practitioner.phone</li>
+                     <li style="font-size: 10px">Definition: <a href="http://fhir.ch/ig/ch-core/StructureDefinition-ch-core-practitioner.html#Practitioner.telecom.value">Practitioner.telecom.value</a></li>
+                  </ul>
+               </div>
+            </div>                              
+         </div>
+      </div>
+   </div>
 
