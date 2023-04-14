@@ -5,31 +5,37 @@
         {
           "type": "string",
           "linkId": "9930114239339",
+          "prefix": "1.",
           "text": "Name"
         },
         {
           "type": "string",
           "linkId": "9085919472554",
+          "prefix": "2.",
           "text": "Vorname"
         },
         {
           "type": "date",
           "linkId": "5829316652380",
+          "prefix": "3.",
           "text": "Geburtsdatum"
         },
         {
           "type": "string",
           "linkId": "9263066051447",
+          "prefix": "4.",
           "text": "Personen, die mich betreuen"
         },
         {
           "type": "string",
           "linkId": "456526547784",
+          "prefix": "5.",
           "text": "Personen, die mich täglich in meinem Umfeld unterstützen"
         },
         {
           "type": "string",
           "linkId": "4911929373133",
+          "prefix": "6.",
           "text": "Von den Pflegekräften und Angehörigen, die ich oben erwähnt habe, fühle ich mich besonders verbunden mit:"
         }
       ],
@@ -38,108 +44,126 @@
       "text": "Ich und meine Umgebung"
     },
     {
-      "type": "string",
-      "linkId": "9993212223219",
-      "text": "Therapeutische Hauptvertreter/in",
       "item": [
         {
           "type": "string",
           "linkId": "9738345742006",
+          "prefix": "7.",
           "text": "Anrede"
         },
         {
           "type": "string",
           "linkId": "9132205223954",
+          "prefix": "8.",
           "text": "Name"
         },
         {
           "type": "string",
           "linkId": "891220234260",
+          "prefix": "9.",
           "text": "Vorname"
         },
         {
           "type": "string",
           "linkId": "9535109784100",
+          "prefix": "10.",
           "text": "Adresse (Strasse, Nr.)"
         },
         {
           "type": "string",
           "linkId": "4720033772588",
+          "prefix": "11.",
           "text": "PLZ, Ort"
         },
         {
           "type": "string",
           "linkId": "6963477448676",
+          "prefix": "12.",
           "text": "Land"
         },
         {
           "type": "string",
           "linkId": "8971700462627",
+          "prefix": "13.",
           "text": "Telefonnummer",
           "repeats": true
         },
         {
           "type": "string",
           "linkId": "723516760049",
+          "prefix": "14.",
           "text": "E-Mail Adresse"
         }
-      ]
+      ],
+      "type": "group",
+      "linkId": "9993212223219",
+      "text": "Therapeutische Hauptvertreter/in"
     },
     {
       "item": [
         {
           "type": "string",
           "linkId": "5508731815779",
+          "prefix": "15.",
           "text": "Anrede"
         },
         {
           "type": "string",
           "linkId": "8410743502253",
+          "prefix": "16.",
           "text": "Name"
         },
         {
           "type": "string",
           "linkId": "5635347807336",
+          "prefix": "17.",
           "text": "Vorname"
         },
         {
           "type": "string",
           "linkId": "8209944995550",
+          "prefix": "18.",
           "text": "Adresse (Strasse, Nr.)"
         },
         {
           "type": "string",
           "linkId": "3992828279439",
+          "prefix": "19.",
           "text": "PLZ, Ort"
         },
         {
           "type": "string",
           "linkId": "8684752293942",
+          "prefix": "20.",
           "text": "Land"
         },
         {
           "type": "string",
           "linkId": "2543945622042",
+          "prefix": "21.",
           "text": "Telefonnummer"
         },
         {
           "type": "string",
           "linkId": "2420095139676",
+          "prefix": "22.",
           "text": "E-Mail Adresse"
         }
       ],
-      "type": "string",
+      "type": "group",
       "linkId": "739889077443",
       "text": "Stellvertretende therapeutische Hauptvertreters/in"
     },
     {
       "type": "text",
       "linkId": "404373101523",
+      "prefix": "23.",
       "text": "Hier sind einige wichtige Dinge, die ich in Bezug auf meine Umgebung klarstellen möchte"
     },
     {
       "type": "text",
       "linkId": "4196475053516",
+      "prefix": "24.",
       "text": "Wichtige Dinge, die ich meinen Mitmenschen mitteilen sollte"
     },
     {
@@ -147,51 +171,61 @@
         {
           "type": "text",
           "linkId": "8997834017239",
+          "prefix": "25.",
           "text": "Das oder die Dinge, die ich unbedingt tun möchte, bevor ich sterbe"
         },
         {
           "type": "text",
           "linkId": "8316339501028",
+          "prefix": "26.",
           "text": "Was mir Angst macht, mir Sorgen bereitet, mich ängstigt"
         },
         {
           "type": "text",
           "linkId": "1645841779477",
-          "text": " Mein Leben würde unerträglich werden, wenn..."
+          "prefix": " 27.",
+          "text": "Mein Leben würde unerträglich werden, wenn..."
         },
         {
           "type": "text",
           "linkId": "2628051202512",
+          "prefix": "28.",
           "text": "Heute ist ein schöner Tag für mich, es ist..."
         },
         {
           "type": "text",
           "linkId": "6697077542577",
+          "prefix": "29.",
           "text": "Ein paar Worte über meine Spiritualität, meine religiösen Überzeugungen"
         },
         {
           "type": "text",
           "linkId": "9732535292747",
+          "prefix": "30.",
           "text": "Ein paar Worte zu meinem Aussehen"
         },
         {
           "type": "text",
           "linkId": "2798963698154",
-          "text": " Was ich gerne tue"
+          "prefix": " 31.",
+          "text": "Was ich gerne tue"
         },
         {
           "type": "text",
           "linkId": "5927613039826",
+          "prefix": "32.",
           "text": "Ich finde es angenehm..."
         },
         {
           "type": "text",
           "linkId": "874394956749",
+          "prefix": "33.",
           "text": "Ein Raum, in dem ich mich wohlfühle, ist..."
         },
         {
           "type": "text",
           "linkId": "4349721842408",
+          "prefix": "34.",
           "text": "Was mich ärgert"
         }
       ],
@@ -204,11 +238,13 @@
         {
           "type": "text",
           "linkId": "5357279691245",
+          "prefix": "35.",
           "text": "Wenn eine Notfallsituation eintritt, in der ich nicht mehr urteilsfähig bin, sollten Sie Folgendes beachten ein oder zwei Dinge, die das Pflegepersonal unbedingt über mich wissen muss:"
         },
         {
           "type": "choice",
           "linkId": "1805590281216",
+          "prefix": "36.",
           "text": "Wenn es medizinisch angezeigt ist, mir die üblichen Therapien (Antibiotika oder andere Medikamente) zu verschreiben. Medikamente, Flüssigkeitszufuhr, Sauerstoff)",
           "answerOption": [
             {
@@ -231,7 +267,8 @@
         {
           "type": "choice",
           "linkId": "3592401135814",
-          "text": " Wenn sich mein Zustand weiter verschlechtert, ich mich in einer lebensbedrohlichen Situation befinde und das Pflegepersonal eine Pflegemaßnahme durchführt, muss der Arzt dies bestätigen. Das Pflegepersonal erwägt, mich kontinuierlich zu überwachen und eine technischere Pflege zu beginnen (Beatmung, Beatmungsgerät usw.). Nicht-invasive Behandlung, Sauerstoff mit höherem Durchfluss).",
+          "prefix": " 37.",
+          "text": "Wenn sich mein Zustand weiter verschlechtert, ich mich in einer lebensbedrohlichen Situation befinde und das Pflegepersonal eine Pflegemaßnahme durchführt, muss der Arzt dies bestätigen. Das Pflegepersonal erwägt, mich kontinuierlich zu überwachen und eine technischere Pflege zu beginnen (Beatmung, Beatmungsgerät usw.). Nicht-invasive Behandlung, Sauerstoff mit höherem Durchfluss).",
           "answerOption": [
             {
               "valueCoding": {
@@ -258,6 +295,7 @@
         {
           "type": "choice",
           "linkId": "7891837989332",
+          "prefix": "38.",
           "text": "Wenn meine Situation noch ernster ist und das Pflegeteam zur Verlängerung meines Lebens erwägt, die folgenden Massnahmen zu ergreifen eine noch technischere Pflege mit bestimmten Maschinen (Dialyse, invasive Beatmung) zu beginnen.",
           "answerOption": [
             {
@@ -285,6 +323,7 @@
         {
           "type": "choice",
           "linkId": "9387124362883",
+          "prefix": "39.",
           "text": "Wenn dann auch noch mein Herz plötzlich stehen bleibt (Herzstillstand) und ich mein Leben verlängern möchte, das Pflegeteam erwägt, eine kardiopulmonale Reanimation zu versuchen",
           "answerOption": [
             {
@@ -312,6 +351,7 @@
         {
           "type": "choice",
           "linkId": "6132915829334",
+          "prefix": "40.",
           "text": "Wenn sich mein Zustand trotz einer Notfallbehandlung nicht wie erhofft verbessert oder wenn ich aufgrund einer schweren Krankheit künstlich ernährt werden muss, soll ich mich an den Arzt wenden. Unter welchen Bedingungen ist es möglich, dass mein Leben nach einer schweren Krankheit durch technische Hilfe (Beatmung) aufrechterhalten wird? Unter welchen Bedingungen halte ich solche Eingriffe für sinnvoll?",
           "answerOption": [
             {
@@ -334,6 +374,7 @@
         {
           "type": "choice",
           "linkId": "1843801793731",
+          "prefix": "41.",
           "text": "Wenn ich im Laufe meines Lebens meine Urteilsfähigkeit dauerhaft verliere (aufgrund von Demenz, Alzheimer oder anderen Krankheiten), kann es sein, dass ich nicht mehr urteilsfähig bin. Demenz, infolge eines Herz-Kreislauf-Unfalls oder des Fortschreitens einer Alzheimer-Krankheit) und sich mein körperlicher Gesundheitszustand verschlechtert",
           "answerOption": [
             {
@@ -356,6 +397,7 @@
         {
           "type": "choice",
           "linkId": "6169432971561",
+          "prefix": "42.",
           "text": "Wenn ich nicht nur meine Urteilsfähigkeit dauerhaft verloren habe, wenn ich nicht mehr in der Lage bin, mich durch den Mund zu ernähren und das medizinische Team ein Verfahren zur künstlichen Ernährung in Betracht zieht.",
           "answerOption": [
             {
@@ -378,6 +420,7 @@
         {
           "type": "text",
           "linkId": "1997695716627",
+          "prefix": "43.",
           "text": "Kommentar"
         }
       ],
@@ -390,11 +433,13 @@
         {
           "type": "text",
           "linkId": "419859842636",
+          "prefix": "44.",
           "text": "Beschreibung der Situation(en), vor der/denen ich Angst habe, weil ich meine Fähigkeit verlieren würde, Entscheidungen zu treffen."
         },
         {
           "type": "choice",
           "linkId": "3947823503452",
+          "prefix": "45.",
           "text": "Wenn ich in einer solchen Situation betreut werde, möchte ich, wenn möglich, dass Kontakt aufgenommen und Rat bei den folgenden Personen eingeholt wird:",
           "answerOption": [
             {
@@ -412,21 +457,25 @@
         {
           "type": "text",
           "linkId": "194224581478",
+          "prefix": "46.",
           "text": "Ausserdem möchte ich in einer solchen Situation..."
         },
         {
           "type": "text",
           "linkId": "3302319692878",
+          "prefix": "47.",
           "text": "Ich habe einige Warnzeichen erkannt, die meine Umgebung alarmieren könnten"
         },
         {
           "type": "text",
           "linkId": "3867341416647",
+          "prefix": "48.",
           "text": "Wenn ich diese Anzeichen zeige, möchte ich, wenn möglich, dass meine Mitmenschen oder mein Pflegepersonal auf diese Weise reagieren"
         },
         {
           "type": "text",
           "linkId": "1735820122597",
+          "prefix": "49.",
           "text": "Ich möchte etwas zu diesem Thema hinzufügen."
         }
       ],
@@ -435,13 +484,11 @@
       "text": "Bei einer Psychologischen Kriese"
     },
     {
-      "type": "group",
-      "linkId": "9495518420461",
-      "text": "Mein Lebensende",
       "item": [
         {
           "type": "choice",
           "linkId": "6449561623696",
+          "prefix": "50.",
           "text": "Wenn ich in meinen letzten Lebensjahren oder -monaten nicht mehr urteilsfähig bin, möchte ich, soweit dies möglich ist, in der Lage sein, meine Rechte auszuüben.",
           "answerOption": [
             {
@@ -459,6 +506,7 @@
         {
           "type": "text",
           "linkId": "9421993759206",
+          "prefix": "51.",
           "text": "Ich möchte eine religiöse, spirituelle oder weltliche Begleitung am Lebensende."
         },
         {
@@ -466,11 +514,13 @@
             {
               "type": "text",
               "linkId": "7927182435302",
+              "prefix": "53.",
               "text": "Kommentar"
             }
           ],
           "type": "choice",
           "linkId": "3006166661507",
+          "prefix": "52.",
           "text": "Wenn ich die Möglichkeit habe, eine Wahl bezüglich des Ortes zu treffen, an dem ich sterben werde, möchte ich:",
           "answerOption": [
             {
@@ -493,9 +543,61 @@
         {
           "type": "string",
           "linkId": "9947387797042",
+          "prefix": "54.",
           "text": "In Bezug auf meine Beerdigung"
+        },
+        {
+          "type": "choice",
+          "linkId": "2696990417741",
+          "prefix": "55.",
+          "text": "In Bezug auf die Organspende",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Ich habe bereits schriftlich oder über Swisstransplant meine Zustimmung oder Nichtzustimmung zur Organspende geäussert."
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Ich werde mich über Swisstransplant informieren und meine Wahl im nationalen Register festhalten."
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Ich werde mich über Swisstransplant informieren und meine Wahl im nationalen Register festhalten."
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "9493450836057",
+          "prefix": "56.",
+          "text": "In Bezug auf die Verwendung meiner biologischen Daten und Proben für die wissenschaftliche Forschung",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Ich habe meine Position zu dieser Frage bereits schriftlich dargelegt."
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Ich möchte mich zu diesem Zeitpunkt nicht zu dieser Frage äussern."
+              }
+            }
+          ],
+          "initial": [
+            {
+              "valueCoding": {
+                "display": "Ich habe meine Position zu dieser Frage bereits schriftlich dargelegt."
+              }
+            }
+          ]
         }
-      ]
+      ],
+      "type": "group",
+      "linkId": "9495518420461",
+      "text": "Mein Lebensende"
     }
   ],
   "resourceType": "Questionnaire",
