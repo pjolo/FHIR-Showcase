@@ -1,0 +1,1108 @@
+{
+  "item": [
+    {
+      "item": [
+        {
+          "type": "string",
+          "linkId": "2024247875027",
+          "text": "Jetziges Leiden:",
+          "item": [
+            {
+              "text": "Aktuelle Ursache wieso sich jemand ärztlich vorstellt (z.B. Fieber, Husten, …)",
+              "type": "display",
+              "linkId": "2024247875027_helpText",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "text": "Help-Button",
+                    "coding": [
+                      {
+                        "code": "help",
+                        "display": "Help-Button",
+                        "system": "http://hl7.org/fhir/questionnaire-item-control"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "type": "group",
+      "linkId": "9064383882486",
+      "text": "Anamnese"
+    },
+    {
+      "item": [
+        {
+          "type": "quantity",
+          "linkId": "9453791164184",
+          "text": "Grösse",
+          "initial": [
+            {
+              "valueQuantity": {
+                "unit": "centimeter",
+                "system": "http://unitsofmeasure.org",
+                "code": "cm"
+              }
+            }
+          ]
+        },
+        {
+          "type": "quantity",
+          "linkId": "5584394658351",
+          "text": "Gewicht",
+          "initial": [
+            {
+              "valueQuantity": {
+                "unit": "kilogram",
+                "system": "http://unitsofmeasure.org",
+                "code": "kg"
+              }
+            }
+          ]
+        },
+        {
+          "type": "open-choice",
+          "linkId": "1843583274073",
+          "text": "Stuhlgang",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "hart"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "weich - geformt"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "breiig"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "wässrig"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "häufig wechseld"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Tendenz zu Durchfall"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Tendenz zu Verstopfung"
+              }
+            }
+          ]
+        },
+        {
+          "type": "open-choice",
+          "linkId": "949829051470",
+          "text": "Miktion",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Probleme Urin zu halten"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Schwierigkeiten/Schmerzen beim Wasserlassen"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4377790706057",
+          "text": "Essgewohnheiten",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "fleischlos"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "vegan"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "laktosefrei"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "glutenfrei"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "9967983981992",
+          "text": "Visus",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Kurzsichtig"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Weitsichtig"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Lesebrille"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Gleichsichtbrille"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4975580604927",
+          "text": "Gehör",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Schwerhörigkeit"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Hörgerät"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "3896977381417",
+          "text": "Noxen",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Tabak"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Alkohol"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Drogen"
+              }
+            }
+          ]
+        }
+      ],
+      "type": "group",
+      "linkId": "6176432158869",
+      "text": "Systemanamnese"
+    },
+    {
+      "type": "group",
+      "linkId": "8374287234804",
+      "text": "Erweiterte Systemanamnese",
+      "item": [
+        {
+          "type": "string",
+          "linkId": "2523087473088",
+          "text": "Appetit:"
+        },
+        {
+          "type": "string",
+          "linkId": "6470564701067",
+          "text": "Durst:"
+        },
+        {
+          "type": "choice",
+          "linkId": "6746762650397",
+          "text": "Stimmung:",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Niedergeschlagenheit"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Grübeltendenz"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Ängstlichkeit"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Ratlos"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Deprimiert"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Hoffnungslos"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Euphorisch"
+              }
+            }
+          ]
+        },
+        {
+          "item": [
+            {
+              "type": "quantity",
+              "linkId": "3872911521988",
+              "text": "Schlafdauer pro Nacht in Stunden",
+              "initial": [
+                {
+                  "valueQuantity": {
+                    "unit": "hour",
+                    "system": "http://unitsofmeasure.org",
+                    "code": "h"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "string",
+              "linkId": "2266295423474",
+              "text": "Bettzeiten"
+            },
+            {
+              "type": "string",
+              "linkId": "8485679319014",
+              "text": "Aufwachzeiten"
+            },
+            {
+              "type": "choice",
+              "linkId": "4986503921544",
+              "text": "Schwierigkeiten",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "display": "beim Einschlafen"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "display": "beim Durchschlafen"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "display": "Atempausen im Schlaf"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "display": "Alpträume"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "choice",
+              "linkId": "8674916051431",
+              "text": "Erwachen",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "display": "erholsam"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "display": "nicht erholsam"
+                  }
+                }
+              ]
+            }
+          ],
+          "type": "group",
+          "linkId": "6969356411152",
+          "text": "Schlafgewohnheiten"
+        },
+        {
+          "type": "choice",
+          "linkId": "8153284054458",
+          "text": "Schwellung der Unterschenkel/Füsse",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "am Abend"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "den ganzen Tag"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "1160224392870",
+          "text": "Engegefühl der Brust",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "in Ruhe"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "bei Anstrengung"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "8895239049653",
+          "text": "Kurzatmigkeit",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "bei leichter Anstrengung (Dyspnoe)"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "im Sitzen (Orthopnoe)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "2386431735898",
+          "text": "Übelkeit/Aufstossen",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "kein klarer Auslöser"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "in bestimmten Situationen (z.B. nach Genuss bestimmter Nahrungsmittel"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "9342897531202",
+          "text": "Erbrechen",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "kein klarer Auslöser"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "in bestimmten Situationen (z.B. nach dem Essen)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "2080238558052",
+          "text": "Husten",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "trockener Husten"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "produktiver Husten (mit Auswurf)"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "6564721894124",
+          "text": "Stuhlgang",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Schmerzen beim Stuhlgang"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Schleim oder Blut im Stuhl"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "weisser Stuhlgang"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "schwarzer Stuhlgang bzw. Teerstuhl"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "2051142321895",
+          "text": "Miktion",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "häufiger Harndrang"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "ungewollter Urinverlust/Inkontinenz"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Gefühl Blase sei nicht richtig entleert"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Blut im Urin"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "spezieller Geruch"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "veränderte Farbe (z.B. rot oder braun)"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "schaumiger Urin"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "8743195618245",
+          "text": "Haut",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "blass"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "gerötet"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "trocken"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "schuppig"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Ausschlag"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "5457077449763",
+          "text": "Bewusstseinsverlust/Ohnmachtsanfälle",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "in bestimmten Situationen (z.B. Anstrengung, langes Stehen, grosse Hitze)"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "spontan"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "mit Verletzungsfolge"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "3883588731529",
+          "text": "Freie Gehstrecke (m), die ohne Schmerzen, Schwäche, Kurzatmigkeit möglich ist: ",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "<500m"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "<200m"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "<100m"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "<50m"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "2740810375611",
+          "text": "Kopfschmerzen",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Migräne"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "327301202148",
+          "text": "Fieber (Körpertemperatur >38,5 C ohne Symptome einer Infektionserkrankung)",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Nachtschweiss"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "3612297442880",
+          "text": "Vermehrte Erschöpfungsneigung",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "rasche Ermüdung (zunehmende Schwierigkeiten, die Aufgaben des Alltags zu bewältigen, obwohl dies zu einem früheren Zeitpunkt möglich war"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "deutlich erhöhtes Ruhebedürfnis"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "erhöhter Schlafbedarf"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "8844604839308",
+          "text": "Neurologisch",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Zittern"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Schwäche"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Bewegungseinschränkungen"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Schwindel"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Kribbeln"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Taubheitsgefühl"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Sehstörungen"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "9395622012851",
+      "text": "Allergien",
+      "item": [
+        {
+          "type": "string",
+          "linkId": "2195898843250",
+          "text": "Allergie auslösende Substanz"
+        },
+        {
+          "type": "string",
+          "linkId": "4859452410062",
+          "text": "Reaktion "
+        },
+        {
+          "type": "choice",
+          "linkId": "9187099872725",
+          "text": "Allergiepass vorliegend?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Ja"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Nein"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "4131235158954",
+      "text": "Sozialanamnese",
+      "item": [
+        {
+          "type": "string",
+          "linkId": "6827530374496",
+          "text": "Beruf"
+        },
+        {
+          "type": "quantity",
+          "linkId": "3792436382595",
+          "text": "Arbeitstätigkeit (in %):",
+          "initial": [
+            {
+              "valueQuantity": {
+                "system": "http://unitsofmeasure.org",
+                "code": "%"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "7365744809790",
+          "text": "Familienstand"
+        },
+        {
+          "type": "string",
+          "linkId": "2991813707033",
+          "text": "Kinder"
+        },
+        {
+          "type": "choice",
+          "linkId": "1172101196744",
+          "text": "Soziale Wohnsituation",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "alleine"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "mit Partner"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Familie"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Wohngemeinschaft"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4905163749704",
+          "text": "Bauliche Wohnsituation",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Treppen"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Aufzug"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "eigenes Haus"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "4969834975153",
+          "text": "Hobbies"
+        },
+        {
+          "type": "string",
+          "linkId": "8813841376877",
+          "text": "Sportliche Aktivität"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "7938031418759",
+      "text": "Familienanamnese",
+      "item": [
+        {
+          "type": "choice",
+          "linkId": "7269423043018",
+          "text": "Erkrankungen der Eltern und Geschwister (Blutsverwandte ersten Grades)",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Krebserkrankungen"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Herzinfarkte"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Schlaganfälle"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "rheumatologische Erkrankungen"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Bluthochdruck"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Diabetes"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Epilepsie"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "psychiatrische Erkrankungen"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "weitere Erbkrankheiten"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "9905330066444",
+          "text": "Erkrankungen der Grosseltern, Onkeln, Tanten, Cousins und Cousinen (Blutsverwandte zweiten Grades):",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Krebserkrankungen"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Herzinfarkte"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Schlaganfälle"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "rheumatologische Erkrankungen"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Bluthochdruck"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Diabetes"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Epilepsie"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "psychiatrische Erkrankungen"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "weitere Erbkrankheiten"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "5786999176719",
+      "text": "Persönliche Anamnese",
+      "item": [
+        {
+          "type": "string",
+          "linkId": "8079997913584",
+          "text": "Bisher stattgefundene Operationen"
+        },
+        {
+          "type": "string",
+          "linkId": "1060442944607",
+          "text": "Längere Erkrankungen (mit Spitalaufenthalt)"
+        },
+        {
+          "type": "string",
+          "linkId": "5892013252010",
+          "text": "Erkrankungen wegen welcher Sie dauerhaft behandelt werden und/oder Medikamente einnehmen"
+        },
+        {
+          "type": "string",
+          "linkId": "411342502810",
+          "text": "Suchterkrankungen"
+        },
+        {
+          "type": "string",
+          "linkId": "7271770343303",
+          "text": "Psychiatrische Erkrankungen"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "4211282328697",
+      "text": "Gynäkologische Anamnese",
+      "item": [
+        {
+          "type": "string",
+          "linkId": "7413880047780",
+          "text": "Erste Periode (Menarche)"
+        },
+        {
+          "type": "integer",
+          "linkId": "8393830589430",
+          "text": "Anzahl der Schwangerschaften und Geburten (inklusive Art der Geburt: Kaiserschnitt/spontan)"
+        },
+        {
+          "type": "string",
+          "linkId": "6861629724315",
+          "text": "Zyklusauffälligkeiten"
+        },
+        {
+          "type": "string",
+          "linkId": "1967869902020",
+          "text": "Gestose/Eklampsie"
+        },
+        {
+          "type": "string",
+          "linkId": "6491474237186",
+          "text": "Verhütungsmittel"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "9161301098780",
+      "text": "Pädiatrische Anamnese",
+      "item": [
+        {
+          "type": "string",
+          "linkId": "9409982278910",
+          "text": "Auffälligkeiten beim Essverhalten/Gewichtszunahme/Wachstum"
+        },
+        {
+          "type": "string",
+          "linkId": "7188000646275",
+          "text": "Freies Sitzen (Alter in Monaten):"
+        },
+        {
+          "type": "string",
+          "linkId": "6046161375202",
+          "text": "Erste Schritte (Alter in Monaten):"
+        },
+        {
+          "type": "string",
+          "linkId": "9184315587540",
+          "text": "Erste Worte (Alter in Monaten):"
+        },
+        {
+          "type": "string",
+          "linkId": "7461658824126",
+          "text": "Impfungen nach Schweizer Impfplan erhalten"
+        },
+        {
+          "type": "string",
+          "linkId": "1427146044356",
+          "text": "Vorsorgeuntersuchungen nach Checkliste durchgeführt ",
+          "item": [
+            {
+              "text": "Checklist_Vorsorgeunt_Formular_2017_DE.pdf (paediatrieschweiz.ch)",
+              "type": "display",
+              "linkId": "1427146044356_helpText",
+              "extension": [
+                {
+                  "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                  "valueCodeableConcept": {
+                    "text": "Help-Button",
+                    "coding": [
+                      {
+                        "code": "help",
+                        "display": "Help-Button",
+                        "system": "http://hl7.org/fhir/questionnaire-item-control"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "9575032415670",
+          "text": "Auffälligkeiten beim Sprechen/Sprachverständnis",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Aussprachefehler"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "verminderte Sprachproduktion"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "352122567714",
+          "text": "Auffälligkeiten im Sozialverhalten"
+        },
+        {
+          "type": "choice",
+          "linkId": "9803147824584",
+          "text": "Auffälligkeiten im Lernverhalten",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Lese-/Rechtschreibschwäche"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Schwierigkeiten bei der Konzentration"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "1452457561731",
+          "text": "Auffälligkeiten im Bewegungsverhalten/Bewegungskoordination:"
+        }
+      ]
+    }
+  ],
+  "resourceType": "Questionnaire",
+  "title": "Anamnesebogen",
+  "status": "draft"
+}
