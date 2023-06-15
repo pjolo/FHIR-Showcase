@@ -23,14 +23,31 @@
           "type": "date"
         },
         {
-          "text": "Geschlecht",
+          "type": "choice",
           "linkId": "4526083098530",
-          "type": "string"
+          "text": "Geschlecht",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Männlich"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Weiblich"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Andere"
+              }
+            }
+          ]
         },
         {
-          "text": "Adresse (Strasse, Nr.)",
+          "type": "string",
           "linkId": "7095424337885",
-          "type": "string"
+          "text": "Adresse (Strasse, Nr.)"
         },
         {
           "text": "PLZ, Ort",
@@ -79,9 +96,9 @@
           "type": "string"
         },
         {
-          "text": "Versicherten-KARTEN-Nummer",
+          "type": "string",
           "linkId": "5355698680933",
-          "type": "string"
+          "text": "Versicherten-KARTEN-Nummer"
         }
       ],
       "type": "group",
@@ -91,19 +108,19 @@
     {
       "item": [
         {
-          "text": "Beziehung (z.B. Vater, Tochter, Ehefrau, Arzt, Sozialarbeiter, etc.)",
+          "type": "string",
           "linkId": "8550571298395",
-          "type": "string"
+          "text": "Beziehung (z.B. Vater, Tochter, Ehefrau, Arzt, Sozialarbeiter, etc.)"
         },
         {
-          "text": "Welche Entscheidungsbefugnis  hat dieser Notfallkontakt",
+          "type": "string",
           "linkId": "9207565307160",
-          "type": "string"
+          "text": "Welche Entscheidungsbefugnis  hat dieser Notfallkontakt"
         },
         {
-          "text": "Wo ist diese Entscheidungsbe-  fugnis dokumentiert?",
+          "type": "string",
           "linkId": "2794242885482",
-          "type": "string"
+          "text": "Wo ist diese Entscheidungsbefugnis dokumentiert?"
         },
         {
           "text": "Anrede",
@@ -169,14 +186,36 @@
     {
       "item": [
         {
-          "text": "Rolle (z.B. Hausarzt, Spezial-arzt, Therapeut, Spitex etc.)",
+          "type": "choice",
           "linkId": "9016602862540",
-          "type": "string"
+          "text": "Rolle (z.B. Hausarzt, Spezialarzt, Therapeut, Spitex etc.)",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Hausarzt"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Spezialarzt"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Therapeut"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Spitex"
+              }
+            }
+          ]
         },
         {
-          "text": "Spezialisierung, Fachrichtung,  Facharzttitel",
+          "type": "string",
           "linkId": "2970478254031",
-          "type": "string"
+          "text": "Spezialisierung, Fachrichtung,  Facharzttitel"
         },
         {
           "text": "Anrede",
@@ -236,7 +275,7 @@
       ],
       "type": "group",
       "linkId": "3121192663534",
-      "text": "Behandelnde Gesundheits-Fachperson",
+      "text": "Behandelnde Gesundheitsfachperson",
       "repeats": true
     },
     {
