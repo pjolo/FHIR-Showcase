@@ -3,9 +3,26 @@
     {
       "item": [
         {
-          "text": "Anrede",
+          "type": "choice",
           "linkId": "3889819847080",
-          "type": "string"
+          "text": "Anrede",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Herr"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Frau"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Dr. med."
+              }
+            }
+          ]
         },
         {
           "text": "Name",
