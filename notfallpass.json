@@ -88,34 +88,34 @@
           "type": "string"
         },
         {
-          "text": "Mobiltelefon-Nummer",
+          "text": "Mobiltelefon",
           "linkId": "7488618161227",
           "type": "string"
         },
         {
-          "text": "Festnetz-Telefonnummer",
+          "text": "Telefonnummer (Festnetz)",
           "linkId": "3767439861241",
           "type": "string"
         },
         {
-          "text": "E-Mail-Adresse",
+          "text": "E-Mail Adresse",
           "linkId": "3323685976043",
           "type": "string"
         },
         {
-          "text": "Name Berufsunfallversicherung  bei Arbeitgeber",
+          "text": "Name Berufsunfallversicherung beim Arbeitgeber",
           "linkId": "4136804692481",
           "type": "string"
         },
         {
-          "text": "Name und Adresse Kranken-  kasse",
+          "text": "Name und Adresse Krankenkasse",
           "linkId": "4112533478978",
           "type": "string"
         },
         {
           "type": "string",
           "linkId": "5355698680933",
-          "text": "Versicherten-KARTEN-Nummer"
+          "text": "Nummer der Versichertenkarte"
         }
       ],
       "type": "group",
@@ -127,12 +127,12 @@
         {
           "type": "string",
           "linkId": "8550571298395",
-          "text": "Beziehung (z.B. Vater, Tochter, Ehefrau, Arzt, Sozialarbeiter, etc.)"
+          "text": "Beziehung (z.B. Vater, Tochter, Ehefrau, Arzt, Sozialarbeiter, usw.)"
         },
         {
           "type": "string",
           "linkId": "9207565307160",
-          "text": "Welche Entscheidungsbefugnis  hat dieser Notfallkontakt"
+          "text": "Welche Entscheidungsbefugnisse hat dieser Notfallkontakt?"
         },
         {
           "type": "string",
@@ -170,22 +170,22 @@
           "type": "string"
         },
         {
-          "text": "Mobiltelefon-Nummer",
+          "text": "Mobiltelefon",
           "linkId": "8812505148761",
           "type": "string"
         },
         {
-          "text": "Festnetz-Telefonnummer",
+          "text": "Telefonnummer (Festnetz)",
           "linkId": "663425580290",
           "type": "string"
         },
         {
-          "text": "Telefon-Nummer Büro",
+          "text": "Telefonnummer (Büro)",
           "linkId": "5120472512933",
           "type": "string"
         },
         {
-          "text": "E-Mail-Adresse",
+          "text": "E-Mail Adresse",
           "linkId": "9323117848381",
           "type": "string"
         },
@@ -205,7 +205,7 @@
         {
           "type": "choice",
           "linkId": "9016602862540",
-          "text": "Rolle (z.B. Hausarzt, Spezialarzt, Therapeut, Spitex etc.)",
+          "text": "Rolle (z.B. Hausarzt, Facharzt, Therapeut, Spitex, usw.)",
           "answerOption": [
             {
               "valueCoding": {
@@ -214,7 +214,7 @@
             },
             {
               "valueCoding": {
-                "display": "Spezialarzt"
+                "display": "Facharzt"
               }
             },
             {
@@ -232,7 +232,7 @@
         {
           "type": "string",
           "linkId": "2970478254031",
-          "text": "Spezialisierung, Fachrichtung,  Facharzttitel"
+          "text": "Spezialisierung, Fachrichtung, Facharzttitel"
         },
         {
           "text": "Anrede",
@@ -265,22 +265,22 @@
           "type": "string"
         },
         {
-          "text": "Mobiltelefon-Nummer",
+          "text": "Mobiltelefon",
           "linkId": "9309290052217",
           "type": "string"
         },
         {
-          "text": "Festnetz-Telefonnummer",
+          "text": "Telefonnummer (Festnetz)",
           "linkId": "6163791743267",
           "type": "string"
         },
         {
-          "text": "Telefon-Nummer Büro",
+          "text": "Telefonnummer (Büro)",
           "linkId": "4627974996363",
           "type": "string"
         },
         {
-          "text": "E-Mail-Adresse",
+          "text": "E-Mail Adresse",
           "linkId": "1422668921503",
           "type": "string"
         },
@@ -315,7 +315,7 @@
           "type": "string"
         },
         {
-          "text": "Beschreibung der Reaktion bei  Eintritt der Allergie oder Unver-  träglichkeit",
+          "text": "Beschreibung der Reaktion bei  Eintritt der Allergie oder Unverträglichkeit",
           "linkId": "560851176806",
           "type": "string"
         },
@@ -325,7 +325,7 @@
           "type": "string"
         },
         {
-          "text": "Gibt es weitere Dokumente im  EPD zu dieser Allergie oder Un-  verträglichkeit?",
+          "text": "Gibt es weitere Dokumente im  EPD zu dieser Allergie oder Unverträglichkeit?",
           "linkId": "5351600961049",
           "type": "string"
         }
@@ -361,7 +361,7 @@
           "type": "string"
         },
         {
-          "text": "Gibt es weitere Dokumente im  EPD zu dieser Krankheit oder  Unfallfolge",
+          "text": "Gibt es weitere Dokumente im  EPD zu dieser Krankheit oder Unfallfolge",
           "linkId": "5382028938869",
           "type": "string"
         }
@@ -374,7 +374,7 @@
     {
       "item": [
         {
-          "text": "Gibt es Gesundheitsausweise in Ihrem EPD (z. B. Brillenpass, Organspendenausweis, Blut-spendenausweis; Impfdaten etc.)?",
+          "text": "Gibt es in Ihrem EPD Gesundheitspässe (z.B. Brillenpass, Organspendeausweis, Blutspendeausweis, Impfdaten usw.)",
           "linkId": "213852082486",
           "type": "string"
         }
@@ -387,26 +387,26 @@
     {
       "item": [
         {
-          "text": "Gibt es Patientenverfügungen in Ihrem EPD?",
+          "text": "Gibt es in Ihrem EPD eine Patientenverfügung?",
           "linkId": "7925545711288",
           "type": "string"
         }
       ],
       "type": "group",
       "linkId": "4351344386967",
-      "text": "Patientenverfügungen"
+      "text": "Patientenverfügung"
     },
     {
       "item": [
         {
-          "text": "Welche wichtigen gesundheits-relevanten Informationen gibt es noch zu Ihrer Person?",
+          "text": "Welche wichtigen gesundheitsrelevanten Informationen gibt es sonst noch über Sie?",
           "linkId": "2754455221167",
           "type": "string"
         }
       ],
       "type": "group",
       "linkId": "7254109121551",
-      "text": "Weitere Bemerkungen",
+      "text": "Sonstige Bemerkungen",
       "repeats": false
     }
   ],
