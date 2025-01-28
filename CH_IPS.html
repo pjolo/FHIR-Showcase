@@ -99,11 +99,11 @@
   <li data-tab="patient"><span class="icon">👩‍⚕️</span>Patient</li>
   <li data-tab="practitioner"><span class="icon">🩺</span>Practitioner</li>
   <li data-tab="organization"><span class="icon">🏥</span>Organization</li>
-  <li data-tab="condition"><span class="icon">⚕️</span>Condition</li>
+  <li data-tab="condition"><span class="icon">⚕️</span>Problemliste</li>
   <li data-tab="medications"><span class="icon">💊</span>Medikationen</li>
   <li data-tab="allergies"><span class="icon">🌿</span>Allergien</li>
   <li data-tab="observations"><span class="icon">📊</span>Beobachtungen</li>
-  <li data-tab="procedures"><span class="icon">🔧</span>Prozeduren</li>
+  <li data-tab="procedures"><span class="icon">🔧</span>Behandlungsverlauf</li>
   <li data-tab="immunizations"><span class="icon">💉</span>Impfungen</li>
 </ul>
 
@@ -1870,7 +1870,7 @@ function renderCompositionTab() {
   );
 
   container.innerHTML = `
-    <h3 style="background-color: #f0f0f0; padding: 10px; margin: 0; border-radius: 5px;">General Information</h3>
+    <h3 style="background-color: #f0f0f0; padding: 10px; margin: 0; border-radius: 5px;">Allgemeine Informationen</h3>
     <p><strong>Title:</strong> ${composition.title || "-"}</p>
     <p><strong>Date:</strong> ${composition.date || "-"}</p>
     <p><strong>Status:</strong> ${composition.status || "-"}</p>
