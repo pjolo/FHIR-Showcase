@@ -1,5 +1,3 @@
-# 📌 Willkommen auf meiner GitHub Pages-Seite
-
 ## 📋 Verfügbare Formulare
 
 🔗 Klicke auf einen der folgenden Links, um das jeweiligen Formular direkt im Viewer zu öffnen:
