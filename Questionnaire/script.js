@@ -58,3 +58,22 @@ var formDef = {
 };
 LForms.Util.addFormToPage(formDef, 'formContainer');
 
+document.getElementById('addFormButton').addEventListener('click', function() {
+  document.getElementById('jsonModal').style.display = 'block';
+});
+
+document.getElementById('closeModalButton').addEventListener('click', function() {
+  document.getElementById('jsonModal').style.display = 'none';
+});
+
+document.getElementById('renderFormButton').addEventListener('click', function() {
+  const jsonInput = document.getElementById('jsonInput').value;
+  try {
+    const formDef = JSON.parse(jsonInput);
+    LForms.Util.addFormToPage(formDef, 'formContainer');
+    document.getElementById('jsonModal').style.display = 'none';
+  } catch (error) {
+    alert('Invalid JSON format');
+  }
+});
+
