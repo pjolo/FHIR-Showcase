@@ -1045,7 +1045,13 @@
       "definition" : "http://fhir.ch/ig/ch-core/StructureDefinition/ch-core-patient#Patient.communication:languageOfCorrespondence",
       "text" : "Korrespondenzsprache",
       "type" : "choice",
-      "answerValueSet" : "http://fhir.ch/ig/ch-term/ValueSet/DocumentEntry.languageCode"
+      "answerOption": [
+    { "valueCoding": { "code": "de", "display": "Deutsch" } },
+    { "valueCoding": { "code": "fr", "display": "Französisch" } },
+    { "valueCoding": { "code": "it", "display": "Italienisch" } },
+    { "valueCoding": { "code": "rm", "display": "Rätoromanisch" } },
+    { "valueCoding": { "code": "en", "display": "Englisch" } }
+  ]
     },
     {
       "extension" : [{
