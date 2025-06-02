@@ -1,5 +1,5 @@
 ## BundleViewer
-https://pjolo.github.io/FHIR-Showcase/BundleViewer.html
+[Bundle Viewer](https://pjolo.github.io/FHIR-Showcase/BundleViewer.html)
 
 ## 📋 Verfügbare Formulare
 
