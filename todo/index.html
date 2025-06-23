@@ -2,18 +2,35 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Todo-Liste mit Zeitmessung und Label-Auswahl</title>
+  <title>Todo-Liste mit farbigen Labels</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 30px; }
     .todo { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
-    .label { background: #e0e0e0; border-radius: 4px; padding: 2px 6px; margin-right: 5px; }
+    .label {
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin-right: 5px;
+      color: #fff;
+      display: inline-block;
+    }
     .stats { margin-top: 20px; }
     .running { color: green; }
     .stopped { color: red; }
+    .label-list { margin-bottom: 10px; }
+    .label-delete-btn {
+      margin-left: 5px;
+      background: #fff;
+      color: #333;
+      border: 1px solid #888;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 10px;
+      padding: 0 4px;
+    }
   </style>
 </head>
 <body>
-  <h2>Todo-Liste mit Zeitmessung</h2>
+  <h2>Todo-Liste mit farbigen Labels</h2>
   <form id="todoForm">
     <input type="text" id="todoText" placeholder="Todo" required>
     <select id="todoLabelSelect">
@@ -22,6 +39,8 @@
     <input type="text" id="todoLabelInput" placeholder="Neues Label (optional)">
     <button type="submit">Hinzufügen</button>
   </form>
+
+  <div class="label-list" id="labelList"></div>
 
   <div id="todoList"></div>
 
@@ -40,17 +59,14 @@
   </div>
 
   <script>
-    // Laden und Speichern von Todos und Labels
-    function saveTodos() {
-      localStorage.setItem('todos', JSON.stringify(todos));
+    // Hilfsfunktionen für zufällige Farben
+    function randomColor() {
+      // Pastellfarben für bessere Lesbarkeit
+      const hue = Math.floor(Math.random() * 360);
+      return `hsl(${hue},70%,50%)`;
     }
-    function loadTodos() {
-      try {
-        return JSON.parse(localStorage.getItem('todos')) || [];
-      } catch {
-        return [];
-      }
-    }
+
+    // Labels: [{name: 'Label', color: '#ff0000'}]
     function saveLabels() {
       localStorage.setItem('labels', JSON.stringify(labels));
     }
@@ -62,19 +78,56 @@
       }
     }
 
+    function saveTodos() {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+    function loadTodos() {
+      try {
+        return JSON.parse(localStorage.getItem('todos')) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    let labels = loadLabels();
     let todos = loadTodos();
     let timerIntervals = {};
-    let labels = loadLabels();
 
     function updateLabelSelect() {
       const select = document.getElementById('todoLabelSelect');
       select.innerHTML = '<option value="">Label auswählen</option>';
       labels.forEach(label => {
         const opt = document.createElement('option');
-        opt.value = label;
-        opt.textContent = label;
+        opt.value = label.name;
+        opt.textContent = label.name;
+        opt.style.backgroundColor = label.color;
+        opt.style.color = "#fff";
         select.appendChild(opt);
       });
+    }
+
+    function updateLabelList() {
+      const list = document.getElementById('labelList');
+      list.innerHTML = '';
+      labels.forEach(label => {
+        const span = document.createElement('span');
+        span.className = 'label';
+        span.style.backgroundColor = label.color;
+        span.textContent = label.name;
+        // Delete-Button
+        const delBtn = document.createElement('button');
+        delBtn.className = 'label-delete-btn';
+        delBtn.textContent = '✕';
+        delBtn.title = 'Label löschen';
+        delBtn.onclick = () => deleteLabel(label.name);
+        span.appendChild(delBtn);
+        list.appendChild(span);
+      });
+    }
+
+    function getLabelColor(labelName) {
+      const label = labels.find(l => l.name === labelName);
+      return label ? label.color : '#888';
     }
 
     function formatTime(ms) {
@@ -92,7 +145,7 @@
         div.className = 'todo';
         div.innerHTML = `
           <strong>${todo.text}</strong>
-          ${todo.label ? `<span class="label">${todo.label}</span>` : ''}
+          ${todo.label ? `<span class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</span>` : ''}
           <div>
             Zeit: <span id="time-${idx}">${formatTime(todo.time)}</span>
             <button onclick="toggleTimer(${idx})" id="btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
@@ -118,7 +171,7 @@
       });
       let labelHtml = '<ul>';
       for (let label in labelMap) {
-        labelHtml += `<li>${label}: ${formatTime(labelMap[label])}</li>`;
+        labelHtml += `<li><span class="label" style="background:${getLabelColor(label)}">${label}</span>: ${formatTime(labelMap[label])}</li>`;
       }
       labelHtml += '</ul>';
       document.getElementById('labelTimes').innerHTML = labelHtml;
@@ -126,11 +179,6 @@
 
     function addTodo(text, label) {
       todos.push({ text, label, time: 0, running: false, start: null });
-      if (label && !labels.includes(label)) {
-        labels.push(label);
-        saveLabels();
-        updateLabelSelect();
-      }
       saveTodos();
       renderTodos();
     }
@@ -184,11 +232,30 @@
       document.getElementById('utilization').innerText = `Auslastung: ${percent}% (${total.toFixed(2)}h von ${hours}h)`;
     }
 
+    function addNewLabel(labelName) {
+      if (!labelName || labels.find(l => l.name === labelName)) return;
+      const color = randomColor();
+      labels.push({ name: labelName, color });
+      saveLabels();
+      updateLabelSelect();
+      updateLabelList();
+    }
+
+    function deleteLabel(labelName) {
+      labels = labels.filter(l => l.name !== labelName);
+      saveLabels();
+      updateLabelSelect();
+      updateLabelList();
+    }
+
     document.getElementById('todoForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const text = document.getElementById('todoText').value.trim();
       let label = document.getElementById('todoLabelInput').value.trim();
       if (!label) label = document.getElementById('todoLabelSelect').value;
+      if (label && !labels.find(l => l.name === label)) {
+        addNewLabel(label);
+      }
       if (text) addTodo(text, label);
       document.getElementById('todoText').value = '';
       document.getElementById('todoLabelInput').value = '';
@@ -197,6 +264,7 @@
 
     // Initial rendering
     updateLabelSelect();
+    updateLabelList();
     renderTodos();
   </script>
 </body>
