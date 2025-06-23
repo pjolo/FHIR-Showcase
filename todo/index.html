@@ -286,4 +286,38 @@
       let now = new Date();
       let thisMonth = now.toISOString().slice(0, 7);
       let openTime = todos.reduce((sum, t) => sum + t.time, 0);
-      if (!monthlyMap[thisMonth]) monthlyMap[thisMonth] =
+      if (!monthlyMap[thisMonth]) monthlyMap[thisMonth] = 0;
+      monthlyMap[thisMonth] += openTime;
+
+      let html = '<table border="1" cellpadding="4"><tr><th>Monat</th><th>Gesamtzeit</th><th>Auslastung</th></tr>';
+      Object.keys(monthlyMap).sort().reverse().forEach(month => {
+        let hours = monthlyMap[month] / 3600000;
+        let percent = workHours ? ((hours / workHours) * 100).toFixed(1) : 0;
+        html += `<tr><td>${month}</td><td>${formatTime(monthlyMap[month])}</td><td>${percent}%</td></tr>`;
+      });
+      html += '</table>';
+      document.getElementById('monthlyStats').innerHTML = html;
+    }
+
+    document.getElementById('todoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const text = document.getElementById('todoText').value.trim();
+      let label = document.getElementById('todoLabelInput').value.trim();
+      if (!label) label = document.getElementById('todoLabelSelect').value;
+      if (label && !labels.find(l => l.name === label)) {
+        addNewLabel(label);
+      }
+      if (text) addTodo(text, label);
+      document.getElementById('todoText').value = '';
+      document.getElementById('todoLabelInput').value = '';
+      document.getElementById('todoLabelSelect').selectedIndex = 0;
+    });
+
+    document.getElementById('deleteLabelBtn').addEventListener('click', deleteSelectedLabel);
+
+    // Initial rendering
+    updateLabelSelect();
+    renderTodos();
+  </script>
+</body>
+</html>
