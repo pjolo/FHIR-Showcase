@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo-Liste mit Zeitmessung</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    .todo { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+    .label { background: #e0e0e0; border-radius: 4px; padding: 2px 6px; margin-right: 5px; }
+    .stats { margin-top: 20px; }
+    .running { color: green; }
+    .stopped { color: red; }
+  </style>
+</head>
+<body>
+  <h2>Todo-Liste mit Zeitmessung</h2>
+  <form id="todoForm">
+    <input type="text" id="todoText" placeholder="Todo" required>
+    <input type="text" id="todoLabel" placeholder="Label (optional)">
+    <button type="submit">Hinzufügen</button>
+  </form>
+
+  <div id="todoList"></div>
+
+  <div class="stats">
+    <h3>Statistiken</h3>
+    <div id="totalTime"></div>
+    <div id="labelTimes"></div>
+    <div>
+      <h4>Auslastung berechnen</h4>
+      <label>Verfügbare Arbeitszeit (Stunden): 
+        <input type="number" id="workHours" value="40">
+      </label>
+      <button onclick="calculateUtilization()">Berechnen</button>
+      <div id="utilization"></div>
+    </div>
+  </div>
+
+  <script>
+    let todos = [];
+    let timerIntervals = {};
+
+    function formatTime(ms) {
+      let sec = Math.floor(ms / 1000) % 60;
+      let min = Math.floor(ms / 60000) % 60;
+      let h = Math.floor(ms / 3600000);
+      return `${h}h ${min}m ${sec}s`;
+    }
+
+    function renderTodos() {
+      const list = document.getElementById('todoList');
+      list.innerHTML = '';
+      todos.forEach((todo, idx) => {
+        const div = document.createElement('div');
+        div.className = 'todo';
+        div.innerHTML = `
+          <strong>${todo.text}</strong>
+          ${todo.label ? `<span class="label">${todo.label}</span>` : ''}
+          <div>
+            Zeit: <span id="time-${idx}">${formatTime(todo.time)}</span>
+            <button onclick="toggleTimer(${idx})" id="btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
+            <button onclick="deleteTodo(${idx})">Löschen</button>
+            <span class="${todo.running ? 'running' : 'stopped'}">${todo.running ? 'läuft...' : ''}</span>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+      updateStats();
+    }
+
+    function updateStats() {
+      // Gesamtzeit
+      let total = todos.reduce((sum, t) => sum + t.time, 0);
+      document.getElementById('totalTime').innerText = `Gesamtzeit: ${formatTime(total)}`;
+
+      // Zeit pro Label
+      let labelMap = {};
+      todos.forEach(t => {
+        if (t.label) {
+          if (!labelMap[t.label]) labelMap[t.label] = 0;
+          labelMap[t.label] += t.time;
+        }
+      });
+      let labelHtml = '<ul>';
+      for (let label in labelMap) {
+        labelHtml += `<li>${label}: ${formatTime(labelMap[label])}</li>`;
+      }
+      labelHtml += '</ul>';
+      document.getElementById('labelTimes').innerHTML = labelHtml;
+    }
+
+    function addTodo(text, label) {
+      todos.push({ text, label, time: 0, running: false, start: null });
+      renderTodos();
+    }
+
+    function deleteTodo(idx) {
+      stopTimer(idx);
+      todos.splice(idx, 1);
+      renderTodos();
+    }
+
+    function toggleTimer(idx) {
+      if (todos[idx].running) {
+        stopTimer(idx);
+      } else {
+        startTimer(idx);
+      }
+      renderTodos();
+    }
+
+    function startTimer(idx) {
+      if (todos[idx].running) return;
+      todos[idx].running = true;
+      todos[idx].start = Date.now();
+      timerIntervals[idx] = setInterval(() => {
+        let now = Date.now();
+        todos[idx].time += now - todos[idx].start;
+        todos[idx].start = now;
+        document.getElementById(`time-${idx}`).innerText = formatTime(todos[idx].time);
+        updateStats();
+      }, 1000);
+    }
+
+    function stopTimer(idx) {
+      if (!todos[idx].running) return;
+      todos[idx].running = false;
+      let now = Date.now();
+      todos[idx].time += now - todos[idx].start;
+      todos[idx].start = null;
+      clearInterval(timerIntervals[idx]);
+      updateStats();
+    }
+
+    function calculateUtilization() {
+      let hours = parseFloat(document.getElementById('workHours').value) || 0;
+      let total = todos.reduce((sum, t) => sum + t.time, 0) / 3600000; // in Stunden
+      let percent = hours ? ((total / hours) * 100).toFixed(1) : 0;
+      document.getElementById('utilization').innerText = `Auslastung: ${percent}% (${total.toFixed(2)}h von ${hours}h)`;
+    }
+
+    document.getElementById('todoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const text = document.getElementById('todoText').value.trim();
+      const label = document.getElementById('todoLabel').value.trim();
+      if (text) addTodo(text, label);
+      document.getElementById('todoText').value = '';
+      document.getElementById('todoLabel').value = '';
+    });
+
+    // Initial rendering
+    renderTodos();
+  </script>
+</body>
+</html>
