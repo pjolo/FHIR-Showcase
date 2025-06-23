@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Todo-Liste mit Zeitmessung</title>
+  <title>Todo-Liste mit Zeitmessung und Label-Auswahl</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 30px; }
     .todo { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
@@ -16,7 +16,10 @@
   <h2>Todo-Liste mit Zeitmessung</h2>
   <form id="todoForm">
     <input type="text" id="todoText" placeholder="Todo" required>
-    <input type="text" id="todoLabel" placeholder="Label (optional)">
+    <select id="todoLabelSelect">
+      <option value="">Label auswählen</option>
+    </select>
+    <input type="text" id="todoLabelInput" placeholder="Neues Label (optional)">
     <button type="submit">Hinzufügen</button>
   </form>
 
@@ -37,8 +40,42 @@
   </div>
 
   <script>
-    let todos = [];
+    // Laden und Speichern von Todos und Labels
+    function saveTodos() {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+    function loadTodos() {
+      try {
+        return JSON.parse(localStorage.getItem('todos')) || [];
+      } catch {
+        return [];
+      }
+    }
+    function saveLabels() {
+      localStorage.setItem('labels', JSON.stringify(labels));
+    }
+    function loadLabels() {
+      try {
+        return JSON.parse(localStorage.getItem('labels')) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    let todos = loadTodos();
     let timerIntervals = {};
+    let labels = loadLabels();
+
+    function updateLabelSelect() {
+      const select = document.getElementById('todoLabelSelect');
+      select.innerHTML = '<option value="">Label auswählen</option>';
+      labels.forEach(label => {
+        const opt = document.createElement('option');
+        opt.value = label;
+        opt.textContent = label;
+        select.appendChild(opt);
+      });
+    }
 
     function formatTime(ms) {
       let sec = Math.floor(ms / 1000) % 60;
@@ -69,11 +106,9 @@
     }
 
     function updateStats() {
-      // Gesamtzeit
       let total = todos.reduce((sum, t) => sum + t.time, 0);
       document.getElementById('totalTime').innerText = `Gesamtzeit: ${formatTime(total)}`;
 
-      // Zeit pro Label
       let labelMap = {};
       todos.forEach(t => {
         if (t.label) {
@@ -91,12 +126,19 @@
 
     function addTodo(text, label) {
       todos.push({ text, label, time: 0, running: false, start: null });
+      if (label && !labels.includes(label)) {
+        labels.push(label);
+        saveLabels();
+        updateLabelSelect();
+      }
+      saveTodos();
       renderTodos();
     }
 
     function deleteTodo(idx) {
       stopTimer(idx);
       todos.splice(idx, 1);
+      saveTodos();
       renderTodos();
     }
 
@@ -118,8 +160,10 @@
         todos[idx].time += now - todos[idx].start;
         todos[idx].start = now;
         document.getElementById(`time-${idx}`).innerText = formatTime(todos[idx].time);
+        saveTodos();
         updateStats();
       }, 1000);
+      saveTodos();
     }
 
     function stopTimer(idx) {
@@ -129,12 +173,13 @@
       todos[idx].time += now - todos[idx].start;
       todos[idx].start = null;
       clearInterval(timerIntervals[idx]);
+      saveTodos();
       updateStats();
     }
 
     function calculateUtilization() {
       let hours = parseFloat(document.getElementById('workHours').value) || 0;
-      let total = todos.reduce((sum, t) => sum + t.time, 0) / 3600000; // in Stunden
+      let total = todos.reduce((sum, t) => sum + t.time, 0) / 3600000;
       let percent = hours ? ((total / hours) * 100).toFixed(1) : 0;
       document.getElementById('utilization').innerText = `Auslastung: ${percent}% (${total.toFixed(2)}h von ${hours}h)`;
     }
@@ -142,13 +187,16 @@
     document.getElementById('todoForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const text = document.getElementById('todoText').value.trim();
-      const label = document.getElementById('todoLabel').value.trim();
+      let label = document.getElementById('todoLabelInput').value.trim();
+      if (!label) label = document.getElementById('todoLabelSelect').value;
       if (text) addTodo(text, label);
       document.getElementById('todoText').value = '';
-      document.getElementById('todoLabel').value = '';
+      document.getElementById('todoLabelInput').value = '';
+      document.getElementById('todoLabelSelect').selectedIndex = 0;
     });
 
     // Initial rendering
+    updateLabelSelect();
     renderTodos();
   </script>
 </body>
