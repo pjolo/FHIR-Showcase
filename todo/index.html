@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Todo-Liste mit Monatsstatistik</title>
+  <title>Todo-Liste mit Labelverwaltung</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 30px; }
     .todo { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
@@ -38,7 +38,7 @@
   </style>
 </head>
 <body>
-  <h2>Todo-Liste mit Monatsstatistik</h2>
+  <h2>Todo-Liste mit Labelverwaltung</h2>
   <form id="todoForm">
     <input type="text" id="todoText" placeholder="Todo" required>
     <select id="todoLabelSelect">
@@ -48,6 +48,11 @@
     <input type="text" id="todoLabelInput" placeholder="Neues Label (optional)">
     <button type="submit">Hinzufügen</button>
   </form>
+
+  <div style="margin: 10px 0;">
+    <input type="text" id="newLabelInput" placeholder="Neues Label erstellen">
+    <button type="button" id="createLabelBtn">Label erstellen</button>
+  </div>
 
   <div id="todoList"></div>
 
@@ -159,11 +164,9 @@
     }
 
     function updateStats() {
-      // Gesamtzeit (erledigte + offene Todos)
       let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0);
       document.getElementById('totalTime').innerText = `Gesamtzeit: ${formatTime(total)}`;
 
-      // Zeit pro Label (nur offene und erledigte Todos zusammen)
       let labelMap = {};
       [...todos, ...doneTodos].forEach(t => {
         if (t.label) {
@@ -178,7 +181,6 @@
       labelHtml += '</ul>';
       document.getElementById('labelTimes').innerHTML = labelHtml;
 
-      // Monatsstatistik
       updateMonthlyStats();
     }
 
@@ -232,9 +234,8 @@
 
     function markDone(idx) {
       stopTimer(idx);
-      // Erledigt-Datum setzen (heute)
       let today = new Date();
-      let doneDate = today.toISOString().slice(0, 10); // YYYY-MM-DD
+      let doneDate = today.toISOString().slice(0, 10);
       let todo = todos[idx];
       todo.doneDate = doneDate;
       doneTodos.push(todo);
@@ -270,19 +271,16 @@
       select.selectedIndex = 0;
     }
 
-    // Monatsstatistik: Zeit und Auslastung pro Monat
     function updateMonthlyStats() {
       const workHours = parseFloat(document.getElementById('workHours').value) || 0;
-      // Gruppiere erledigte Todos nach Monat
       let monthlyMap = {};
       doneTodos.forEach(todo => {
         if (todo.doneDate) {
-          let month = todo.doneDate.slice(0, 7); // YYYY-MM
+          let month = todo.doneDate.slice(0, 7);
           if (!monthlyMap[month]) monthlyMap[month] = 0;
           monthlyMap[month] += todo.time;
         }
       });
-      // Aktuellen Monat auch mit offenen Todos berücksichtigen
       let now = new Date();
       let thisMonth = now.toISOString().slice(0, 7);
       let openTime = todos.reduce((sum, t) => sum + t.time, 0);
@@ -314,6 +312,14 @@
     });
 
     document.getElementById('deleteLabelBtn').addEventListener('click', deleteSelectedLabel);
+
+    document.getElementById('createLabelBtn').addEventListener('click', function() {
+      const labelName = document.getElementById('newLabelInput').value.trim();
+      if (labelName && !labels.find(l => l.name === labelName)) {
+        addNewLabel(labelName);
+        document.getElementById('newLabelInput').value = '';
+      }
+    });
 
     // Initial rendering
     updateLabelSelect();
