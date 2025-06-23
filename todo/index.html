@@ -16,7 +16,6 @@
     .stats { margin-top: 20px; }
     .running { color: green; }
     .stopped { color: red; }
-    .label-list { margin-bottom: 10px; }
     .label-delete-btn {
       margin-left: 5px;
       background: #fff;
@@ -36,11 +35,10 @@
     <select id="todoLabelSelect">
       <option value="">Label auswählen</option>
     </select>
+    <button type="button" id="deleteLabelBtn" title="Ausgewähltes Label löschen">Label löschen</button>
     <input type="text" id="todoLabelInput" placeholder="Neues Label (optional)">
     <button type="submit">Hinzufügen</button>
   </form>
-
-  <div class="label-list" id="labelList"></div>
 
   <div id="todoList"></div>
 
@@ -59,14 +57,11 @@
   </div>
 
   <script>
-    // Hilfsfunktionen für zufällige Farben
     function randomColor() {
-      // Pastellfarben für bessere Lesbarkeit
       const hue = Math.floor(Math.random() * 360);
       return `hsl(${hue},70%,50%)`;
     }
 
-    // Labels: [{name: 'Label', color: '#ff0000'}]
     function saveLabels() {
       localStorage.setItem('labels', JSON.stringify(labels));
     }
@@ -77,7 +72,6 @@
         return [];
       }
     }
-
     function saveTodos() {
       localStorage.setItem('todos', JSON.stringify(todos));
     }
@@ -103,25 +97,6 @@
         opt.style.backgroundColor = label.color;
         opt.style.color = "#fff";
         select.appendChild(opt);
-      });
-    }
-
-    function updateLabelList() {
-      const list = document.getElementById('labelList');
-      list.innerHTML = '';
-      labels.forEach(label => {
-        const span = document.createElement('span');
-        span.className = 'label';
-        span.style.backgroundColor = label.color;
-        span.textContent = label.name;
-        // Delete-Button
-        const delBtn = document.createElement('button');
-        delBtn.className = 'label-delete-btn';
-        delBtn.textContent = '✕';
-        delBtn.title = 'Label löschen';
-        delBtn.onclick = () => deleteLabel(label.name);
-        span.appendChild(delBtn);
-        list.appendChild(span);
       });
     }
 
@@ -238,14 +213,19 @@
       labels.push({ name: labelName, color });
       saveLabels();
       updateLabelSelect();
-      updateLabelList();
     }
 
-    function deleteLabel(labelName) {
-      labels = labels.filter(l => l.name !== labelName);
+    function deleteSelectedLabel() {
+      const select = document.getElementById('todoLabelSelect');
+      const selectedValue = select.value;
+      if (!selectedValue) return;
+      // Optional: Bestätigung
+      if (!confirm(`Label "${selectedValue}" wirklich löschen?`)) return;
+      labels = labels.filter(l => l.name !== selectedValue);
       saveLabels();
       updateLabelSelect();
-      updateLabelList();
+      // Falls das gelöschte Label gerade im Eingabefeld ausgewählt war, zurücksetzen
+      select.selectedIndex = 0;
     }
 
     document.getElementById('todoForm').addEventListener('submit', function(e) {
@@ -262,9 +242,10 @@
       document.getElementById('todoLabelSelect').selectedIndex = 0;
     });
 
+    document.getElementById('deleteLabelBtn').addEventListener('click', deleteSelectedLabel);
+
     // Initial rendering
     updateLabelSelect();
-    updateLabelList();
     renderTodos();
   </script>
 </body>
