@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Todo-Liste mit farbigen Labels</title>
+  <title>Todo-Liste mit Monatsstatistik</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 30px; }
     .todo { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
@@ -16,6 +16,15 @@
     .stats { margin-top: 20px; }
     .running { color: green; }
     .stopped { color: red; }
+    .done-btn {
+      margin-left: 10px;
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 2px 8px;
+    }
     .label-delete-btn {
       margin-left: 5px;
       background: #fff;
@@ -29,7 +38,7 @@
   </style>
 </head>
 <body>
-  <h2>Todo-Liste mit farbigen Labels</h2>
+  <h2>Todo-Liste mit Monatsstatistik</h2>
   <form id="todoForm">
     <input type="text" id="todoText" placeholder="Todo" required>
     <select id="todoLabelSelect">
@@ -48,11 +57,15 @@
     <div id="labelTimes"></div>
     <div>
       <h4>Auslastung berechnen</h4>
-      <label>Verfügbare Arbeitszeit (Stunden): 
-        <input type="number" id="workHours" value="40">
+      <label>Verfügbare Arbeitszeit (Stunden/Monat): 
+        <input type="number" id="workHours" value="160">
       </label>
       <button onclick="calculateUtilization()">Berechnen</button>
       <div id="utilization"></div>
+    </div>
+    <div>
+      <h4>Monatsstatistik</h4>
+      <div id="monthlyStats"></div>
     </div>
   </div>
 
@@ -82,9 +95,20 @@
         return [];
       }
     }
+    function saveDoneTodos() {
+      localStorage.setItem('doneTodos', JSON.stringify(doneTodos));
+    }
+    function loadDoneTodos() {
+      try {
+        return JSON.parse(localStorage.getItem('doneTodos')) || [];
+      } catch {
+        return [];
+      }
+    }
 
     let labels = loadLabels();
     let todos = loadTodos();
+    let doneTodos = loadDoneTodos();
     let timerIntervals = {};
 
     function updateLabelSelect() {
@@ -125,6 +149,7 @@
             Zeit: <span id="time-${idx}">${formatTime(todo.time)}</span>
             <button onclick="toggleTimer(${idx})" id="btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
             <button onclick="deleteTodo(${idx})">Löschen</button>
+            <button class="done-btn" onclick="markDone(${idx})">Erledigt</button>
             <span class="${todo.running ? 'running' : 'stopped'}">${todo.running ? 'läuft...' : ''}</span>
           </div>
         `;
@@ -134,11 +159,13 @@
     }
 
     function updateStats() {
-      let total = todos.reduce((sum, t) => sum + t.time, 0);
+      // Gesamtzeit (erledigte + offene Todos)
+      let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0);
       document.getElementById('totalTime').innerText = `Gesamtzeit: ${formatTime(total)}`;
 
+      // Zeit pro Label (nur offene und erledigte Todos zusammen)
       let labelMap = {};
-      todos.forEach(t => {
+      [...todos, ...doneTodos].forEach(t => {
         if (t.label) {
           if (!labelMap[t.label]) labelMap[t.label] = 0;
           labelMap[t.label] += t.time;
@@ -150,6 +177,9 @@
       }
       labelHtml += '</ul>';
       document.getElementById('labelTimes').innerHTML = labelHtml;
+
+      // Monatsstatistik
+      updateMonthlyStats();
     }
 
     function addTodo(text, label) {
@@ -200,9 +230,23 @@
       updateStats();
     }
 
+    function markDone(idx) {
+      stopTimer(idx);
+      // Erledigt-Datum setzen (heute)
+      let today = new Date();
+      let doneDate = today.toISOString().slice(0, 10); // YYYY-MM-DD
+      let todo = todos[idx];
+      todo.doneDate = doneDate;
+      doneTodos.push(todo);
+      saveDoneTodos();
+      todos.splice(idx, 1);
+      saveTodos();
+      renderTodos();
+    }
+
     function calculateUtilization() {
       let hours = parseFloat(document.getElementById('workHours').value) || 0;
-      let total = todos.reduce((sum, t) => sum + t.time, 0) / 3600000;
+      let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0) / 3600000;
       let percent = hours ? ((total / hours) * 100).toFixed(1) : 0;
       document.getElementById('utilization').innerText = `Auslastung: ${percent}% (${total.toFixed(2)}h von ${hours}h)`;
     }
@@ -219,34 +263,27 @@
       const select = document.getElementById('todoLabelSelect');
       const selectedValue = select.value;
       if (!selectedValue) return;
-      // Optional: Bestätigung
       if (!confirm(`Label "${selectedValue}" wirklich löschen?`)) return;
       labels = labels.filter(l => l.name !== selectedValue);
       saveLabels();
       updateLabelSelect();
-      // Falls das gelöschte Label gerade im Eingabefeld ausgewählt war, zurücksetzen
       select.selectedIndex = 0;
     }
 
-    document.getElementById('todoForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const text = document.getElementById('todoText').value.trim();
-      let label = document.getElementById('todoLabelInput').value.trim();
-      if (!label) label = document.getElementById('todoLabelSelect').value;
-      if (label && !labels.find(l => l.name === label)) {
-        addNewLabel(label);
-      }
-      if (text) addTodo(text, label);
-      document.getElementById('todoText').value = '';
-      document.getElementById('todoLabelInput').value = '';
-      document.getElementById('todoLabelSelect').selectedIndex = 0;
-    });
-
-    document.getElementById('deleteLabelBtn').addEventListener('click', deleteSelectedLabel);
-
-    // Initial rendering
-    updateLabelSelect();
-    renderTodos();
-  </script>
-</body>
-</html>
+    // Monatsstatistik: Zeit und Auslastung pro Monat
+    function updateMonthlyStats() {
+      const workHours = parseFloat(document.getElementById('workHours').value) || 0;
+      // Gruppiere erledigte Todos nach Monat
+      let monthlyMap = {};
+      doneTodos.forEach(todo => {
+        if (todo.doneDate) {
+          let month = todo.doneDate.slice(0, 7); // YYYY-MM
+          if (!monthlyMap[month]) monthlyMap[month] = 0;
+          monthlyMap[month] += todo.time;
+        }
+      });
+      // Aktuellen Monat auch mit offenen Todos berücksichtigen
+      let now = new Date();
+      let thisMonth = now.toISOString().slice(0, 7);
+      let openTime = todos.reduce((sum, t) => sum + t.time, 0);
+      if (!monthlyMap[thisMonth]) monthlyMap[thisMonth] =
