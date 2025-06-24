@@ -133,9 +133,17 @@
       }
     }
 
+    // Migration: Setze fehlende Priorität auf "mittel"
+    function migrateTodos(arr) {
+      arr.forEach(todo => {
+        if (!todo.priority) todo.priority = "mittel";
+      });
+      return arr;
+    }
+
     let labels = loadLabels();
-    let todos = loadTodos();
-    let doneTodos = loadDoneTodos();
+    let todos = migrateTodos(loadTodos());
+    let doneTodos = migrateTodos(loadDoneTodos());
     let timerIntervals = {};
 
     function updateLabelSelect() {
@@ -166,20 +174,21 @@
     function renderTodos() {
       const list = document.getElementById('todoList');
       list.innerHTML = '';
-      // Sortierte Kopie für Anzeige, aber Index im Original merken!
       const prioOrder = { hoch: 1, mittel: 2, niedrig: 3 };
       const sorted = todos
         .map((todo, idx) => ({ ...todo, origIdx: idx }))
-        .sort((a, b) => prioOrder[a.priority] - prioOrder[b.priority]);
+        .sort((a, b) => prioOrder[a.priority || "mittel"] - prioOrder[b.priority || "mittel"]);
 
       sorted.forEach(todo => {
         const idx = todo.origIdx;
-        const div = document.createElement('div');
+        // Fallback für alte Todos ohne priority
+        const prio = todo.priority || "mittel";
+        div = document.createElement('div');
         div.className = 'todo';
         div.innerHTML = `
           <strong>${todo.text}</strong>
           ${todo.label ? `<span class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</span>` : ''}
-          <span class="priority ${todo.priority}">${todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1)}</span>
+          <span class="priority ${prio}">${prio.charAt(0).toUpperCase() + prio.slice(1)}</span>
           <div>
             Zeit: <span id="time-${idx}">${formatTime(todo.time)}</span>
             <button onclick="toggleTimer(${idx})" id="btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
@@ -293,6 +302,7 @@
       let doneDate = today.toISOString().slice(0, 10);
       let todo = todos[idx];
       todo.doneDate = doneDate;
+      if (!todo.priority) todo.priority = "mittel";
       doneTodos.push(todo);
       saveDoneTodos();
       todos.splice(idx, 1);
