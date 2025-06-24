@@ -45,6 +45,13 @@
       font-size: 10px;
       padding: 0 4px;
     }
+    .add-time-form input {
+      width: 40px;
+      margin-right: 2px;
+    }
+    .add-time-form button {
+      margin-right: 2px;
+    }
   </style>
 </head>
 <body>
@@ -174,12 +181,37 @@
             <button onclick="toggleTimer(${idx})" id="btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
             <button onclick="deleteTodo(${idx})">Löschen</button>
             <button class="done-btn" onclick="markDone(${idx})">Erledigt</button>
+            <button onclick="showAddTimeForm(${idx})">Zeit hinzufügen</button>
+            <span id="addTimeForm-${idx}" class="add-time-form" style="display:none;">
+              <input type="number" id="addH-${idx}" min="0" placeholder="h">
+              <input type="number" id="addM-${idx}" min="0" max="59" placeholder="m">
+              <input type="number" id="addS-${idx}" min="0" max="59" placeholder="s">
+              <button onclick="addManualTime(${idx})" type="button">OK</button>
+              <button onclick="hideAddTimeForm(${idx})" type="button">Abbrechen</button>
+            </span>
             <span class="${todo.running ? 'running' : 'stopped'}">${todo.running ? 'läuft...' : ''}</span>
           </div>
         `;
         list.appendChild(div);
       });
       updateStats();
+    }
+
+    function showAddTimeForm(idx) {
+      document.getElementById(`addTimeForm-${idx}`).style.display = 'inline';
+    }
+    function hideAddTimeForm(idx) {
+      document.getElementById(`addTimeForm-${idx}`).style.display = 'none';
+    }
+    function addManualTime(idx) {
+      const h = parseInt(document.getElementById(`addH-${idx}`).value) || 0;
+      const m = parseInt(document.getElementById(`addM-${idx}`).value) || 0;
+      const s = parseInt(document.getElementById(`addS-${idx}`).value) || 0;
+      const addMs = ((h * 60 * 60) + (m * 60) + s) * 1000;
+      todos[idx].time += addMs;
+      saveTodos();
+      hideAddTimeForm(idx);
+      renderTodos();
     }
 
     function updateStats() {
