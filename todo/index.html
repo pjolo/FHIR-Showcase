@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Todo-Liste mit Labelverwaltung</title>
+  <title>Todo-Liste mit Prioritäten, Labels und Statistik</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 30px; }
     .todo { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
@@ -13,6 +13,16 @@
       color: #fff;
       display: inline-block;
     }
+    .priority {
+      border-radius: 4px;
+      padding: 2px 6px;
+      margin-right: 5px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    .priority.hoch { background: #e53935; color: #fff; }
+    .priority.mittel { background: #fbc02d; color: #fff; }
+    .priority.niedrig { background: #43a047; color: #fff; }
     .stats { margin-top: 20px; }
     .running { color: green; }
     .stopped { color: red; }
@@ -38,7 +48,7 @@
   </style>
 </head>
 <body>
-  <h2>Todo-Liste mit Labelverwaltung</h2>
+  <h2>Todo-Liste mit Prioritäten, Labels und Statistik</h2>
   <form id="todoForm">
     <input type="text" id="todoText" placeholder="Todo" required>
     <select id="todoLabelSelect">
@@ -46,6 +56,11 @@
     </select>
     <button type="button" id="deleteLabelBtn" title="Ausgewähltes Label löschen">Label löschen</button>
     <input type="text" id="todoLabelInput" placeholder="Neues Label (optional)">
+    <select id="todoPrioritySelect">
+      <option value="hoch">Hoch</option>
+      <option value="mittel" selected>Mittel</option>
+      <option value="niedrig">Niedrig</option>
+    </select>
     <button type="submit">Hinzufügen</button>
   </form>
 
@@ -144,12 +159,16 @@
     function renderTodos() {
       const list = document.getElementById('todoList');
       list.innerHTML = '';
+      // Sortiere nach Priorität: hoch > mittel > niedrig
+      const prioOrder = { hoch: 1, mittel: 2, niedrig: 3 };
+      todos.sort((a, b) => prioOrder[a.priority] - prioOrder[b.priority]);
       todos.forEach((todo, idx) => {
         const div = document.createElement('div');
         div.className = 'todo';
         div.innerHTML = `
           <strong>${todo.text}</strong>
           ${todo.label ? `<span class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</span>` : ''}
+          <span class="priority ${todo.priority}">${todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1)}</span>
           <div>
             Zeit: <span id="time-${idx}">${formatTime(todo.time)}</span>
             <button onclick="toggleTimer(${idx})" id="btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
@@ -184,8 +203,8 @@
       updateMonthlyStats();
     }
 
-    function addTodo(text, label) {
-      todos.push({ text, label, time: 0, running: false, start: null });
+    function addTodo(text, label, priority) {
+      todos.push({ text, label, priority, time: 0, running: false, start: null });
       saveTodos();
       renderTodos();
     }
@@ -301,14 +320,16 @@
       e.preventDefault();
       const text = document.getElementById('todoText').value.trim();
       let label = document.getElementById('todoLabelInput').value.trim();
+      const priority = document.getElementById('todoPrioritySelect').value;
       if (!label) label = document.getElementById('todoLabelSelect').value;
       if (label && !labels.find(l => l.name === label)) {
         addNewLabel(label);
       }
-      if (text) addTodo(text, label);
+      if (text) addTodo(text, label, priority);
       document.getElementById('todoText').value = '';
       document.getElementById('todoLabelInput').value = '';
       document.getElementById('todoLabelSelect').selectedIndex = 0;
+      document.getElementById('todoPrioritySelect').value = 'mittel';
     });
 
     document.getElementById('deleteLabelBtn').addEventListener('click', deleteSelectedLabel);
