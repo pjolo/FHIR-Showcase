@@ -52,6 +52,10 @@
     .add-time-form button {
       margin-right: 2px;
     }
+    .edit-select {
+      margin-left: 5px;
+      margin-right: 5px;
+    }
   </style>
 </head>
 <body>
@@ -133,7 +137,6 @@
       }
     }
 
-    // Migration: Setze fehlende Priorität auf "mittel"
     function migrateTodos(arr) {
       arr.forEach(todo => {
         if (!todo.priority) todo.priority = "mittel";
@@ -181,12 +184,20 @@
 
       sorted.forEach(todo => {
         const idx = todo.origIdx;
-        // Fallback für alte Todos ohne priority
         const prio = todo.priority || "mittel";
-        div = document.createElement('div');
+        const div = document.createElement('div');
         div.className = 'todo';
         div.innerHTML = `
           <strong>${todo.text}</strong>
+          <select class="edit-select" onchange="updateTodoLabel(${idx}, this.value)">
+            <option value="">Kein Label</option>
+            ${labels.map(l => `<option value="${l.name}" style="background:${l.color};color:#fff;" ${todo.label===l.name?'selected':''}>${l.name}</option>`).join('')}
+          </select>
+          <select class="edit-select" onchange="updateTodoPrio(${idx}, this.value)">
+            <option value="hoch" ${prio==='hoch'?'selected':''}>Hoch</option>
+            <option value="mittel" ${prio==='mittel'?'selected':''}>Mittel</option>
+            <option value="niedrig" ${prio==='niedrig'?'selected':''}>Niedrig</option>
+          </select>
           ${todo.label ? `<span class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</span>` : ''}
           <span class="priority ${prio}">${prio.charAt(0).toUpperCase() + prio.slice(1)}</span>
           <div>
@@ -209,6 +220,18 @@
       });
       updateStats();
     }
+
+    // Editierbare Label/Priorität
+    window.updateTodoLabel = function(idx, value) {
+      todos[idx].label = value;
+      saveTodos();
+      renderTodos();
+    };
+    window.updateTodoPrio = function(idx, value) {
+      todos[idx].priority = value;
+      saveTodos();
+      renderTodos();
+    };
 
     function showAddTimeForm(idx) {
       document.getElementById(`addTimeForm-${idx}`).style.display = 'inline';
