@@ -166,10 +166,14 @@
     function renderTodos() {
       const list = document.getElementById('todoList');
       list.innerHTML = '';
-      // Sortiere nach Priorität: hoch > mittel > niedrig
+      // Sortierte Kopie für Anzeige, aber Index im Original merken!
       const prioOrder = { hoch: 1, mittel: 2, niedrig: 3 };
-      todos.sort((a, b) => prioOrder[a.priority] - prioOrder[b.priority]);
-      todos.forEach((todo, idx) => {
+      const sorted = todos
+        .map((todo, idx) => ({ ...todo, origIdx: idx }))
+        .sort((a, b) => prioOrder[a.priority] - prioOrder[b.priority]);
+
+      sorted.forEach(todo => {
+        const idx = todo.origIdx;
         const div = document.createElement('div');
         div.className = 'todo';
         div.innerHTML = `
