@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Todo-Liste</title>
+  <title>Todo-Liste mit Prioritäten, Labels, Statistik & Kommentaren</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -126,6 +126,41 @@
       gap: 8px;
       margin-top: 6px;
     }
+    .comment-toggle-btn {
+      background: #e0e7ff;
+      color: #374151;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 3px 10px;
+      font-size: 1em;
+      margin-bottom: 4px;
+      margin-left: 0;
+      margin-right: 0;
+      transition: background 0.15s;
+    }
+    .comment-toggle-btn:hover {
+      background: #c7d2fe;
+    }
+    .comment-area {
+      margin-top: 8px;
+      background: #f3f4f6;
+      border-radius: 6px;
+      padding: 8px 6px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .comment-area textarea {
+      width: 100%;
+      min-height: 48px;
+      font-size: 1em;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      padding: 5px;
+      resize: vertical;
+      background: #fff;
+      box-sizing: border-box;
+    }
     .stats {
       margin-top: 32px;
       background: #fff;
@@ -146,7 +181,7 @@
   </style>
 </head>
 <body>
-  <h2>Todo-Liste</h2>
+  <h2>Todo-Liste mit Prioritäten, Labels, Statistik & Kommentaren</h2>
   <form id="todoForm">
     <input type="text" id="todoText" placeholder="Todo" required>
     <select id="todoLabelSelect">
@@ -234,6 +269,7 @@
     function migrateTodos(arr) {
       arr.forEach(todo => {
         if (!todo.priority) todo.priority = "mittel";
+        if (typeof todo.comment === "undefined") todo.comment = "";
       });
       return arr;
     }
@@ -279,6 +315,8 @@
       sorted.forEach(todo => {
         const idx = todo.origIdx;
         const prio = todo.priority || "mittel";
+        const commentId = `comment-${idx}`;
+        const showCommentId = `showComment-${idx}`;
         const div = document.createElement('div');
         div.className = 'todo';
         div.innerHTML = `
@@ -305,6 +343,7 @@
             <button onclick="deleteTodo(${idx})" title="Löschen">🗑️</button>
             <button class="done-btn" onclick="markDone(${idx})" title="Erledigt">✔️</button>
             <button onclick="showAddTimeForm(${idx})" title="Zeit hinzufügen">⏱️</button>
+            <button class="comment-toggle-btn" onclick="toggleComment(${idx})" type="button" id="${showCommentId}">Kommentar anzeigen</button>
             <span id="addTimeForm-${idx}" class="add-time-form" style="display:none;">
               <input type="number" id="addH-${idx}" min="0" placeholder="h">
               <input type="number" id="addM-${idx}" min="0" max="59" placeholder="m">
@@ -312,6 +351,9 @@
               <button onclick="addManualTime(${idx})" type="button">OK</button>
               <button onclick="hideAddTimeForm(${idx})" type="button">Abbrechen</button>
             </span>
+          </div>
+          <div id="${commentId}" class="comment-area" style="display:none;">
+            <textarea rows="2" placeholder="Kommentar..." oninput="updateComment(${idx}, this.value)">${todo.comment ? todo.comment : ''}</textarea>
           </div>
         `;
         list.appendChild(div);
@@ -347,6 +389,25 @@
       renderTodos();
     }
 
+    // Kommentar ein-/ausblenden
+    window.toggleComment = function(idx) {
+      const commentDiv = document.getElementById(`comment-${idx}`);
+      const btn = document.getElementById(`showComment-${idx}`);
+      if (commentDiv.style.display === "none") {
+        commentDiv.style.display = "block";
+        btn.textContent = "Kommentar ausblenden";
+      } else {
+        commentDiv.style.display = "none";
+        btn.textContent = "Kommentar anzeigen";
+      }
+    };
+
+    // Kommentar speichern
+    window.updateComment = function(idx, value) {
+      todos[idx].comment = value;
+      saveTodos();
+    };
+
     function updateStats() {
       let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0);
       document.getElementById('totalTime').innerText = `Gesamtzeit: ${formatTime(total)}`;
@@ -369,7 +430,7 @@
     }
 
     function addTodo(text, label, priority) {
-      todos.push({ text, label, priority, time: 0, running: false, start: null });
+      todos.push({ text, label, priority, time: 0, running: false, start: null, comment: "" });
       saveTodos();
       renderTodos();
     }
@@ -509,8 +570,8 @@
         try {
           const data = JSON.parse(e.target.result);
           if (data.todos && data.doneTodos && data.labels) {
-            todos = data.todos;
-            doneTodos = data.doneTodos;
+            todos = migrateTodos(data.todos);
+            doneTodos = migrateTodos(data.doneTodos);
             labels = data.labels;
             saveTodos();
             saveDoneTodos();
