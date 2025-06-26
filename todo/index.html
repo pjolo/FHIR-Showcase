@@ -10,30 +10,9 @@
       background: #f7f8fa;
       color: #222;
     }
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
+    h2, h3, h4 {
+      color: #374151;
     }
-    .tab-btn {
-      padding: 8px 18px;
-      border: none;
-      border-radius: 6px 6px 0 0;
-      background: #e0e7ff;
-      color: #222;
-      font-size: 1.1em;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .tab-btn.active {
-      background: #6366f1;
-      color: #fff;
-      font-weight: bold;
-    }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    /* Startseiten-Kachelansicht (aus Anhang) */
     #todoList {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
@@ -159,9 +138,25 @@
       margin-left: 0;
       margin-right: 0;
       transition: background 0.15s;
+      position: relative;
     }
     .comment-toggle-btn:hover {
       background: #c7d2fe;
+    }
+    .comment-exists {
+      background-color: #4caf50 !important;
+      color: white !important;
+      font-weight: bold;
+      border: 2px solid #388e3c;
+      position: relative;
+    }
+    .comment-exists::after {
+      content: "●";
+      color: #fff700;
+      font-size: 1.2em;
+      position: absolute;
+      right: 10px;
+      top: 4px;
     }
     .comment-area {
       margin-top: 8px;
@@ -190,209 +185,115 @@
       padding: 18px 20px 10px 20px;
       max-width: 700px;
     }
-    /* Kanban Board Styles */
-    .kanban-board {
-      display: flex;
-      gap: 18px;
-      margin-top: 10px;
-      min-height: 350px;
-    }
-    .kanban-column {
-      background: #e0e7ff;
-      border-radius: 10px;
-      flex: 1 1 0;
-      padding: 12px 10px 18px 10px;
-      min-width: 260px;
-      display: flex;
-      flex-direction: column;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    .kanban-column h3 {
-      text-align: center;
-      color: #3730a3;
-      margin-bottom: 8px;
-      font-size: 1.12em;
-    }
-    .kanban-list {
-      flex: 1;
-      min-height: 60px;
-    }
-    .kanban-card {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      padding: 10px 12px 8px 12px;
-      margin-bottom: 10px;
-      cursor: grab;
-      word-break: break-word;
-      border-left: 5px solid #6366f1;
-    }
-    .kanban-card[data-priority="hoch"] { border-left-color: #e53935; }
-    .kanban-card[data-priority="mittel"] { border-left-color: #fbc02d; }
-    .kanban-card[data-priority="niedrig"] { border-left-color: #43a047; }
-    .kanban-card .label {
-      display: inline-block;
-      background: #6366f1;
-      color: #fff;
-      border-radius: 4px;
-      padding: 1px 8px;
-      font-size: 0.95em;
-      margin-right: 5px;
-      margin-bottom: 2px;
-      max-width: 150px;
-      white-space: normal;
-      word-break: break-word;
-    }
-    .kanban-card .card-actions {
-      margin-top: 6px;
-      display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
-    }
-    .kanban-card button {
-      background: #f3f4f6;
-      color: #222;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 2px 8px;
-      font-size: 0.97em;
-    }
-    .kanban-card button:hover {
-      background: #e0e7ff;
-    }
-    .kanban-card .done-btn {
-      background: #4caf50;
-      color: #fff;
-    }
-    .kanban-card .done-btn:hover {
-      background: #388e3c;
-    }
     @media (max-width: 600px) {
-      #todoList { grid-template-columns: 1fr; }
-      .todo { min-width: 95vw; max-width: 99vw; }
-      .kanban-board { flex-direction: column; }
-      .kanban-column { min-width: 95vw; }
+      #todoList {
+        grid-template-columns: 1fr;
+      }
+      .todo {
+        min-width: 95vw;
+        max-width: 99vw;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="tabs">
-    <button class="tab-btn active" id="tabHomeBtn" onclick="showTab('homeTab')">Startseite</button>
-    <button class="tab-btn" id="tabBoardBtn" onclick="showTab('boardTab')">Board</button>
-    <button class="tab-btn" id="tabStatsBtn" onclick="showTab('statsTab')">Statistik</button>
+  <h2>Todo-Liste</h2>
+  <form id="todoForm">
+    <input type="text" id="todoText" placeholder="Todo" required>
+    <select id="todoLabelSelect">
+      <option value="">Label auswählen</option>
+    </select>
+    <button type="button" id="deleteLabelBtn" title="Ausgewähltes Label löschen">Label löschen</button>
+    <input type="text" id="todoLabelInput" placeholder="Neues Label (optional)">
+    <select id="todoPrioritySelect">
+      <option value="hoch">Hoch</option>
+      <option value="mittel" selected>Mittel</option>
+      <option value="niedrig">Niedrig</option>
+    </select>
+    <button type="submit">Hinzufügen</button>
+  </form>
+
+  <div style="margin: 10px 0;">
+    <input type="text" id="newLabelInput" placeholder="Neues Label erstellen">
+    <button type="button" id="createLabelBtn">Label erstellen</button>
   </div>
 
-  <!-- Startseite (Kachelansicht, unverändert) -->
-  <div id="homeTab" class="tab-content active">
-    <h2>Todo-Liste</h2>
-    <form id="todoForm">
-      <input type="text" id="todoText" placeholder="Todo" required>
-      <select id="todoLabelSelect">
-        <option value="">Label auswählen</option>
-      </select>
-      <button type="button" id="deleteLabelBtn" title="Ausgewähltes Label löschen">Label löschen</button>
-      <input type="text" id="todoLabelInput" placeholder="Neues Label (optional)">
-      <select id="todoPrioritySelect">
-        <option value="hoch">Hoch</option>
-        <option value="mittel" selected>Mittel</option>
-        <option value="niedrig">Niedrig</option>
-      </select>
-      <button type="submit">Hinzufügen</button>
-    </form>
-    <div style="margin: 10px 0;">
-      <input type="text" id="newLabelInput" placeholder="Neues Label erstellen">
-      <button type="button" id="createLabelBtn">Label erstellen</button>
-    </div>
-    <div style="margin: 10px 0;">
-      <button onclick="exportData()">Daten exportieren</button>
-      <input type="file" id="importFile" style="display:none" onchange="importData(event)">
-      <button onclick="document.getElementById('importFile').click()">Daten importieren</button>
-    </div>
-    <div id="todoList"></div>
+  <!-- Export/Import Buttons -->
+  <div style="margin: 10px 0;">
+    <button onclick="exportData()">Daten exportieren</button>
+    <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+    <button onclick="document.getElementById('importFile').click()">Daten importieren</button>
   </div>
 
-  <!-- Board (Kanban) -->
-  <div id="boardTab" class="tab-content">
-    <h2>Kanban Board</h2>
-    <div class="kanban-board">
-      <div class="kanban-column" id="kanban-todo" ondrop="kanbanDrop(event, 'todo')" ondragover="kanbanAllowDrop(event)">
-        <h3>To Do</h3>
-        <div class="kanban-list" id="kanban-list-todo"></div>
-      </div>
-      <div class="kanban-column" id="kanban-inprogress" ondrop="kanbanDrop(event, 'inprogress')" ondragover="kanbanAllowDrop(event)">
-        <h3>In Progress</h3>
-        <div class="kanban-list" id="kanban-list-inprogress"></div>
-      </div>
-      <div class="kanban-column" id="kanban-done" ondrop="kanbanDrop(event, 'done')" ondragover="kanbanAllowDrop(event)">
-        <h3>Done</h3>
-        <div class="kanban-list" id="kanban-list-done"></div>
-      </div>
-    </div>
-  </div>
+  <div id="todoList"></div>
 
-  <!-- Statistik -->
-  <div id="statsTab" class="tab-content">
-    <div class="stats">
-      <h3>Statistiken</h3>
-      <div id="totalTime"></div>
-      <div id="labelTimes"></div>
-      <div>
-        <h4>Auslastung berechnen</h4>
-        <label>Verfügbare Arbeitszeit (Stunden/Monat): 
-          <input type="number" id="workHours" value="160">
-        </label>
-        <button onclick="calculateUtilization()">Berechnen</button>
-        <div id="utilization"></div>
-      </div>
-      <div>
-        <h4>Monatsstatistik</h4>
-        <div id="monthlyStats"></div>
-      </div>
+  <div class="stats">
+    <h3>Statistiken</h3>
+    <div id="totalTime"></div>
+    <div id="labelTimes"></div>
+    <div>
+      <h4>Auslastung berechnen</h4>
+      <label>Verfügbare Arbeitszeit (Stunden/Monat): 
+        <input type="number" id="workHours" value="160">
+      </label>
+      <button onclick="calculateUtilization()">Berechnen</button>
+      <div id="utilization"></div>
+    </div>
+    <div>
+      <h4>Monatsstatistik</h4>
+      <div id="monthlyStats"></div>
     </div>
   </div>
 
   <script>
-    // Tab-Funktionalität
-    function showTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      if(tabId === 'homeTab') document.getElementById('tabHomeBtn').classList.add('active');
-      if(tabId === 'boardTab') {
-        document.getElementById('tabBoardBtn').classList.add('active');
-        renderKanban();
-      }
-      if(tabId === 'statsTab') {
-        document.getElementById('tabStatsBtn').classList.add('active');
-        updateStats();
-      }
-    }
-
-    // Datenhaltung & Hilfsfunktionen
     function randomColor() {
       const hue = Math.floor(Math.random() * 360);
       return `hsl(${hue},70%,50%)`;
     }
-    function saveLabels() { localStorage.setItem('labels', JSON.stringify(labels)); }
-    function loadLabels() { try { return JSON.parse(localStorage.getItem('labels')) || []; } catch { return []; } }
-    function saveTodos() { localStorage.setItem('todos', JSON.stringify(todos)); }
-    function loadTodos() { try { return JSON.parse(localStorage.getItem('todos')) || []; } catch { return []; } }
-    function saveDoneTodos() { localStorage.setItem('doneTodos', JSON.stringify(doneTodos)); }
-    function loadDoneTodos() { try { return JSON.parse(localStorage.getItem('doneTodos')) || []; } catch { return []; } }
+    function saveLabels() {
+      localStorage.setItem('labels', JSON.stringify(labels));
+    }
+    function loadLabels() {
+      try {
+        return JSON.parse(localStorage.getItem('labels')) || [];
+      } catch {
+        return [];
+      }
+    }
+    function saveTodos() {
+      localStorage.setItem('todos', JSON.stringify(todos));
+    }
+    function loadTodos() {
+      try {
+        return JSON.parse(localStorage.getItem('todos')) || [];
+      } catch {
+        return [];
+      }
+    }
+    function saveDoneTodos() {
+      localStorage.setItem('doneTodos', JSON.stringify(doneTodos));
+    }
+    function loadDoneTodos() {
+      try {
+        return JSON.parse(localStorage.getItem('doneTodos')) || [];
+      } catch {
+        return [];
+      }
+    }
+
     function migrateTodos(arr) {
       arr.forEach(todo => {
         if (!todo.priority) todo.priority = "mittel";
-        if (!todo.status) todo.status = "todo";
         if (typeof todo.comment === "undefined") todo.comment = "";
       });
       return arr;
     }
+
     let labels = loadLabels();
     let todos = migrateTodos(loadTodos());
     let doneTodos = migrateTodos(loadDoneTodos());
     let timerIntervals = {};
+
     function updateLabelSelect() {
       const select = document.getElementById('todoLabelSelect');
       select.innerHTML = '<option value="">Label auswählen</option>';
@@ -405,10 +306,12 @@
         select.appendChild(opt);
       });
     }
+
     function getLabelColor(labelName) {
       const label = labels.find(l => l.name === labelName);
       return label ? label.color : '#888';
     }
+
     function formatTime(ms) {
       let sec = Math.floor(ms / 1000) % 60;
       let min = Math.floor(ms / 60000) % 60;
@@ -416,7 +319,6 @@
       return `${h}h ${min}m ${sec}s`;
     }
 
-    // Startseiten-Kachelansicht
     function renderTodos() {
       const list = document.getElementById('todoList');
       list.innerHTML = '';
@@ -424,11 +326,14 @@
       const sorted = todos
         .map((todo, idx) => ({ ...todo, origIdx: idx }))
         .sort((a, b) => prioOrder[a.priority || "mittel"] - prioOrder[b.priority || "mittel"]);
+
       sorted.forEach(todo => {
         const idx = todo.origIdx;
         const prio = todo.priority || "mittel";
         const commentId = `comment-${idx}`;
         const showCommentId = `showComment-${idx}`;
+        // Markierung für vorhandenen Kommentar
+        const commentButtonClass = todo.comment && todo.comment.trim() !== '' ? 'comment-exists' : '';
         const div = document.createElement('div');
         div.className = 'todo';
         div.innerHTML = `
@@ -455,7 +360,7 @@
             <button onclick="deleteTodo(${idx})" title="Löschen">🗑️</button>
             <button class="done-btn" onclick="markDone(${idx})" title="Erledigt">✔️</button>
             <button onclick="showAddTimeForm(${idx})" title="Zeit hinzufügen">⏱️</button>
-            <button class="comment-toggle-btn" onclick="toggleComment(${idx})" type="button" id="${showCommentId}">Kommentar anzeigen</button>
+            <button class="comment-toggle-btn ${commentButtonClass}" onclick="toggleComment(${idx})" type="button" id="${showCommentId}">Kommentar anzeigen</button>
             <span id="addTimeForm-${idx}" class="add-time-form" style="display:none;">
               <input type="number" id="addH-${idx}" min="0" placeholder="h">
               <input type="number" id="addM-${idx}" min="0" max="59" placeholder="m">
@@ -470,6 +375,7 @@
         `;
         list.appendChild(div);
       });
+      updateStats();
     }
 
     window.updateTodoLabel = function(idx, value) {
@@ -482,6 +388,7 @@
       saveTodos();
       renderTodos();
     };
+
     function showAddTimeForm(idx) {
       document.getElementById(`addTimeForm-${idx}`).style.display = 'inline';
     }
@@ -498,6 +405,8 @@
       hideAddTimeForm(idx);
       renderTodos();
     }
+
+    // Kommentar ein-/ausblenden
     window.toggleComment = function(idx) {
       const commentDiv = document.getElementById(`comment-${idx}`);
       const btn = document.getElementById(`showComment-${idx}`);
@@ -509,56 +418,18 @@
         btn.textContent = "Kommentar anzeigen";
       }
     };
+
+    // Kommentar speichern
     window.updateComment = function(idx, value) {
       todos[idx].comment = value;
       saveTodos();
+      renderTodos();
     };
 
-    // Kanban Board
-    function renderKanban() {
-      ["todo", "inprogress", "done"].forEach(col => {
-        document.getElementById("kanban-list-" + col).innerHTML = "";
-      });
-      todos.forEach((todo, idx) => {
-        const card = document.createElement("div");
-        card.className = "kanban-card";
-        card.setAttribute("draggable", "true");
-        card.setAttribute("data-id", idx);
-        card.setAttribute("data-priority", todo.priority || "mittel");
-        card.addEventListener("dragstart", kanbanDragStart);
-        card.innerHTML = `
-          <div><strong>${todo.text}</strong></div>
-          ${todo.label ? `<div class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</div>` : ""}
-          <div style="margin:4px 0 0 0;font-size:0.97em;color:#555;">
-            Zeit: ${formatTime(todo.time)}
-          </div>
-          <div style="font-size:0.97em;color:#888;">Prio: ${todo.priority || "mittel"}</div>
-          <div class="card-actions">
-            <button onclick="deleteTodo(${idx})" title="Löschen">🗑️</button>
-            <button class="done-btn" onclick="markDone(${idx})" title="Erledigt">✔️</button>
-          </div>
-        `;
-        document.getElementById("kanban-list-" + (todo.status || "todo")).appendChild(card);
-      });
-    }
-    function kanbanDragStart(e) {
-      e.dataTransfer.setData("text/plain", e.target.getAttribute("data-id"));
-    }
-    function kanbanAllowDrop(e) { e.preventDefault(); }
-    function kanbanDrop(e, status) {
-      e.preventDefault();
-      const idx = e.dataTransfer.getData("text/plain");
-      if (todos[idx]) {
-        todos[idx].status = status;
-        saveTodos();
-        renderKanban();
-      }
-    }
-
-    // Statistik
     function updateStats() {
       let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0);
       document.getElementById('totalTime').innerText = `Gesamtzeit: ${formatTime(total)}`;
+
       let labelMap = {};
       [...todos, ...doneTodos].forEach(t => {
         if (t.label) {
@@ -572,20 +443,23 @@
       }
       labelHtml += '</ul>';
       document.getElementById('labelTimes').innerHTML = labelHtml;
+
       updateMonthlyStats();
     }
+
     function addTodo(text, label, priority) {
-      todos.push({ text, label, priority, time: 0, running: false, start: null, comment: "", status: "todo" });
+      todos.push({ text, label, priority, time: 0, running: false, start: null, comment: "" });
       saveTodos();
       renderTodos();
     }
+
     function deleteTodo(idx) {
       stopTimer(idx);
       todos.splice(idx, 1);
       saveTodos();
       renderTodos();
-      renderKanban();
     }
+
     function toggleTimer(idx) {
       if (todos[idx].running) {
         stopTimer(idx);
@@ -594,6 +468,7 @@
       }
       renderTodos();
     }
+
     function startTimer(idx) {
       if (todos[idx].running) return;
       todos[idx].running = true;
@@ -608,6 +483,7 @@
       }, 1000);
       saveTodos();
     }
+
     function stopTimer(idx) {
       if (!todos[idx].running) return;
       todos[idx].running = false;
@@ -618,6 +494,7 @@
       saveTodos();
       updateStats();
     }
+
     function markDone(idx) {
       stopTimer(idx);
       let today = new Date();
@@ -625,17 +502,20 @@
       let todo = todos[idx];
       todo.doneDate = doneDate;
       if (!todo.priority) todo.priority = "mittel";
-      todo.status = "done";
+      doneTodos.push(todo);
+      saveDoneTodos();
+      todos.splice(idx, 1);
       saveTodos();
       renderTodos();
-      renderKanban();
     }
+
     function calculateUtilization() {
       let hours = parseFloat(document.getElementById('workHours').value) || 0;
       let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0) / 3600000;
       let percent = hours ? ((total / hours) * 100).toFixed(1) : 0;
       document.getElementById('utilization').innerText = `Auslastung: ${percent}% (${total.toFixed(2)}h von ${hours}h)`;
     }
+
     function addNewLabel(labelName) {
       if (!labelName || labels.find(l => l.name === labelName)) return;
       const color = randomColor();
@@ -643,6 +523,7 @@
       saveLabels();
       updateLabelSelect();
     }
+
     function deleteSelectedLabel() {
       const select = document.getElementById('todoLabelSelect');
       const selectedValue = select.value;
@@ -653,6 +534,7 @@
       updateLabelSelect();
       select.selectedIndex = 0;
     }
+
     function updateMonthlyStats() {
       const workHours = parseFloat(document.getElementById('workHours').value) || 0;
       let monthlyMap = {};
@@ -668,6 +550,7 @@
       let openTime = todos.reduce((sum, t) => sum + t.time, 0);
       if (!monthlyMap[thisMonth]) monthlyMap[thisMonth] = 0;
       monthlyMap[thisMonth] += openTime;
+
       let html = '<table border="1" cellpadding="4"><tr><th>Monat</th><th>Gesamtzeit</th><th>Auslastung</th></tr>';
       Object.keys(monthlyMap).sort().reverse().forEach(month => {
         let hours = monthlyMap[month] / 3600000;
@@ -687,6 +570,7 @@
       };
       const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
       const url = URL.createObjectURL(blob);
+
       const a = document.createElement('a');
       a.href = url;
       a.download = 'todo_backup.json';
@@ -695,6 +579,7 @@
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
+
     function importData(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -736,9 +621,10 @@
       document.getElementById('todoLabelInput').value = '';
       document.getElementById('todoLabelSelect').selectedIndex = 0;
       document.getElementById('todoPrioritySelect').value = 'mittel';
-      renderKanban();
     });
+
     document.getElementById('deleteLabelBtn').addEventListener('click', deleteSelectedLabel);
+
     document.getElementById('createLabelBtn').addEventListener('click', function() {
       const labelName = document.getElementById('newLabelInput').value.trim();
       if (labelName && !labels.find(l => l.name === labelName)) {
