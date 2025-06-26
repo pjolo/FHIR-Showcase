@@ -80,6 +80,13 @@
     <button type="button" id="createLabelBtn">Label erstellen</button>
   </div>
 
+  <!-- Export/Import Buttons -->
+  <div style="margin: 10px 0;">
+    <button onclick="exportData()">Daten exportieren</button>
+    <input type="file" id="importFile" style="display:none" onchange="importData(event)">
+    <button onclick="document.getElementById('importFile').click()">Daten importieren</button>
+  </div>
+
   <div id="todoList"></div>
 
   <div class="stats">
@@ -383,6 +390,52 @@
       });
       html += '</table>';
       document.getElementById('monthlyStats').innerHTML = html;
+    }
+
+    // Export/Import Funktionen
+    function exportData() {
+      const data = {
+        todos,
+        doneTodos,
+        labels
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'todo_backup.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.todos && data.doneTodos && data.labels) {
+            todos = data.todos;
+            doneTodos = data.doneTodos;
+            labels = data.labels;
+            saveTodos();
+            saveDoneTodos();
+            saveLabels();
+            updateLabelSelect();
+            renderTodos();
+            alert('Daten erfolgreich importiert!');
+          } else {
+            alert('Ungültige Datei.');
+          }
+        } catch {
+          alert('Fehler beim Import.');
+        }
+      };
+      reader.readAsText(file);
     }
 
     document.getElementById('todoForm').addEventListener('submit', function(e) {
