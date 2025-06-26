@@ -4,57 +4,142 @@
   <meta charset="UTF-8">
   <title>Todo-Liste mit Prioritäten, Labels und Statistik</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; }
-    .todo { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 30px;
+      background: #f7f8fa;
+      color: #222;
+    }
+    h2, h3, h4 {
+      color: #374151;
+    }
+    #todoList {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    .todo {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07), 0 1.5px 4px rgba(0,0,0,0.04);
+      border-left: 6px solid #e5e7eb;
+      padding: 18px 18px 12px 18px;
+      min-width: 320px;
+      max-width: 360px;
+      flex: 1 1 320px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: box-shadow 0.2s;
+    }
+    .todo:hover {
+      box-shadow: 0 6px 24px rgba(0,0,0,0.13), 0 3px 12px rgba(0,0,0,0.08);
+    }
+    .todo .header-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+    .todo .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .todo:hover .actions {
+      opacity: 1;
+    }
     .label {
       border-radius: 4px;
-      padding: 2px 6px;
+      padding: 2px 8px;
       margin-right: 5px;
       color: #fff;
+      font-size: 0.95em;
+      background: #6366f1;
       display: inline-block;
     }
     .priority {
       border-radius: 4px;
-      padding: 2px 6px;
+      padding: 2px 8px;
       margin-right: 5px;
       font-weight: bold;
+      font-size: 0.95em;
       display: inline-block;
     }
-    .priority.hoch { background: #e53935; color: #fff; }
-    .priority.mittel { background: #fbc02d; color: #fff; }
-    .priority.niedrig { background: #43a047; color: #fff; }
-    .stats { margin-top: 20px; }
-    .running { color: green; }
-    .stopped { color: red; }
-    .done-btn {
-      margin-left: 10px;
-      background: #4caf50;
-      color: #fff;
+    .priority.hoch { background: #e53935; color: #fff; border-left: 4px solid #e53935;}
+    .priority.mittel { background: #fbc02d; color: #fff; border-left: 4px solid #fbc02d;}
+    .priority.niedrig { background: #43a047; color: #fff; border-left: 4px solid #43a047;}
+    .todo .header-row strong {
+      flex: 1;
+      font-size: 1.13em;
+      font-weight: 500;
+      color: #222;
+      letter-spacing: 0.01em;
+    }
+    .todo select.edit-select {
+      font-size: 0.95em;
+      margin-left: 0;
+      margin-right: 0;
+      padding: 1px 3px;
+      background: #f3f4f6;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+    }
+    .todo .time-row {
+      font-size: 0.98em;
+      color: #555;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .todo .running { color: #059669; font-weight: bold; }
+    .todo .stopped { color: #b91c1c; }
+    .done-btn, .todo button {
+      background: #f3f4f6;
+      color: #222;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      padding: 2px 8px;
+      padding: 3px 9px;
+      font-size: 0.98em;
+      transition: background 0.15s;
     }
-    .label-delete-btn {
-      margin-left: 5px;
-      background: #fff;
-      color: #333;
-      border: 1px solid #888;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 10px;
-      padding: 0 4px;
+    .done-btn {
+      background: #4caf50;
+      color: #fff;
+    }
+    .done-btn:hover {
+      background: #388e3c;
+    }
+    .todo button:hover {
+      background: #e5e7eb;
     }
     .add-time-form input {
-      width: 40px;
+      width: 36px;
       margin-right: 2px;
+      font-size: 0.95em;
     }
     .add-time-form button {
       margin-right: 2px;
     }
-    .edit-select {
-      margin-left: 5px;
-      margin-right: 5px;
+    .stats {
+      margin-top: 32px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      padding: 18px 20px 10px 20px;
+      max-width: 700px;
+    }
+    /* Responsive */
+    @media (max-width: 800px) {
+      #todoList { flex-direction: column; }
+      .todo { min-width: 90vw; max-width: 98vw;}
+      .stats { max-width: 97vw;}
     }
   </style>
 </head>
@@ -195,24 +280,29 @@
         const div = document.createElement('div');
         div.className = 'todo';
         div.innerHTML = `
-          <strong>${todo.text}</strong>
-          <select class="edit-select" onchange="updateTodoLabel(${idx}, this.value)">
-            <option value="">Kein Label</option>
-            ${labels.map(l => `<option value="${l.name}" style="background:${l.color};color:#fff;" ${todo.label===l.name?'selected':''}>${l.name}</option>`).join('')}
-          </select>
-          <select class="edit-select" onchange="updateTodoPrio(${idx}, this.value)">
-            <option value="hoch" ${prio==='hoch'?'selected':''}>Hoch</option>
-            <option value="mittel" ${prio==='mittel'?'selected':''}>Mittel</option>
-            <option value="niedrig" ${prio==='niedrig'?'selected':''}>Niedrig</option>
-          </select>
-          ${todo.label ? `<span class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</span>` : ''}
-          <span class="priority ${prio}">${prio.charAt(0).toUpperCase() + prio.slice(1)}</span>
-          <div>
+          <div class="header-row">
+            <strong>${todo.text}</strong>
+            <span class="priority ${prio}">${prio.charAt(0).toUpperCase() + prio.slice(1)}</span>
+            ${todo.label ? `<span class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</span>` : ''}
+          </div>
+          <div class="time-row">
             Zeit: <span id="time-${idx}">${formatTime(todo.time)}</span>
+            <span class="${todo.running ? 'running' : 'stopped'}">${todo.running ? 'läuft...' : ''}</span>
+          </div>
+          <div class="actions">
+            <select class="edit-select" onchange="updateTodoLabel(${idx}, this.value)">
+              <option value="">Kein Label</option>
+              ${labels.map(l => `<option value="${l.name}" style="background:${l.color};color:#fff;" ${todo.label===l.name?'selected':''}>${l.name}</option>`).join('')}
+            </select>
+            <select class="edit-select" onchange="updateTodoPrio(${idx}, this.value)">
+              <option value="hoch" ${prio==='hoch'?'selected':''}>Hoch</option>
+              <option value="mittel" ${prio==='mittel'?'selected':''}>Mittel</option>
+              <option value="niedrig" ${prio==='niedrig'?'selected':''}>Niedrig</option>
+            </select>
             <button onclick="toggleTimer(${idx})" id="btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
-            <button onclick="deleteTodo(${idx})">Löschen</button>
-            <button class="done-btn" onclick="markDone(${idx})">Erledigt</button>
-            <button onclick="showAddTimeForm(${idx})">Zeit hinzufügen</button>
+            <button onclick="deleteTodo(${idx})" title="Löschen">🗑️</button>
+            <button class="done-btn" onclick="markDone(${idx})" title="Erledigt">✔️</button>
+            <button onclick="showAddTimeForm(${idx})" title="Zeit hinzufügen">⏱️</button>
             <span id="addTimeForm-${idx}" class="add-time-form" style="display:none;">
               <input type="number" id="addH-${idx}" min="0" placeholder="h">
               <input type="number" id="addM-${idx}" min="0" max="59" placeholder="m">
@@ -220,7 +310,6 @@
               <button onclick="addManualTime(${idx})" type="button">OK</button>
               <button onclick="hideAddTimeForm(${idx})" type="button">Abbrechen</button>
             </span>
-            <span class="${todo.running ? 'running' : 'stopped'}">${todo.running ? 'läuft...' : ''}</span>
           </div>
         `;
         list.appendChild(div);
@@ -228,7 +317,6 @@
       updateStats();
     }
 
-    // Editierbare Label/Priorität
     window.updateTodoLabel = function(idx, value) {
       todos[idx].label = value;
       saveTodos();
