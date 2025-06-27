@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Todo-Liste</title>
   <style>
+    /* ... Dein gesamtes CSS aus dem Anhang ... */
     body { font-family: Arial, sans-serif; margin: 30px; background: #f7f8fa; color: #222; }
     .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
     .tab-btn { padding: 8px 18px; border: none; border-radius: 6px 6px 0 0; background: #e0e7ff; color: #222; font-size: 1.1em; cursor: pointer; transition: background 0.2s; }
@@ -131,6 +132,7 @@
     </div>
   </div>
   <script>
+    // ... Alle bisherigen Hilfsfunktionen ...
     function showTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -195,7 +197,7 @@
       const prioOrder = { hoch: 1, mittel: 2, niedrig: 3 };
       const sorted = todos
         .map((todo, idx) => ({ ...todo, origIdx: idx }))
-        .filter(todo => todo.status !== 'done')
+        .filter(todo => todo.status !== 'done') // <-- nur offene Todos!
         .sort((a, b) => prioOrder[a.priority || "mittel"] - prioOrder[b.priority || "mittel"]);
       sorted.forEach(todo => {
         const idx = todo.origIdx;
@@ -288,7 +290,7 @@
     window.updateComment = function(idx, value) {
       todos[idx].comment = value;
       saveTodos();
-      // Kein renderTodos() mehr!
+      // Kein renderTodos() hier!
       const btn = document.getElementById(`showComment-${idx}`);
       if (btn) {
         if (value.trim() !== "") {
@@ -324,14 +326,6 @@
           </div>
         `;
         document.getElementById("kanban-list-" + (todo.status || "todo")).appendChild(card);
-      });
-      // Zeit live aktualisieren
-      todos.forEach((todo, idx) => {
-        if (todo.running) {
-          if (!timerIntervals[idx]) {
-            startTimer(idx);
-          }
-        }
       });
     }
     function kanbanDragStart(e) {
