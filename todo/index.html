@@ -283,6 +283,8 @@
     .kanban-card .done-btn:hover {
       background: #388e3c;
     }
+    .kanban-card .running { color: #059669; font-weight: bold; }
+    .kanban-card .stopped { color: #b91c1c; }
     @media (max-width: 600px) {
       #todoList { grid-template-columns: 1fr; }
       .todo { min-width: 95vw; max-width: 99vw; }
@@ -428,7 +430,7 @@
       return `${h}h ${min}m ${sec}s`;
     }
 
-    // Nur offene Todos anzeigen
+    // Startseiten-Kachelansicht
     function renderTodos() {
       const list = document.getElementById('todoList');
       list.innerHTML = '';
@@ -490,11 +492,13 @@
       todos[idx].label = value;
       saveTodos();
       renderTodos();
+      renderKanban();
     };
     window.updateTodoPrio = function(idx, value) {
       todos[idx].priority = value;
       saveTodos();
       renderTodos();
+      renderKanban();
     };
     function showAddTimeForm(idx) {
       document.getElementById(`addTimeForm-${idx}`).style.display = 'inline';
@@ -511,6 +515,7 @@
       saveTodos();
       hideAddTimeForm(idx);
       renderTodos();
+      renderKanban();
     }
     window.toggleComment = function(idx) {
       const commentDiv = document.getElementById(`comment-${idx}`);
@@ -527,9 +532,10 @@
       todos[idx].comment = value;
       saveTodos();
       renderTodos();
+      renderKanban();
     };
 
-    // Kanban Board: alle Todos nach Status
+    // Kanban Board mit Zeitsteuerung
     function renderKanban() {
       ["todo", "inprogress", "done"].forEach(col => {
         document.getElementById("kanban-list-" + col).innerHTML = "";
@@ -545,10 +551,12 @@
           <div><strong>${todo.text}</strong></div>
           ${todo.label ? `<div class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</div>` : ""}
           <div style="margin:4px 0 0 0;font-size:0.97em;color:#555;">
-            Zeit: ${formatTime(todo.time)}
+            Zeit: <span id="kanban-time-${idx}">${formatTime(todo.time)}</span>
+            <span class="${todo.running ? 'running' : 'stopped'}">${todo.running ? 'läuft...' : ''}</span>
           </div>
           <div style="font-size:0.97em;color:#888;">Prio: ${todo.priority || "mittel"}</div>
           <div class="card-actions">
+            <button onclick="toggleTimer(${idx})" id="kanban-btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
             <button onclick="deleteTodo(${idx})" title="Löschen">🗑️</button>
             ${todo.status !== "done" ? `<button class="done-btn" onclick="markDone(${idx})" title="Erledigt">✔️</button>` : ""}
           </div>
@@ -571,7 +579,69 @@
       }
     }
 
-    // Statistik
+    // Live-Zeit-Update für beide Ansichten
+    function startTimer(idx) {
+      if (todos[idx].running) return;
+      todos[idx].running = true;
+      todos[idx].start = Date.now();
+      timerIntervals[idx] = setInterval(() => {
+        let now = Date.now();
+        todos[idx].time += now - todos[idx].start;
+        todos[idx].start = now;
+        document.getElementById(`time-${idx}`)?.innerText = formatTime(todos[idx].time);
+        document.getElementById(`kanban-time-${idx}`)?.innerText = formatTime(todos[idx].time);
+        saveTodos();
+        updateStats();
+      }, 1000);
+      saveTodos();
+    }
+    function stopTimer(idx) {
+      if (!todos[idx].running) return;
+      todos[idx].running = false;
+      let now = Date.now();
+      todos[idx].time += now - todos[idx].start;
+      todos[idx].start = null;
+      clearInterval(timerIntervals[idx]);
+      saveTodos();
+      updateStats();
+    }
+    function toggleTimer(idx) {
+      if (todos[idx].running) {
+        stopTimer(idx);
+      } else {
+        startTimer(idx);
+      }
+      renderTodos();
+      renderKanban();
+    }
+
+    function markDone(idx) {
+      stopTimer(idx);
+      let today = new Date();
+      let doneDate = today.toISOString().slice(0, 10);
+      let todo = todos[idx];
+      todo.doneDate = doneDate;
+      if (!todo.priority) todo.priority = "mittel";
+      todo.status = "done";
+      saveTodos();
+      renderTodos();
+      renderKanban();
+    }
+    function addTodo(text, label, priority) {
+      todos.push({ text, label, priority, time: 0, running: false, start: null, comment: "", status: "todo" });
+      saveTodos();
+      renderTodos();
+      renderKanban();
+    }
+    function deleteTodo(idx) {
+      stopTimer(idx);
+      todos.splice(idx, 1);
+      saveTodos();
+      renderTodos();
+      renderKanban();
+    }
+
+    // Statistik und weitere Funktionen wie gehabt ...
     function updateStats() {
       let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0);
       document.getElementById('totalTime').innerText = `Gesamtzeit: ${formatTime(total)}`;
@@ -589,63 +659,6 @@
       labelHtml += '</ul>';
       document.getElementById('labelTimes').innerHTML = labelHtml;
       updateMonthlyStats();
-    }
-    function addTodo(text, label, priority) {
-      todos.push({ text, label, priority, time: 0, running: false, start: null, comment: "", status: "todo" });
-      saveTodos();
-      renderTodos();
-      renderKanban();
-    }
-    function deleteTodo(idx) {
-      stopTimer(idx);
-      todos.splice(idx, 1);
-      saveTodos();
-      renderTodos();
-      renderKanban();
-    }
-    function toggleTimer(idx) {
-      if (todos[idx].running) {
-        stopTimer(idx);
-      } else {
-        startTimer(idx);
-      }
-      renderTodos();
-    }
-    function startTimer(idx) {
-      if (todos[idx].running) return;
-      todos[idx].running = true;
-      todos[idx].start = Date.now();
-      timerIntervals[idx] = setInterval(() => {
-        let now = Date.now();
-        todos[idx].time += now - todos[idx].start;
-        todos[idx].start = now;
-        document.getElementById(`time-${idx}`).innerText = formatTime(todos[idx].time);
-        saveTodos();
-        updateStats();
-      }, 1000);
-      saveTodos();
-    }
-    function stopTimer(idx) {
-      if (!todos[idx].running) return;
-      todos[idx].running = false;
-      let now = Date.now();
-      todos[idx].time += now - todos[idx].start;
-      todos[idx].start = null;
-      clearInterval(timerIntervals[idx]);
-      saveTodos();
-      updateStats();
-    }
-    function markDone(idx) {
-      stopTimer(idx);
-      let today = new Date();
-      let doneDate = today.toISOString().slice(0, 10);
-      let todo = todos[idx];
-      todo.doneDate = doneDate;
-      if (!todo.priority) todo.priority = "mittel";
-      todo.status = "done";
-      saveTodos();
-      renderTodos();
-      renderKanban();
     }
     function calculateUtilization() {
       let hours = parseFloat(document.getElementById('workHours').value) || 0;
@@ -728,6 +741,7 @@
             saveLabels();
             updateLabelSelect();
             renderTodos();
+            renderKanban();
             alert('Daten erfolgreich importiert!');
           } else {
             alert('Ungültige Datei.');
