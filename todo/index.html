@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Todo-Liste</title>
-  <!-- ... CSS wie gehabt ... -->
   <style>
-    /* ... (CSS aus deiner Datei, unverändert) ... */
     body { font-family: Arial, sans-serif; margin: 30px; background: #f7f8fa; color: #222; }
     .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
     .tab-btn { padding: 8px 18px; border: none; border-radius: 6px 6px 0 0; background: #e0e7ff; color: #222; font-size: 1.1em; cursor: pointer; transition: background 0.2s; }
@@ -39,7 +37,6 @@
     .comment-area { margin-top: 8px; background: #f3f4f6; border-radius: 6px; padding: 8px 6px; width: 100%; box-sizing: border-box; }
     .comment-area textarea { width: 100%; min-height: 48px; font-size: 1em; border-radius: 4px; border: 1px solid #d1d5db; padding: 5px; resize: vertical; background: #fff; box-sizing: border-box; }
     .stats { margin-top: 32px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 18px 20px 10px 20px; max-width: 700px; }
-    /* Kanban Board Styles ... (wie gehabt) ... */
     .kanban-board { display: flex; gap: 18px; margin-top: 10px; min-height: 350px; }
     .kanban-column { background: #e0e7ff; border-radius: 10px; flex: 1 1 0; padding: 12px 10px 18px 10px; min-width: 260px; display: flex; flex-direction: column; max-height: 80vh; overflow-y: auto; }
     .kanban-column h3 { text-align: center; color: #3730a3; margin-bottom: 8px; font-size: 1.12em; }
@@ -65,14 +62,12 @@
   </style>
 </head>
 <body>
-  <!-- ... Tabs und HTML wie gehabt ... -->
   <div class="tabs">
     <button class="tab-btn active" id="tabHomeBtn" onclick="showTab('homeTab')">Startseite</button>
     <button class="tab-btn" id="tabBoardBtn" onclick="showTab('boardTab')">Board</button>
     <button class="tab-btn" id="tabStatsBtn" onclick="showTab('statsTab')">Statistik</button>
   </div>
   <div id="homeTab" class="tab-content active">
-    <!-- ... Startseiten-Formular und Liste wie gehabt ... -->
     <h2>Todo-Liste</h2>
     <form id="todoForm">
       <input type="text" id="todoText" placeholder="Todo" required>
@@ -136,14 +131,164 @@
     </div>
   </div>
   <script>
-    // ... Alle bisherigen Funktionen wie gehabt ...
-    // (siehe Datei, keine Änderungen außer updateComment)
-    // ...
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      if(tabId === 'homeTab') document.getElementById('tabHomeBtn').classList.add('active');
+      if(tabId === 'boardTab') {
+        document.getElementById('tabBoardBtn').classList.add('active');
+        renderKanban();
+      }
+      if(tabId === 'statsTab') {
+        document.getElementById('tabStatsBtn').classList.add('active');
+        updateStats();
+      }
+    }
+    function randomColor() {
+      const hue = Math.floor(Math.random() * 360);
+      return `hsl(${hue},70%,50%)`;
+    }
+    function saveLabels() { localStorage.setItem('labels', JSON.stringify(labels)); }
+    function loadLabels() { try { return JSON.parse(localStorage.getItem('labels')) || []; } catch { return []; } }
+    function saveTodos() { localStorage.setItem('todos', JSON.stringify(todos)); }
+    function loadTodos() { try { return JSON.parse(localStorage.getItem('todos')) || []; } catch { return []; } }
+    function saveDoneTodos() { localStorage.setItem('doneTodos', JSON.stringify(doneTodos)); }
+    function loadDoneTodos() { try { return JSON.parse(localStorage.getItem('doneTodos')) || []; } catch { return []; } }
+    function migrateTodos(arr) {
+      arr.forEach(todo => {
+        if (!todo.priority) todo.priority = "mittel";
+        if (!todo.status) todo.status = "todo";
+        if (typeof todo.comment === "undefined") todo.comment = "";
+      });
+      return arr;
+    }
+    let labels = loadLabels();
+    let todos = migrateTodos(loadTodos());
+    let doneTodos = migrateTodos(loadDoneTodos());
+    let timerIntervals = {};
+    function updateLabelSelect() {
+      const select = document.getElementById('todoLabelSelect');
+      select.innerHTML = '<option value="">Label auswählen</option>';
+      labels.forEach(label => {
+        const opt = document.createElement('option');
+        opt.value = label.name;
+        opt.textContent = label.name;
+        opt.style.backgroundColor = label.color;
+        opt.style.color = "#fff";
+        select.appendChild(opt);
+      });
+    }
+    function getLabelColor(labelName) {
+      const label = labels.find(l => l.name === labelName);
+      return label ? label.color : '#888';
+    }
+    function formatTime(ms) {
+      let sec = Math.floor(ms / 1000) % 60;
+      let min = Math.floor(ms / 60000) % 60;
+      let h = Math.floor(ms / 3600000);
+      return `${h}h ${min}m ${sec}s`;
+    }
+    function renderTodos() {
+      const list = document.getElementById('todoList');
+      list.innerHTML = '';
+      const prioOrder = { hoch: 1, mittel: 2, niedrig: 3 };
+      const sorted = todos
+        .map((todo, idx) => ({ ...todo, origIdx: idx }))
+        .filter(todo => todo.status !== 'done')
+        .sort((a, b) => prioOrder[a.priority || "mittel"] - prioOrder[b.priority || "mittel"]);
+      sorted.forEach(todo => {
+        const idx = todo.origIdx;
+        const prio = todo.priority || "mittel";
+        const commentId = `comment-${idx}`;
+        const showCommentId = `showComment-${idx}`;
+        const commentButtonClass = todo.comment && todo.comment.trim() !== '' ? 'comment-exists' : '';
+        const div = document.createElement('div');
+        div.className = 'todo';
+        div.innerHTML = `
+          <div class="header-row">
+            <strong>${todo.text}</strong>
+            <span class="priority ${prio}">${prio.charAt(0).toUpperCase() + prio.slice(1)}</span>
+            ${todo.label ? `<span class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</span>` : ''}
+          </div>
+          <div class="time-row">
+            Zeit: <span id="time-${idx}">${formatTime(todo.time)}</span>
+            <span class="${todo.running ? 'running' : 'stopped'}">${todo.running ? 'läuft...' : ''}</span>
+          </div>
+          <div class="actions">
+            <select class="edit-select" onchange="updateTodoLabel(${idx}, this.value)">
+              <option value="">Kein Label</option>
+              ${labels.map(l => `<option value="${l.name}" style="background:${l.color};color:#fff;" ${todo.label===l.name?'selected':''}>${l.name}</option>`).join('')}
+            </select>
+            <select class="edit-select" onchange="updateTodoPrio(${idx}, this.value)">
+              <option value="hoch" ${prio==='hoch'?'selected':''}>Hoch</option>
+              <option value="mittel" ${prio==='mittel'?'selected':''}>Mittel</option>
+              <option value="niedrig" ${prio==='niedrig'?'selected':''}>Niedrig</option>
+            </select>
+            <button onclick="toggleTimer(${idx})" id="btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
+            <button onclick="deleteTodo(${idx})" title="Löschen">🗑️</button>
+            <button class="done-btn" onclick="markDone(${idx})" title="Erledigt">✔️</button>
+            <button onclick="showAddTimeForm(${idx})" title="Zeit hinzufügen">⏱️</button>
+            <button class="comment-toggle-btn ${commentButtonClass}" onclick="toggleComment(${idx})" type="button" id="${showCommentId}">Kommentar anzeigen</button>
+            <span id="addTimeForm-${idx}" class="add-time-form" style="display:none;">
+              <input type="number" id="addH-${idx}" min="0" placeholder="h">
+              <input type="number" id="addM-${idx}" min="0" max="59" placeholder="m">
+              <input type="number" id="addS-${idx}" min="0" max="59" placeholder="s">
+              <button onclick="addManualTime(${idx})" type="button">OK</button>
+              <button onclick="hideAddTimeForm(${idx})" type="button">Abbrechen</button>
+            </span>
+          </div>
+          <div id="${commentId}" class="comment-area" style="display:none;">
+            <textarea rows="2" placeholder="Kommentar..." oninput="updateComment(${idx}, this.value)">${todo.comment ? todo.comment : ''}</textarea>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+    window.updateTodoLabel = function(idx, value) {
+      todos[idx].label = value;
+      saveTodos();
+      renderTodos();
+      renderKanban();
+    };
+    window.updateTodoPrio = function(idx, value) {
+      todos[idx].priority = value;
+      saveTodos();
+      renderTodos();
+      renderKanban();
+    };
+    function showAddTimeForm(idx) {
+      document.getElementById(`addTimeForm-${idx}`).style.display = 'inline';
+    }
+    function hideAddTimeForm(idx) {
+      document.getElementById(`addTimeForm-${idx}`).style.display = 'none';
+    }
+    function addManualTime(idx) {
+      const h = parseInt(document.getElementById(`addH-${idx}`).value) || 0;
+      const m = parseInt(document.getElementById(`addM-${idx}`).value) || 0;
+      const s = parseInt(document.getElementById(`addS-${idx}`).value) || 0;
+      const addMs = ((h * 60 * 60) + (m * 60) + s) * 1000;
+      todos[idx].time += addMs;
+      saveTodos();
+      hideAddTimeForm(idx);
+      renderTodos();
+      renderKanban();
+    }
+    window.toggleComment = function(idx) {
+      const commentDiv = document.getElementById(`comment-${idx}`);
+      const btn = document.getElementById(`showComment-${idx}`);
+      if (commentDiv.style.display === "none") {
+        commentDiv.style.display = "block";
+        btn.textContent = "Kommentar ausblenden";
+      } else {
+        commentDiv.style.display = "none";
+        btn.textContent = "Kommentar anzeigen";
+      }
+    };
     window.updateComment = function(idx, value) {
       todos[idx].comment = value;
       saveTodos();
-      // Kein renderTodos() hier!
-      // Optional: Button-Markierung live aktualisieren
+      // Kein renderTodos() mehr!
       const btn = document.getElementById(`showComment-${idx}`);
       if (btn) {
         if (value.trim() !== "") {
@@ -153,7 +298,250 @@
         }
       }
     };
-    // ... Rest bleibt unverändert ...
+    function renderKanban() {
+      ["todo", "inprogress", "done"].forEach(col => {
+        document.getElementById("kanban-list-" + col).innerHTML = "";
+      });
+      todos.forEach((todo, idx) => {
+        const card = document.createElement("div");
+        card.className = "kanban-card";
+        card.setAttribute("draggable", "true");
+        card.setAttribute("data-id", idx);
+        card.setAttribute("data-priority", todo.priority || "mittel");
+        card.addEventListener("dragstart", kanbanDragStart);
+        card.innerHTML = `
+          <div><strong>${todo.text}</strong></div>
+          ${todo.label ? `<div class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</div>` : ""}
+          <div style="margin:4px 0 0 0;font-size:0.97em;color:#555;">
+            Zeit: <span id="kanban-time-${idx}">${formatTime(todo.time)}</span>
+            <span class="${todo.running ? 'running' : 'stopped'}">${todo.running ? 'läuft...' : ''}</span>
+          </div>
+          <div style="font-size:0.97em;color:#888;">Prio: ${todo.priority || "mittel"}</div>
+          <div class="card-actions">
+            <button onclick="toggleTimer(${idx})" id="kanban-btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
+            <button onclick="deleteTodo(${idx})" title="Löschen">🗑️</button>
+            ${todo.status !== "done" ? `<button class="done-btn" onclick="markDone(${idx})" title="Erledigt">✔️</button>` : ""}
+          </div>
+        `;
+        document.getElementById("kanban-list-" + (todo.status || "todo")).appendChild(card);
+      });
+      // Zeit live aktualisieren
+      todos.forEach((todo, idx) => {
+        if (todo.running) {
+          if (!timerIntervals[idx]) {
+            startTimer(idx);
+          }
+        }
+      });
+    }
+    function kanbanDragStart(e) {
+      e.dataTransfer.setData("text/plain", e.target.getAttribute("data-id"));
+    }
+    function kanbanAllowDrop(e) { e.preventDefault(); }
+    function kanbanDrop(e, status) {
+      e.preventDefault();
+      const idx = e.dataTransfer.getData("text/plain");
+      if (todos[idx]) {
+        todos[idx].status = status;
+        saveTodos();
+        renderKanban();
+        renderTodos();
+      }
+    }
+    function startTimer(idx) {
+      if (todos[idx].running && timerIntervals[idx]) return;
+      todos[idx].running = true;
+      todos[idx].start = Date.now();
+      timerIntervals[idx] = setInterval(() => {
+        let now = Date.now();
+        todos[idx].time += now - todos[idx].start;
+        todos[idx].start = now;
+        document.getElementById(`time-${idx}`)?.innerText = formatTime(todos[idx].time);
+        document.getElementById(`kanban-time-${idx}`)?.innerText = formatTime(todos[idx].time);
+        saveTodos();
+        updateStats();
+      }, 1000);
+      saveTodos();
+    }
+    function stopTimer(idx) {
+      if (!todos[idx].running) return;
+      todos[idx].running = false;
+      let now = Date.now();
+      todos[idx].time += now - todos[idx].start;
+      todos[idx].start = null;
+      clearInterval(timerIntervals[idx]);
+      timerIntervals[idx] = null;
+      saveTodos();
+      updateStats();
+    }
+    function toggleTimer(idx) {
+      if (todos[idx].running) {
+        stopTimer(idx);
+      } else {
+        startTimer(idx);
+      }
+      renderTodos();
+      renderKanban();
+    }
+    function markDone(idx) {
+      stopTimer(idx);
+      let today = new Date();
+      let doneDate = today.toISOString().slice(0, 10);
+      let todo = todos[idx];
+      todo.doneDate = doneDate;
+      if (!todo.priority) todo.priority = "mittel";
+      todo.status = "done";
+      saveTodos();
+      renderTodos();
+      renderKanban();
+    }
+    function addTodo(text, label, priority) {
+      todos.push({ text, label, priority, time: 0, running: false, start: null, comment: "", status: "todo" });
+      saveTodos();
+      renderTodos();
+      renderKanban();
+    }
+    function deleteTodo(idx) {
+      stopTimer(idx);
+      todos.splice(idx, 1);
+      saveTodos();
+      renderTodos();
+      renderKanban();
+    }
+    function updateStats() {
+      let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0);
+      document.getElementById('totalTime').innerText = `Gesamtzeit: ${formatTime(total)}`;
+      let labelMap = {};
+      [...todos, ...doneTodos].forEach(t => {
+        if (t.label) {
+          if (!labelMap[t.label]) labelMap[t.label] = 0;
+          labelMap[t.label] += t.time;
+        }
+      });
+      let labelHtml = '<ul>';
+      for (let label in labelMap) {
+        labelHtml += `<li><span class="label" style="background:${getLabelColor(label)}">${label}</span>: ${formatTime(labelMap[label])}</li>`;
+      }
+      labelHtml += '</ul>';
+      document.getElementById('labelTimes').innerHTML = labelHtml;
+      updateMonthlyStats();
+    }
+    function calculateUtilization() {
+      let hours = parseFloat(document.getElementById('workHours').value) || 0;
+      let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0) / 3600000;
+      let percent = hours ? ((total / hours) * 100).toFixed(1) : 0;
+      document.getElementById('utilization').innerText = `Auslastung: ${percent}% (${total.toFixed(2)}h von ${hours}h)`;
+    }
+    function addNewLabel(labelName) {
+      if (!labelName || labels.find(l => l.name === labelName)) return;
+      const color = randomColor();
+      labels.push({ name: labelName, color });
+      saveLabels();
+      updateLabelSelect();
+    }
+    function deleteSelectedLabel() {
+      const select = document.getElementById('todoLabelSelect');
+      const selectedValue = select.value;
+      if (!selectedValue) return;
+      if (!confirm(`Label "${selectedValue}" wirklich löschen?`)) return;
+      labels = labels.filter(l => l.name !== selectedValue);
+      saveLabels();
+      updateLabelSelect();
+      select.selectedIndex = 0;
+    }
+    function updateMonthlyStats() {
+      const workHours = parseFloat(document.getElementById('workHours').value) || 0;
+      let monthlyMap = {};
+      [...todos, ...doneTodos].forEach(todo => {
+        if (todo.doneDate) {
+          let month = todo.doneDate.slice(0, 7);
+          if (!monthlyMap[month]) monthlyMap[month] = 0;
+          monthlyMap[month] += todo.time;
+        }
+      });
+      let now = new Date();
+      let thisMonth = now.toISOString().slice(0, 7);
+      let openTime = todos.filter(t => t.status !== 'done').reduce((sum, t) => sum + t.time, 0);
+      if (!monthlyMap[thisMonth]) monthlyMap[thisMonth] = 0;
+      monthlyMap[thisMonth] += openTime;
+      let html = '<table border="1" cellpadding="4"><tr><th>Monat</th><th>Gesamtzeit</th><th>Auslastung</th></tr>';
+      Object.keys(monthlyMap).sort().reverse().forEach(month => {
+        let hours = monthlyMap[month] / 3600000;
+        let percent = workHours ? ((hours / workHours) * 100).toFixed(1) : 0;
+        html += `<tr><td>${month}</td><td>${formatTime(monthlyMap[month])}</td><td>${percent}%</td></tr>`;
+      });
+      html += '</table>';
+      document.getElementById('monthlyStats').innerHTML = html;
+    }
+    function exportData() {
+      const data = {
+        todos,
+        doneTodos,
+        labels
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'todo_backup.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data.todos && data.doneTodos && data.labels) {
+            todos = migrateTodos(data.todos);
+            doneTodos = migrateTodos(data.doneTodos);
+            labels = data.labels;
+            saveTodos();
+            saveDoneTodos();
+            saveLabels();
+            updateLabelSelect();
+            renderTodos();
+            renderKanban();
+            alert('Daten erfolgreich importiert!');
+          } else {
+            alert('Ungültige Datei.');
+          }
+        } catch {
+          alert('Fehler beim Import.');
+        }
+      };
+      reader.readAsText(file);
+    }
+    document.getElementById('todoForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const text = document.getElementById('todoText').value.trim();
+      let label = document.getElementById('todoLabelInput').value.trim();
+      const priority = document.getElementById('todoPrioritySelect').value;
+      if (!label) label = document.getElementById('todoLabelSelect').value;
+      if (label && !labels.find(l => l.name === label)) {
+        addNewLabel(label);
+      }
+      if (text) addTodo(text, label, priority);
+      document.getElementById('todoText').value = '';
+      document.getElementById('todoLabelInput').value = '';
+      document.getElementById('todoLabelSelect').selectedIndex = 0;
+      document.getElementById('todoPrioritySelect').value = 'mittel';
+      renderKanban();
+    });
+    document.getElementById('deleteLabelBtn').addEventListener('click', deleteSelectedLabel);
+    document.getElementById('createLabelBtn').addEventListener('click', function() {
+      const labelName = document.getElementById('newLabelInput').value.trim();
+      if (labelName && !labels.find(l => l.name === labelName)) {
+        addNewLabel(labelName);
+        document.getElementById('newLabelInput').value = '';
+      }
+    });
+    updateLabelSelect();
+    renderTodos();
   </script>
 </body>
 </html>
