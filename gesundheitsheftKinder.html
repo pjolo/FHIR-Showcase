@@ -13,169 +13,259 @@
     input, select, textarea { width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px; border: 1px solid #bbb; }
     .group { background: #f0f4f8; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
     .display { font-style: italic; color: #555; margin-bottom: 12px; }
+    .submit-btn { background: #2a6ebd; color: #fff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 1.1em; cursor: pointer; margin-top: 24px; }
+    .submit-btn:hover { background: #1a4e8a; }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Gesundheitsheft für Kinder (Schweiz)</h1>
-    <div class="section display">
-      <p>Digitales Abbild des Schweizer Gesundheitshefts für Kinder mit allen relevanten Rubriken und Altersabschnitten.</p>
-    </div>
+    <form id="kinderheft-form">
+      <div class="section display">
+        <p>Digitales Abbild des Schweizer Gesundheitshefts für Kinder mit allen relevanten Rubriken und Altersabschnitten.</p>
+      </div>
 
-    <div class="section group">
-      <h2>Wichtige Informationen</h2>
-      <label>Wichtige Telefonnummern</label>
-      <input type="text" name="contact-info">
-      <label>Namen und Adresse der Eltern</label>
-      <input type="text" name="parent-info">
-    </div>
+      <div class="section group">
+        <h2>Wichtige Informationen</h2>
+        <label>Wichtige Telefonnummern</label>
+        <input type="text" name="contact-info">
+        <label>Namen und Adresse der Eltern</label>
+        <input type="text" name="parent-info">
+      </div>
 
-    <div class="section group">
-      <h2>Angaben zum Kind</h2>
-      <label>Name des Kindes</label>
-      <input type="text" name="child-name">
-      <label>Geburtsdatum</label>
-      <input type="date" name="child-birthdate">
-      <label>Geschlecht</label>
-      <select name="child-gender">
-        <option value="male">männlich</option>
-        <option value="female">weiblich</option>
-        <option value="other">divers</option>
-      </select>
-    </div>
+      <div class="section group">
+        <h2>Angaben zum Kind</h2>
+        <label>Name des Kindes</label>
+        <input type="text" name="name">
+        <label>Geburtsdatum</label>
+        <input type="date" name="birthdate">
+        <label>Geschlecht</label>
+        <select name="gender">
+          <option value="male">männlich</option>
+          <option value="female">weiblich</option>
+          <option value="other">divers</option>
+        </select>
+      </div>
 
-    <div class="section group">
-      <h2>Vorsorgeuntersuchungen</h2>
-      <h3>Geburt</h3>
-      <label>Geburtsdatum</label>
-      <input type="date" name="geburtsdatum">
-      <label>Geburtsort</label>
-      <input type="text" name="geburtsort">
-      <label>Hausgeburt</label>
-      <select name="hausgeburt">
-        <option value="true">Ja</option>
-        <option value="false">Nein</option>
-      </select>
-      <label>APGAR (1', 5', 10')</label>
-      <input type="text" name="apgar">
-      <label>Geburtsgewicht (g)</label>
-      <input type="number" name="gewicht">
-      <label>Geburtslänge (cm)</label>
-      <input type="number" step="0.1" name="laenge">
-      <label>Kopfumfang (cm)</label>
-      <input type="number" step="0.1" name="kopfumfang">
-      <label>Vitamin K-Prophylaxe</label>
-      <select name="vitaminK">
-        <option value="true">Ja</option>
-        <option value="false">Nein</option>
-      </select>
-      <label>Vitamin D verschrieben</label>
-      <select name="vitaminD">
-        <option value="true">Ja</option>
-        <option value="false">Nein</option>
-      </select>
-      <label>Guthrie-Test durchgeführt</label>
-      <select name="guthrie">
-        <option value="true">Ja</option>
-        <option value="false">Nein</option>
-      </select>
-      <label>Pulsoxymetrie ≥ 95%</label>
-      <select name="pulsoxymetrie">
-        <option value="true">Ja</option>
-        <option value="false">Nein</option>
-      </select>
-      <label>Gehörscreening links bestanden</label>
-      <select name="gehoerlinks">
-        <option value="true">Ja</option>
-        <option value="false">Nein</option>
-      </select>
-      <label>Gehörscreening rechts bestanden</label>
-      <select name="gehoerrechts">
-        <option value="true">Ja</option>
-        <option value="false">Nein</option>
-      </select>
-      <label>Bemerkungen, besondere Massnahmen</label>
-      <input type="text" name="bemerkungen">
-    </div>
+      <div class="section group">
+        <h2>Vorsorgeuntersuchungen – Geburt</h2>
+        <label>Geburtsdatum</label>
+        <input type="date" name="geburtsdatum">
+        <label>Geburtsort</label>
+        <input type="text" name="geburtsort">
+        <label>Hausgeburt</label>
+        <select name="hausgeburt">
+          <option value="true">Ja</option>
+          <option value="false">Nein</option>
+        </select>
+        <label>APGAR (1', 5', 10')</label>
+        <input type="text" name="apgar">
+        <label>Geburtsgewicht (g)</label>
+        <input type="number" name="gewicht">
+        <label>Geburtslänge (cm)</label>
+        <input type="number" step="0.1" name="laenge">
+        <label>Kopfumfang (cm)</label>
+        <input type="number" step="0.1" name="kopfumfang">
+        <label>Vitamin K-Prophylaxe</label>
+        <select name="vitaminK">
+          <option value="true">Ja</option>
+          <option value="false">Nein</option>
+        </select>
+        <label>Vitamin D verschrieben</label>
+        <select name="vitaminD">
+          <option value="true">Ja</option>
+          <option value="false">Nein</option>
+        </select>
+        <label>Guthrie-Test durchgeführt</label>
+        <select name="guthrie">
+          <option value="true">Ja</option>
+          <option value="false">Nein</option>
+        </select>
+        <label>Pulsoxymetrie ≥ 95%</label>
+        <select name="pulsoxymetrie">
+          <option value="true">Ja</option>
+          <option value="false">Nein</option>
+        </select>
+        <label>Gehörscreening links bestanden</label>
+        <select name="gehoerlinks">
+          <option value="true">Ja</option>
+          <option value="false">Nein</option>
+        </select>
+        <label>Gehörscreening rechts bestanden</label>
+        <select name="gehoerrechts">
+          <option value="true">Ja</option>
+          <option value="false">Nein</option>
+        </select>
+        <label>Bemerkungen, besondere Massnahmen</label>
+        <input type="text" name="bemerkungen">
+      </div>
 
-    <div class="section group">
-      <h3>Vorsorge nach Alter</h3>
-      <label>Kontrolle Hebamme/Mütter-/Väterberatung/Stillberatung (erste Woche)</label>
-      <input type="text" name="kontrolle-hebamme">
-      <label>1 Monat</label>
-      <input type="text" name="1-monat">
-      <label>2 Monate</label>
-      <input type="text" name="2-monate">
-      <label>4 Monate</label>
-      <input type="text" name="4-monate">
-      <label>6 Monate</label>
-      <input type="text" name="6-monate">
-      <label>9 Monate</label>
-      <input type="text" name="9-monate">
-      <label>12 Monate</label>
-      <input type="text" name="12-monate">
-      <label>18 Monate</label>
-      <input type="text" name="18-monate">
-      <label>24 Monate</label>
-      <input type="text" name="24-monate">
-      <label>3 Jahre</label>
-      <input type="text" name="3-jahre">
-      <label>4 Jahre</label>
-      <input type="text" name="4-jahre">
-      <label>6 Jahre</label>
-      <input type="text" name="6-jahre">
-      <label>10 Jahre</label>
-      <input type="text" name="10-jahre">
-      <label>12 Jahre</label>
-      <input type="text" name="12-jahre">
-      <label>14 Jahre</label>
-      <input type="text" name="14-jahre">
-    </div>
+      <div class="section group">
+        <h3>Vorsorge nach Alter</h3>
+        <label>Kontrolle Hebamme/Mütter-/Väterberatung/Stillberatung (erste Woche)</label>
+        <input type="text" name="kontrolle-hebamme">
+        <label>1 Monat</label>
+        <input type="text" name="1-monat">
+        <label>2 Monate</label>
+        <input type="text" name="2-monate">
+        <label>4 Monate</label>
+        <input type="text" name="4-monate">
+        <label>6 Monate</label>
+        <input type="text" name="6-monate">
+        <label>9 Monate</label>
+        <input type="text" name="9-monate">
+        <label>12 Monate</label>
+        <input type="text" name="12-monate">
+        <label>18 Monate</label>
+        <input type="text" name="18-monate">
+        <label>24 Monate</label>
+        <input type="text" name="24-monate">
+        <label>3 Jahre</label>
+        <input type="text" name="3-jahre">
+        <label>4 Jahre</label>
+        <input type="text" name="4-jahre">
+        <label>6 Jahre</label>
+        <input type="text" name="6-jahre">
+        <label>10 Jahre</label>
+        <input type="text" name="10-jahre">
+        <label>12 Jahre</label>
+        <input type="text" name="12-jahre">
+        <label>14 Jahre</label>
+        <input type="text" name="14-jahre">
+      </div>
 
-    <div class="section group">
-      <h2>Andere Arztbesuche</h2>
-      <label>Schulgesundheitsdienst</label>
-      <input type="text" name="schulgesundheitsdienst">
-      <label>Fachärztliche Konsultationen</label>
-      <input type="text" name="facharzt">
-      <label>Krankheiten/Unfälle/Operationen/Spitalaufenthalte</label>
-      <input type="text" name="krankheiten">
-      <label>Konsultationen für neuangekommene Kinder/Jugendliche</label>
-      <input type="text" name="neueinreise">
-    </div>
+      <div class="section group">
+        <h2>Andere Arztbesuche</h2>
+        <label>Schulgesundheitsdienst</label>
+        <input type="text" name="schulgesundheitsdienst">
+        <label>Fachärztliche Konsultationen</label>
+        <input type="text" name="facharzt">
+        <label>Krankheiten/Unfälle/Operationen/Spitalaufenthalte</label>
+        <input type="text" name="krankheiten">
+        <label>Konsultationen für neuangekommene Kinder/Jugendliche</label>
+        <input type="text" name="neueinreise">
+      </div>
 
-    <div class="section group">
-      <h2>Entwicklung</h2>
-      <label>Entwicklungsschritte</label>
-      <input type="text" name="entwicklungsschritte">
-      <label>Wie eine Seh-, Hörstörung oder einen Sprechfehler erkennen?</label>
-      <input type="text" name="sehstoerung">
-    </div>
+      <div class="section group">
+        <h2>Entwicklung</h2>
+        <label>Entwicklungsschritte</label>
+        <input type="text" name="entwicklungsschritte">
+        <label>Wie eine Seh-, Hörstörung oder einen Sprechfehler erkennen?</label>
+        <input type="text" name="sehstoerung">
+      </div>
 
-    <div class="section display">
-      <h2>Was tun, wenn Ihr Kind krank ist?</h2>
-      <p>Bitte beachten Sie die Hinweise im Gesundheitsheft oder wenden Sie sich an Ihre Kinderärztin/Ihren Kinderarzt.</p>
-    </div>
+      <div class="section display">
+        <h2>Was tun, wenn Ihr Kind krank ist?</h2>
+        <p>Bitte beachten Sie die Hinweise im Gesundheitsheft oder wenden Sie sich an Ihre Kinderärztin/Ihren Kinderarzt.</p>
+      </div>
 
-    <div class="section group">
-      <h2>Wachstumskurven</h2>
-      <label>Größe (cm)</label>
-      <input type="number" step="0.1" name="groesse">
-      <label>Gewicht (kg)</label>
-      <input type="number" step="0.1" name="gewicht">
-      <label>Kopfumfang (cm)</label>
-      <input type="number" step="0.1" name="kopfumfang">
-    </div>
+      <div class="section group">
+        <h2>Wachstumskurven</h2>
+        <label>Größe (cm)</label>
+        <input type="number" step="0.1" name="groesse">
+        <label>Gewicht (kg)</label>
+        <input type="number" step="0.1" name="gewicht-wachstum">
+        <label>Kopfumfang (cm)</label>
+        <input type="number" step="0.1" name="kopfumfang-wachstum">
+      </div>
 
-    <div class="section group">
-      <h2>Impfplan</h2>
-      <input type="text" name="impfplan">
-    </div>
+      <div class="section group">
+        <h2>Impfplan</h2>
+        <input type="text" name="impfplan">
+      </div>
 
-    <div class="section group">
-      <h2>Notizen der Eltern</h2>
-      <textarea name="elternnotizen" rows="4"></textarea>
-    </div>
+      <div class="section group">
+        <h2>Notizen der Eltern</h2>
+        <textarea name="elternnotizen" rows="4"></textarea>
+      </div>
+
+      <button type="button" class="submit-btn" onclick="downloadResponse()">Absenden &amp; Download</button>
+    </form>
   </div>
+  <script>
+    function downloadResponse() {
+      const form = document.getElementById('kinderheft-form');
+      const formData = new FormData(form);
+
+      // Hilfsfunktion für value-Typen
+      function answerValue(name, type) {
+        const val = formData.get(name);
+        if (!val) return null;
+        if (type === "valueDate") return { valueDate: val };
+        if (type === "valueBoolean") return { valueBoolean: val === "true" };
+        if (type === "valueDecimal") return { valueDecimal: parseFloat(val) };
+        if (type === "valueInteger") return { valueInteger: parseInt(val) };
+        if (type === "valueCoding") return { valueCoding: { code: val, display: val } };
+        return { valueString: val };
+      }
+
+      // Items für QuestionnaireResponse
+      const items = [
+        { linkId: "contact-info", answer: [answerValue("contact-info")] },
+        { linkId: "parent-info", answer: [answerValue("parent-info")] },
+        { linkId: "name", answer: [answerValue("name")] },
+        { linkId: "birthdate", answer: [answerValue("birthdate", "valueDate")] },
+        { linkId: "gender", answer: [answerValue("gender", "valueCoding")] },
+        { linkId: "geburtsdatum", answer: [answerValue("geburtsdatum", "valueDate")] },
+        { linkId: "geburtsort", answer: [answerValue("geburtsort")] },
+        { linkId: "hausgeburt", answer: [answerValue("hausgeburt", "valueBoolean")] },
+        { linkId: "apgar", answer: [answerValue("apgar")] },
+        { linkId: "gewicht", answer: [answerValue("gewicht", "valueInteger")] },
+        { linkId: "laenge", answer: [answerValue("laenge", "valueDecimal")] },
+        { linkId: "kopfumfang", answer: [answerValue("kopfumfang", "valueDecimal")] },
+        { linkId: "vitaminK", answer: [answerValue("vitaminK", "valueBoolean")] },
+        { linkId: "vitaminD", answer: [answerValue("vitaminD", "valueBoolean")] },
+        { linkId: "guthrie", answer: [answerValue("guthrie", "valueBoolean")] },
+        { linkId: "pulsoxymetrie", answer: [answerValue("pulsoxymetrie", "valueBoolean")] },
+        { linkId: "gehoerlinks", answer: [answerValue("gehoerlinks", "valueBoolean")] },
+        { linkId: "gehoerrechts", answer: [answerValue("gehoerrechts", "valueBoolean")] },
+        { linkId: "bemerkungen", answer: [answerValue("bemerkungen")] },
+        { linkId: "kontrolle-hebamme", answer: [answerValue("kontrolle-hebamme")] },
+        { linkId: "1-monat", answer: [answerValue("1-monat")] },
+        { linkId: "2-monate", answer: [answerValue("2-monate")] },
+        { linkId: "4-monate", answer: [answerValue("4-monate")] },
+        { linkId: "6-monate", answer: [answerValue("6-monate")] },
+        { linkId: "9-monate", answer: [answerValue("9-monate")] },
+        { linkId: "12-monate", answer: [answerValue("12-monate")] },
+        { linkId: "18-monate", answer: [answerValue("18-monate")] },
+        { linkId: "24-monate", answer: [answerValue("24-monate")] },
+        { linkId: "3-jahre", answer: [answerValue("3-jahre")] },
+        { linkId: "4-jahre", answer: [answerValue("4-jahre")] },
+        { linkId: "6-jahre", answer: [answerValue("6-jahre")] },
+        { linkId: "10-jahre", answer: [answerValue("10-jahre")] },
+        { linkId: "12-jahre", answer: [answerValue("12-jahre")] },
+        { linkId: "14-jahre", answer: [answerValue("14-jahre")] },
+        { linkId: "schulgesundheitsdienst", answer: [answerValue("schulgesundheitsdienst")] },
+        { linkId: "facharzt", answer: [answerValue("facharzt")] },
+        { linkId: "krankheiten", answer: [answerValue("krankheiten")] },
+        { linkId: "neueinreise", answer: [answerValue("neueinreise")] },
+        { linkId: "entwicklungsschritte", answer: [answerValue("entwicklungsschritte")] },
+        { linkId: "sehstoerung", answer: [answerValue("sehstoerung")] },
+        { linkId: "groesse", answer: [answerValue("groesse", "valueDecimal")] },
+        { linkId: "gewicht-wachstum", answer: [answerValue("gewicht-wachstum", "valueDecimal")] },
+        { linkId: "kopfumfang-wachstum", answer: [answerValue("kopfumfang-wachstum", "valueDecimal")] },
+        { linkId: "impfplan", answer: [answerValue("impfplan")] },
+        { linkId: "elternnotizen", answer: [answerValue("elternnotizen")] }
+      ].filter(item => item.answer[0] && item.answer[0] !== null && item.answer[0] !== undefined && item.answer[0] !== "");
+
+      const response = {
+        resourceType: "QuestionnaireResponse",
+        status: "completed",
+        questionnaire: "kinder-gesundheitsheft-ch",
+        item: items
+      };
+
+      const blob = new Blob([JSON.stringify(response, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "questionnaire-response.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
 </body>
 </html>
