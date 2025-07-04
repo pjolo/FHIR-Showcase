@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Gesundheitsheft für Kinder (Schweiz) – Digitaler Fragebogen</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f7f9fa; color: #222; margin: 0; padding: 0; }
+    .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px #ccc; padding: 32px; }
+    h1, h2 { color: #2a6ebd; }
+    h1 { margin-top: 0; }
+    .section { margin-bottom: 32px; }
+    label { font-weight: bold; display: block; margin-top: 16px; }
+    input, select, textarea { width: 100%; padding: 8px; margin-top: 4px; border-radius: 4px; border: 1px solid #bbb; }
+    .group { background: #f0f4f8; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+    .display { font-style: italic; color: #555; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gesundheitsheft für Kinder (Schweiz)</h1>
+    <div class="section display">
+      <p>Digitales Abbild des Schweizer Gesundheitshefts für Kinder mit allen relevanten Rubriken und Altersabschnitten.</p>
+    </div>
+
+    <div class="section group">
+      <h2>Wichtige Informationen</h2>
+      <label>Wichtige Telefonnummern</label>
+      <input type="text" name="contact-info">
+      <label>Namen und Adresse der Eltern</label>
+      <input type="text" name="parent-info">
+    </div>
+
+    <div class="section group">
+      <h2>Angaben zum Kind</h2>
+      <label>Name des Kindes</label>
+      <input type="text" name="child-name">
+      <label>Geburtsdatum</label>
+      <input type="date" name="child-birthdate">
+      <label>Geschlecht</label>
+      <select name="child-gender">
+        <option value="male">männlich</option>
+        <option value="female">weiblich</option>
+        <option value="other">divers</option>
+      </select>
+    </div>
+
+    <div class="section group">
+      <h2>Vorsorgeuntersuchungen</h2>
+      <h3>Geburt</h3>
+      <label>Geburtsdatum</label>
+      <input type="date" name="geburtsdatum">
+      <label>Geburtsort</label>
+      <input type="text" name="geburtsort">
+      <label>Hausgeburt</label>
+      <select name="hausgeburt">
+        <option value="true">Ja</option>
+        <option value="false">Nein</option>
+      </select>
+      <label>APGAR (1', 5', 10')</label>
+      <input type="text" name="apgar">
+      <label>Geburtsgewicht (g)</label>
+      <input type="number" name="gewicht">
+      <label>Geburtslänge (cm)</label>
+      <input type="number" step="0.1" name="laenge">
+      <label>Kopfumfang (cm)</label>
+      <input type="number" step="0.1" name="kopfumfang">
+      <label>Vitamin K-Prophylaxe</label>
+      <select name="vitaminK">
+        <option value="true">Ja</option>
+        <option value="false">Nein</option>
+      </select>
+      <label>Vitamin D verschrieben</label>
+      <select name="vitaminD">
+        <option value="true">Ja</option>
+        <option value="false">Nein</option>
+      </select>
+      <label>Guthrie-Test durchgeführt</label>
+      <select name="guthrie">
+        <option value="true">Ja</option>
+        <option value="false">Nein</option>
+      </select>
+      <label>Pulsoxymetrie ≥ 95%</label>
+      <select name="pulsoxymetrie">
+        <option value="true">Ja</option>
+        <option value="false">Nein</option>
+      </select>
+      <label>Gehörscreening links bestanden</label>
+      <select name="gehoerlinks">
+        <option value="true">Ja</option>
+        <option value="false">Nein</option>
+      </select>
+      <label>Gehörscreening rechts bestanden</label>
+      <select name="gehoerrechts">
+        <option value="true">Ja</option>
+        <option value="false">Nein</option>
+      </select>
+      <label>Bemerkungen, besondere Massnahmen</label>
+      <input type="text" name="bemerkungen">
+    </div>
+
+    <div class="section group">
+      <h3>Vorsorge nach Alter</h3>
+      <label>Kontrolle Hebamme/Mütter-/Väterberatung/Stillberatung (erste Woche)</label>
+      <input type="text" name="kontrolle-hebamme">
+      <label>1 Monat</label>
+      <input type="text" name="1-monat">
+      <label>2 Monate</label>
+      <input type="text" name="2-monate">
+      <label>4 Monate</label>
+      <input type="text" name="4-monate">
+      <label>6 Monate</label>
+      <input type="text" name="6-monate">
+      <label>9 Monate</label>
+      <input type="text" name="9-monate">
+      <label>12 Monate</label>
+      <input type="text" name="12-monate">
+      <label>18 Monate</label>
+      <input type="text" name="18-monate">
+      <label>24 Monate</label>
+      <input type="text" name="24-monate">
+      <label>3 Jahre</label>
+      <input type="text" name="3-jahre">
+      <label>4 Jahre</label>
+      <input type="text" name="4-jahre">
+      <label>6 Jahre</label>
+      <input type="text" name="6-jahre">
+      <label>10 Jahre</label>
+      <input type="text" name="10-jahre">
+      <label>12 Jahre</label>
+      <input type="text" name="12-jahre">
+      <label>14 Jahre</label>
+      <input type="text" name="14-jahre">
+    </div>
+
+    <div class="section group">
+      <h2>Andere Arztbesuche</h2>
+      <label>Schulgesundheitsdienst</label>
+      <input type="text" name="schulgesundheitsdienst">
+      <label>Fachärztliche Konsultationen</label>
+      <input type="text" name="facharzt">
+      <label>Krankheiten/Unfälle/Operationen/Spitalaufenthalte</label>
+      <input type="text" name="krankheiten">
+      <label>Konsultationen für neuangekommene Kinder/Jugendliche</label>
+      <input type="text" name="neueinreise">
+    </div>
+
+    <div class="section group">
+      <h2>Entwicklung</h2>
+      <label>Entwicklungsschritte</label>
+      <input type="text" name="entwicklungsschritte">
+      <label>Wie eine Seh-, Hörstörung oder einen Sprechfehler erkennen?</label>
+      <input type="text" name="sehstoerung">
+    </div>
+
+    <div class="section display">
+      <h2>Was tun, wenn Ihr Kind krank ist?</h2>
+      <p>Bitte beachten Sie die Hinweise im Gesundheitsheft oder wenden Sie sich an Ihre Kinderärztin/Ihren Kinderarzt.</p>
+    </div>
+
+    <div class="section group">
+      <h2>Wachstumskurven</h2>
+      <label>Größe (cm)</label>
+      <input type="number" step="0.1" name="groesse">
+      <label>Gewicht (kg)</label>
+      <input type="number" step="0.1" name="gewicht">
+      <label>Kopfumfang (cm)</label>
+      <input type="number" step="0.1" name="kopfumfang">
+    </div>
+
+    <div class="section group">
+      <h2>Impfplan</h2>
+      <input type="text" name="impfplan">
+    </div>
+
+    <div class="section group">
+      <h2>Notizen der Eltern</h2>
+      <textarea name="elternnotizen" rows="4"></textarea>
+    </div>
+  </div>
+</body>
+</html>
