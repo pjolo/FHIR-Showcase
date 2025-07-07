@@ -4,285 +4,53 @@
   <meta charset="UTF-8">
   <title>Todo-Liste</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 30px;
-      background: #f7f8fa;
-      color: #222;
-    }
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-    .tab-btn {
-      padding: 8px 18px;
-      border: none;
-      border-radius: 6px 6px 0 0;
-      background: #e0e7ff;
-      color: #222;
-      font-size: 1.1em;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .tab-btn.active {
-      background: #6366f1;
-      color: #fff;
-      font-weight: bold;
-    }
+    body { font-family: Arial, sans-serif; margin: 30px; background: #f7f8fa; color: #222; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab-btn { padding: 8px 18px; border: none; border-radius: 6px 6px 0 0; background: #e0e7ff; color: #222; font-size: 1.1em; cursor: pointer; transition: background 0.2s; }
+    .tab-btn.active { background: #6366f1; color: #fff; font-weight: bold; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    #todoList {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-      gap: 20px;
-      margin-top: 18px;
-    }
-    .todo {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.07), 0 1.5px 4px rgba(0,0,0,0.04);
-      border-left: 6px solid #e5e7eb;
-      padding: 18px 24px 18px 24px;
-      min-width: 320px;
-      max-width: 700px;
-      word-break: break-word;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .todo .header-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 5px;
-    }
-    .label {
-      border-radius: 4px;
-      padding: 2px 12px;
-      margin-right: 5px;
-      color: #fff;
-      font-size: 1em;
-      background: #6366f1;
-      display: inline-block;
-      max-width: 350px;
-      white-space: normal;
-      word-break: break-word;
-    }
-    .priority {
-      border-radius: 4px;
-      padding: 2px 10px;
-      margin-right: 5px;
-      font-weight: bold;
-      font-size: 1em;
-      display: inline-block;
-    }
+    #todoList { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; margin-top: 18px; }
+    .todo { background: #fff; border-radius: 10px; box-shadow: 0 3px 12px rgba(0,0,0,0.07), 0 1.5px 4px rgba(0,0,0,0.04); border-left: 6px solid #e5e7eb; padding: 18px 24px 18px 24px; min-width: 320px; max-width: 700px; word-break: break-word; display: flex; flex-direction: column; gap: 10px; }
+    .todo .header-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 5px; }
+    .label { border-radius: 4px; padding: 2px 12px; margin-right: 5px; color: #fff; font-size: 1em; background: #6366f1; display: inline-block; max-width: 350px; white-space: normal; word-break: break-word; }
+    .priority { border-radius: 4px; padding: 2px 10px; margin-right: 5px; font-weight: bold; font-size: 1em; display: inline-block; }
     .priority.hoch { background: #e53935; color: #fff; border-left: 4px solid #e53935;}
     .priority.mittel { background: #fbc02d; color: #fff; border-left: 4px solid #fbc02d;}
     .priority.niedrig { background: #43a047; color: #fff; border-left: 4px solid #43a047;}
-    .todo .header-row strong {
-      flex: 1 1 100%;
-      font-size: 1.13em;
-      font-weight: 500;
-      color: #222;
-      letter-spacing: 0.01em;
-      word-break: break-word;
-    }
-    .todo select.edit-select {
-      font-size: 1em;
-      margin-left: 0;
-      margin-right: 0;
-      padding: 2px 5px;
-      background: #f3f4f6;
-      border-radius: 4px;
-      border: 1px solid #d1d5db;
-      margin-bottom: 4px;
-    }
-    .todo .time-row {
-      font-size: 1em;
-      color: #555;
-      margin-top: 4px;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      flex-wrap: wrap;
-    }
+    .todo .header-row strong { flex: 1 1 100%; font-size: 1.13em; font-weight: 500; color: #222; letter-spacing: 0.01em; word-break: break-word; }
+    .todo select.edit-select { font-size: 1em; margin-left: 0; margin-right: 0; padding: 2px 5px; background: #f3f4f6; border-radius: 4px; border: 1px solid #d1d5db; margin-bottom: 4px; }
+    .todo .time-row { font-size: 1em; color: #555; margin-top: 4px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
     .todo .running { color: #059669; font-weight: bold; }
     .todo .stopped { color: #b91c1c; }
-    .done-btn, .todo button {
-      background: #f3f4f6;
-      color: #222;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 4px 12px;
-      font-size: 1em;
-      transition: background 0.15s;
-      margin-bottom: 4px;
-    }
-    .done-btn {
-      background: #4caf50;
-      color: #fff;
-    }
-    .done-btn:hover {
-      background: #388e3c;
-    }
-    .todo button:hover {
-      background: #e5e7eb;
-    }
-    .add-time-form input {
-      width: 40px;
-      margin-right: 2px;
-      font-size: 1em;
-    }
-    .add-time-form button {
-      margin-right: 2px;
-    }
-    .todo .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .comment-toggle-btn {
-      background: #e0e7ff;
-      color: #374151;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 3px 10px;
-      font-size: 1em;
-      margin-bottom: 4px;
-      margin-left: 0;
-      margin-right: 0;
-      transition: background 0.15s;
-      position: relative;
-    }
-    .comment-toggle-btn:hover {
-      background: #c7d2fe;
-    }
-    .comment-exists {
-      background-color: #4caf50 !important;
-      color: white !important;
-      font-weight: bold;
-      border: 2px solid #388e3c;
-      position: relative;
-    }
-    .comment-exists::after {
-      content: "●";
-      color: #fff700;
-      font-size: 1.2em;
-      position: absolute;
-      right: 10px;
-      top: 4px;
-    }
-    .comment-area {
-      margin-top: 8px;
-      background: #f3f4f6;
-      border-radius: 6px;
-      padding: 8px 6px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .comment-area textarea {
-      width: 100%;
-      min-height: 48px;
-      font-size: 1em;
-      border-radius: 4px;
-      border: 1px solid #d1d5db;
-      padding: 5px;
-      resize: vertical;
-      background: #fff;
-      box-sizing: border-box;
-    }
-    .stats {
-      margin-top: 32px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      padding: 18px 20px 10px 20px;
-      max-width: 700px;
-    }
-    /* Kanban Board Styles */
-    .kanban-board {
-      display: flex;
-      gap: 18px;
-      margin-top: 10px;
-      min-height: 350px;
-    }
-    .kanban-column {
-      background: #e0e7ff;
-      border-radius: 10px;
-      flex: 1 1 0;
-      padding: 12px 10px 18px 10px;
-      min-width: 260px;
-      display: flex;
-      flex-direction: column;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-    .kanban-column h3 {
-      text-align: center;
-      color: #3730a3;
-      margin-bottom: 8px;
-      font-size: 1.12em;
-    }
-    .kanban-list {
-      flex: 1;
-      min-height: 60px;
-    }
-    .kanban-card {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      padding: 10px 12px 8px 12px;
-      margin-bottom: 10px;
-      cursor: grab;
-      word-break: break-word;
-      border-left: 5px solid #6366f1;
-    }
+    .done-btn, .todo button { background: #f3f4f6; color: #222; border: none; border-radius: 4px; cursor: pointer; padding: 4px 12px; font-size: 1em; transition: background 0.15s; margin-bottom: 4px; }
+    .done-btn { background: #4caf50; color: #fff; }
+    .done-btn:hover { background: #388e3c; }
+    .todo button:hover { background: #e5e7eb; }
+    .add-time-form input { width: 40px; margin-right: 2px; font-size: 1em; }
+    .add-time-form button { margin-right: 2px; }
+    .todo .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .comment-toggle-btn { background: #e0e7ff; color: #374151; border: none; border-radius: 4px; cursor: pointer; padding: 3px 10px; font-size: 1em; margin-bottom: 4px; margin-left: 0; margin-right: 0; transition: background 0.15s; position: relative; }
+    .comment-toggle-btn:hover { background: #c7d2fe; }
+    .comment-exists { background-color: #4caf50 !important; color: white !important; font-weight: bold; border: 2px solid #388e3c; position: relative; }
+    .comment-exists::after { content: "●"; color: #fff700; font-size: 1.2em; position: absolute; right: 10px; top: 4px; }
+    .comment-area { margin-top: 8px; background: #f3f4f6; border-radius: 6px; padding: 8px 6px; width: 100%; box-sizing: border-box; }
+    .comment-area textarea { width: 100%; min-height: 48px; font-size: 1em; border-radius: 4px; border: 1px solid #d1d5db; padding: 5px; resize: vertical; background: #fff; box-sizing: border-box; }
+    .stats { margin-top: 32px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 18px 20px 10px 20px; max-width: 700px; }
+    .kanban-board { display: flex; gap: 18px; margin-top: 10px; min-height: 350px; }
+    .kanban-column { background: #e0e7ff; border-radius: 10px; flex: 1 1 0; padding: 12px 10px 18px 10px; min-width: 260px; display: flex; flex-direction: column; max-height: 80vh; overflow-y: auto; }
+    .kanban-column h3 { text-align: center; color: #3730a3; margin-bottom: 8px; font-size: 1.12em; }
+    .kanban-list { flex: 1; min-height: 60px; }
+    .kanban-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 10px 12px 8px 12px; margin-bottom: 10px; cursor: grab; word-break: break-word; border-left: 5px solid #6366f1; }
     .kanban-card[data-priority="hoch"] { border-left-color: #e53935; }
     .kanban-card[data-priority="mittel"] { border-left-color: #fbc02d; }
     .kanban-card[data-priority="niedrig"] { border-left-color: #43a047; }
-    .kanban-card .label {
-      display: inline-block;
-      background: #6366f1;
-      color: #fff;
-      border-radius: 4px;
-      padding: 1px 8px;
-      font-size: 0.95em;
-      margin-right: 5px;
-      margin-bottom: 2px;
-      max-width: 150px;
-      white-space: normal;
-      word-break: break-word;
-    }
-    .kanban-card .card-actions {
-      margin-top: 6px;
-      display: flex;
-      gap: 5px;
-      flex-wrap: wrap;
-    }
-    .kanban-card button {
-      background: #f3f4f6;
-      color: #222;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 2px 8px;
-      font-size: 0.97em;
-    }
-    .kanban-card button:hover {
-      background: #e0e7ff;
-    }
-    .kanban-card .done-btn {
-      background: #4caf50;
-      color: #fff;
-    }
-    .kanban-card .done-btn:hover {
-      background: #388e3c;
-    }
+    .kanban-card .label { display: inline-block; background: #6366f1; color: #fff; border-radius: 4px; padding: 1px 8px; font-size: 0.95em; margin-right: 5px; margin-bottom: 2px; max-width: 150px; white-space: normal; word-break: break-word; }
+    .kanban-card .card-actions { margin-top: 6px; display: flex; gap: 5px; flex-wrap: wrap; }
+    .kanban-card button { background: #f3f4f6; color: #222; border: none; border-radius: 4px; cursor: pointer; padding: 2px 8px; font-size: 0.97em; }
+    .kanban-card button:hover { background: #e0e7ff; }
+    .kanban-card .done-btn { background: #4caf50; color: #fff; }
+    .kanban-card .done-btn:hover { background: #388e3c; }
     @media (max-width: 600px) {
       #todoList { grid-template-columns: 1fr; }
       .todo { min-width: 95vw; max-width: 99vw; }
@@ -297,8 +65,6 @@
     <button class="tab-btn" id="tabBoardBtn" onclick="showTab('boardTab')">Board</button>
     <button class="tab-btn" id="tabStatsBtn" onclick="showTab('statsTab')">Statistik</button>
   </div>
-
-  <!-- Startseite (Kachelansicht, unverändert) -->
   <div id="homeTab" class="tab-content active">
     <h2>Todo-Liste</h2>
     <form id="todoForm">
@@ -326,8 +92,6 @@
     </div>
     <div id="todoList"></div>
   </div>
-
-  <!-- Board (Kanban) -->
   <div id="boardTab" class="tab-content">
     <h2>Kanban Board</h2>
     <div class="kanban-board">
@@ -345,8 +109,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Statistik -->
   <div id="statsTab" class="tab-content">
     <div class="stats">
       <h3>Statistiken</h3>
@@ -364,9 +126,12 @@
         <h4>Monatsstatistik</h4>
         <div id="monthlyStats"></div>
       </div>
+      <div>
+        <h4>Monat/Label-Statistik</h4>
+        <div id="monthlyLabelStats"></div>
+      </div>
     </div>
   </div>
-
   <script>
     function showTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -382,7 +147,6 @@
         updateStats();
       }
     }
-
     function randomColor() {
       const hue = Math.floor(Math.random() * 360);
       return `hsl(${hue},70%,50%)`;
@@ -427,8 +191,6 @@
       let h = Math.floor(ms / 3600000);
       return `${h}h ${min}m ${sec}s`;
     }
-
-    // Nur offene Todos anzeigen
     function renderTodos() {
       const list = document.getElementById('todoList');
       list.innerHTML = '';
@@ -485,7 +247,6 @@
         list.appendChild(div);
       });
     }
-
     window.updateTodoLabel = function(idx, value) {
       todos[idx].label = value;
       saveTodos();
@@ -528,8 +289,6 @@
       saveTodos();
       renderTodos();
     };
-
-    // Kanban Board: alle Todos nach Status
     function renderKanban() {
       ["todo", "inprogress", "done"].forEach(col => {
         document.getElementById("kanban-list-" + col).innerHTML = "";
@@ -570,8 +329,6 @@
         renderTodos();
       }
     }
-
-    // Statistik
     function updateStats() {
       let total = [...todos, ...doneTodos].reduce((sum, t) => sum + t.time, 0);
       document.getElementById('totalTime').innerText = `Gesamtzeit: ${formatTime(total)}`;
@@ -589,6 +346,7 @@
       labelHtml += '</ul>';
       document.getElementById('labelTimes').innerHTML = labelHtml;
       updateMonthlyStats();
+      updateMonthlyLabelStats();
     }
     function addTodo(text, label, priority) {
       todos.push({ text, label, priority, time: 0, running: false, start: null, comment: "", status: "todo" });
@@ -695,7 +453,40 @@
       document.getElementById('monthlyStats').innerHTML = html;
     }
 
-    // Export/Import Funktionen
+    // NEU: Monats-Label-Statistik
+    function updateMonthlyLabelStats() {
+      let monthlyLabelMap = {};
+      doneTodos.forEach(todo => {
+        if (todo.doneDate && todo.label) {
+          let month = todo.doneDate.slice(0, 7);
+          if (!monthlyLabelMap[month]) monthlyLabelMap[month] = {};
+          if (!monthlyLabelMap[month][todo.label]) monthlyLabelMap[month][todo.label] = 0;
+          monthlyLabelMap[month][todo.label] += todo.time;
+        }
+      });
+      let now = new Date();
+      let thisMonth = now.toISOString().slice(0, 7);
+      todos.forEach(todo => {
+        if (todo.label) {
+          if (!monthlyLabelMap[thisMonth]) monthlyLabelMap[thisMonth] = {};
+          if (!monthlyLabelMap[thisMonth][todo.label]) monthlyLabelMap[thisMonth][todo.label] = 0;
+          monthlyLabelMap[thisMonth][todo.label] += todo.time;
+        }
+      });
+      let html = '<table border="1" cellpadding="4"><tr><th>Monat</th><th>Label</th><th>Zeit</th></tr>';
+      Object.keys(monthlyLabelMap).sort().reverse().forEach(month => {
+        Object.keys(monthlyLabelMap[month]).forEach(label => {
+          html += `<tr>
+            <td>${month}</td>
+            <td><span class="label" style="background:${getLabelColor(label)}">${label}</span></td>
+            <td>${formatTime(monthlyLabelMap[month][label])}</td>
+          </tr>`;
+        });
+      });
+      html += '</table>';
+      document.getElementById('monthlyLabelStats').innerHTML = html;
+    }
+
     function exportData() {
       const data = {
         todos,
