@@ -37,20 +37,9 @@
     .comment-area { margin-top: 8px; background: #f3f4f6; border-radius: 6px; padding: 8px 6px; width: 100%; box-sizing: border-box; }
     .comment-area textarea { width: 100%; min-height: 48px; font-size: 1em; border-radius: 4px; border: 1px solid #d1d5db; padding: 5px; resize: vertical; background: #fff; box-sizing: border-box; }
     .stats { margin-top: 32px; background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 18px 20px 10px 20px; max-width: 700px; }
-    .kanban-board { display: flex; gap: 18px; margin-top: 10px; min-height: 350px; }
-    .kanban-column { background: #e0e7ff; border-radius: 10px; flex: 1 1 0; padding: 12px 10px 18px 10px; min-width: 260px; display: flex; flex-direction: column; max-height: 80vh; overflow-y: auto; }
-    .kanban-column h3 { text-align: center; color: #3730a3; margin-bottom: 8px; font-size: 1.12em; }
-    .kanban-list { flex: 1; min-height: 60px; }
-    .kanban-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 10px 12px 8px 12px; margin-bottom: 10px; cursor: grab; word-break: break-word; border-left: 5px solid #6366f1; }
-    .kanban-card[data-priority="hoch"] { border-left-color: #e53935; }
-    .kanban-card[data-priority="mittel"] { border-left-color: #fbc02d; }
-    .kanban-card[data-priority="niedrig"] { border-left-color: #43a047; }
-    .kanban-card .label { display: inline-block; background: #6366f1; color: #fff; border-radius: 4px; padding: 1px 8px; font-size: 0.95em; margin-right: 5px; margin-bottom: 2px; max-width: 150px; white-space: normal; word-break: break-word; }
-    .kanban-card .card-actions { margin-top: 6px; display: flex; gap: 5px; flex-wrap: wrap; }
-    .kanban-card button { background: #f3f4f6; color: #222; border: none; border-radius: 4px; cursor: pointer; padding: 2px 8px; font-size: 0.97em; }
-    .kanban-card button:hover { background: #e0e7ff; }
-    .kanban-card .done-btn { background: #4caf50; color: #fff; }
-    .kanban-card .done-btn:hover { background: #388e3c; }
+    .scroll-table { overflow-x: auto; }
+    .scroll-table table { min-width: 600px; border-collapse: collapse; }
+    .scroll-table th, .scroll-table td { padding: 6px 12px; text-align: center; white-space: nowrap; border: 1px solid #d1d5db; }
     @media (max-width: 600px) {
       #todoList { grid-template-columns: 1fr; }
       .todo { min-width: 95vw; max-width: 99vw; }
@@ -127,8 +116,10 @@
         <div id="monthlyStats"></div>
       </div>
       <div>
-        <h4>Monat/Label-Statistik</h4>
-        <div id="monthlyLabelStats"></div>
+        <h4>Monat/Label-Tabelle</h4>
+        <div class="scroll-table">
+          <table id="monthlyLabelTable"></table>
+        </div>
       </div>
     </div>
   </div>
@@ -346,7 +337,7 @@
       labelHtml += '</ul>';
       document.getElementById('labelTimes').innerHTML = labelHtml;
       updateMonthlyStats();
-      updateMonthlyLabelStats();
+      updateMonthlyLabelTable();
     }
     function addTodo(text, label, priority) {
       todos.push({ text, label, priority, time: 0, running: false, start: null, comment: "", status: "todo" });
@@ -453,38 +444,35 @@
       document.getElementById('monthlyStats').innerHTML = html;
     }
 
-    // NEU: Monats-Label-Statistik
-    function updateMonthlyLabelStats() {
-      let monthlyLabelMap = {};
-      doneTodos.forEach(todo => {
-        if (todo.doneDate && todo.label) {
-          let month = todo.doneDate.slice(0, 7);
-          if (!monthlyLabelMap[month]) monthlyLabelMap[month] = {};
-          if (!monthlyLabelMap[month][todo.label]) monthlyLabelMap[month][todo.label] = 0;
-          monthlyLabelMap[month][todo.label] += todo.time;
+    // Kompakte Monats-Label-Tabelle (scrollbar, zeigt Zeiten pro Label und Monat)
+    function updateMonthlyLabelTable() {
+      // Alle Labels, alphabetisch sortiert
+      const allLabels = labels.map(l => l.name).sort((a, b) => a.localeCompare(b, 'de', {sensitivity: 'base'}));
+      // Datenstruktur: {monat: {label: zeitInMs}}
+      let monthLabelMap = {};
+      [...todos, ...doneTodos].forEach(todo => {
+        if (todo.label && todo.doneDate) {
+          const month = todo.doneDate.slice(0, 7);
+          if (!monthLabelMap[month]) monthLabelMap[month] = {};
+          if (!monthLabelMap[month][todo.label]) monthLabelMap[month][todo.label] = 0;
+          monthLabelMap[month][todo.label] += todo.time;
         }
       });
-      let now = new Date();
-      let thisMonth = now.toISOString().slice(0, 7);
-      todos.forEach(todo => {
-        if (todo.label) {
-          if (!monthlyLabelMap[thisMonth]) monthlyLabelMap[thisMonth] = {};
-          if (!monthlyLabelMap[thisMonth][todo.label]) monthlyLabelMap[thisMonth][todo.label] = 0;
-          monthlyLabelMap[thisMonth][todo.label] += todo.time;
-        }
+
+      // Tabelle aufbauen
+      const table = document.getElementById('monthlyLabelTable');
+      let thead = '<tr><th>Monat</th>';
+      allLabels.forEach(l => { thead += `<th><span class="label" style="background:${getLabelColor(l)}">${l}</span></th>`; });
+      thead += '</tr>';
+      let tbody = '';
+      Object.keys(monthLabelMap).sort().reverse().forEach(month => {
+        tbody += `<tr><td>${month}</td>`;
+        allLabels.forEach(label =>
+          tbody += `<td>${monthLabelMap[month][label] ? formatTime(monthLabelMap[month][label]) : '-'}</td>`
+        );
+        tbody += '</tr>';
       });
-      let html = '<table border="1" cellpadding="4"><tr><th>Monat</th><th>Label</th><th>Zeit</th></tr>';
-      Object.keys(monthlyLabelMap).sort().reverse().forEach(month => {
-        Object.keys(monthlyLabelMap[month]).forEach(label => {
-          html += `<tr>
-            <td>${month}</td>
-            <td><span class="label" style="background:${getLabelColor(label)}">${label}</span></td>
-            <td>${formatTime(monthlyLabelMap[month][label])}</td>
-          </tr>`;
-        });
-      });
-      html += '</table>';
-      document.getElementById('monthlyLabelStats').innerHTML = html;
+      table.innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
     }
 
     function exportData() {
