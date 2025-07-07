@@ -246,13 +246,20 @@
             <button onclick="deleteTodo(${idx})" title="Löschen">🗑️</button>
             <button class="done-btn" onclick="markDone(${idx})" title="Erledigt">✔️</button>
             <button onclick="showAddTimeForm(${idx})" title="Zeit hinzufügen">⏱️</button>
-            <button class="comment-toggle-btn ${commentButtonClass}" onclick="toggleComment(${idx})" type="button" id="${showCommentId}">Kommentar anzeigen</button>
+            <button onclick="showEditTimeForm(${idx})" title="Zeit bearbeiten">⏰ Zeit anpassen</button>
             <span id="addTimeForm-${idx}" class="add-time-form" style="display:none;">
               <input type="number" id="addH-${idx}" min="0" placeholder="h">
               <input type="number" id="addM-${idx}" min="0" max="59" placeholder="m">
               <input type="number" id="addS-${idx}" min="0" max="59" placeholder="s">
               <button onclick="addManualTime(${idx})" type="button">OK</button>
               <button onclick="hideAddTimeForm(${idx})" type="button">Abbrechen</button>
+            </span>
+            <span id="editTimeForm-${idx}" class="add-time-form" style="display:none;">
+              <input type="number" id="editH-${idx}" min="0" placeholder="h" style="width:50px;">
+              <input type="number" id="editM-${idx}" min="0" max="59" placeholder="m" style="width:50px;">
+              <input type="number" id="editS-${idx}" min="0" max="59" placeholder="s" style="width:50px;">
+              <button onclick="setManualTime(${idx})" type="button">OK</button>
+              <button onclick="hideEditTimeForm(${idx})" type="button">Abbrechen</button>
             </span>
           </div>
           <div id="${commentId}" class="comment-area" style="display:none;">
@@ -287,6 +294,28 @@
       saveTodos();
       hideAddTimeForm(idx);
       renderTodos();
+    }
+    // NEU: Zeit anpassen
+    function showEditTimeForm(idx) {
+      document.getElementById(`editTimeForm-${idx}`).style.display = 'inline';
+      // aktuelle Zeit vorbefüllen
+      let ms = todos[idx].time || 0;
+      document.getElementById(`editH-${idx}`).value = Math.floor(ms / 3600000);
+      document.getElementById(`editM-${idx}`).value = Math.floor(ms / 60000) % 60;
+      document.getElementById(`editS-${idx}`).value = Math.floor(ms / 1000) % 60;
+    }
+    function hideEditTimeForm(idx) {
+      document.getElementById(`editTimeForm-${idx}`).style.display = 'none';
+    }
+    function setManualTime(idx) {
+      const h = parseInt(document.getElementById(`editH-${idx}`).value) || 0;
+      const m = parseInt(document.getElementById(`editM-${idx}`).value) || 0;
+      const s = parseInt(document.getElementById(`editS-${idx}`).value) || 0;
+      todos[idx].time = ((h * 60 * 60) + (m * 60) + s) * 1000;
+      saveTodos();
+      hideEditTimeForm(idx);
+      renderTodos();
+      renderKanban();
     }
     window.toggleComment = function(idx) {
       const commentDiv = document.getElementById(`comment-${idx}`);
