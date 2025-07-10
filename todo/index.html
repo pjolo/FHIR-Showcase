@@ -63,11 +63,48 @@
       font-size: 1em;
       padding: 2px 8px;
     }
+    /* Kanban Board */
+    .kanban-board {
+      display: flex;
+      gap: 18px;
+      margin-top: 10px;
+      min-height: 350px;
+      overflow-x: auto;
+      width: 100%;
+    }
+    .kanban-column {
+      background: #e0e7ff;
+      border-radius: 10px;
+      flex: 1 1 0;
+      padding: 12px 10px 18px 10px;
+      min-width: 260px;
+      display: flex;
+      flex-direction: column;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .kanban-column h3 { text-align: center; color: #3730a3; margin-bottom: 8px; font-size: 1.12em; }
+    .kanban-list { flex: 1; min-height: 60px; }
+    .kanban-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 10px 12px 8px 12px; margin-bottom: 10px; cursor: grab; word-break: break-word; border-left: 5px solid #6366f1; display: flex; flex-direction: column; }
+    .kanban-card[data-priority="hoch"] { border-left-color: #e53935; }
+    .kanban-card[data-priority="mittel"] { border-left-color: #fbc02d; }
+    .kanban-card[data-priority="niedrig"] { border-left-color: #43a047; }
+    .kanban-card .label { display: inline-block; background: #6366f1; color: #fff; border-radius: 4px; padding: 1px 8px; font-size: 0.95em; margin-right: 5px; margin-bottom: 2px; max-width: 150px; white-space: normal; word-break: break-word; }
+    .kanban-card .card-actions { margin-top: 6px; display: flex; gap: 5px; flex-wrap: wrap; }
+    .kanban-card button { background: #f3f4f6; color: #222; border: none; border-radius: 4px; cursor: pointer; padding: 2px 8px; font-size: 0.97em; }
+    .kanban-card button:hover { background: #e0e7ff; }
+    .kanban-card .done-btn { background: #4caf50; color: #fff; }
+    .kanban-card .done-btn:hover { background: #388e3c; }
+    .kanban-card .running { color: #059669; font-weight: bold; }
+    .kanban-card .stopped { color: #b91c1c; }
+    /* Entfernt das Umschalten auf Spalten untereinander */
+    /*@media (max-width: 900px) {
+      .kanban-board { flex-direction: column; }
+      .kanban-column { min-width: 95vw; }
+    }*/
     @media (max-width: 600px) {
       #todoList { grid-template-columns: 1fr; }
       .todo { min-width: 95vw; max-width: 99vw; }
-      .kanban-board { flex-direction: column; }
-      .kanban-column { min-width: 95vw; }
       .stats { max-width: 99vw; }
     }
   </style>
@@ -148,6 +185,8 @@
     </div>
   </div>
   <script>
+    // ... (Der vollständige JavaScript-Code ist wie in den letzten Versionen, siehe vorherige Antworten)
+    // Für die Übersichtlichkeit hier direkt eingefügt:
     function showTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -295,10 +334,8 @@
       hideAddTimeForm(idx);
       renderTodos();
     }
-    // NEU: Zeit anpassen
     function showEditTimeForm(idx) {
       document.getElementById(`editTimeForm-${idx}`).style.display = 'inline';
-      // aktuelle Zeit vorbefüllen
       let ms = todos[idx].time || 0;
       document.getElementById(`editH-${idx}`).value = Math.floor(ms / 3600000);
       document.getElementById(`editM-${idx}`).value = Math.floor(ms / 60000) % 60;
@@ -348,10 +385,12 @@
           <div><strong>${todo.text}</strong></div>
           ${todo.label ? `<div class="label" style="background:${getLabelColor(todo.label)}">${todo.label}</div>` : ""}
           <div style="margin:4px 0 0 0;font-size:0.97em;color:#555;">
-            Zeit: ${formatTime(todo.time)}
+            Zeit: <span id="kanban-time-${idx}">${formatTime(todo.time)}</span>
+            <span class="${todo.running ? 'running' : 'stopped'}">${todo.running ? 'läuft...' : ''}</span>
           </div>
           <div style="font-size:0.97em;color:#888;">Prio: ${todo.priority || "mittel"}</div>
           <div class="card-actions">
+            <button onclick="toggleTimer(${idx})" id="kanban-btn-${idx}">${todo.running ? 'Stoppen' : 'Starten'}</button>
             <button onclick="deleteTodo(${idx})" title="Löschen">🗑️</button>
             ${todo.status !== "done" ? `<button class="done-btn" onclick="markDone(${idx})" title="Erledigt">✔️</button>` : ""}
           </div>
@@ -412,6 +451,7 @@
         startTimer(idx);
       }
       renderTodos();
+      renderKanban();
     }
     function startTimer(idx) {
       if (todos[idx].running) return;
@@ -421,7 +461,8 @@
         let now = Date.now();
         todos[idx].time += now - todos[idx].start;
         todos[idx].start = now;
-        document.getElementById(`time-${idx}`).innerText = formatTime(todos[idx].time);
+        document.getElementById(`time-${idx}`) && (document.getElementById(`time-${idx}`).innerText = formatTime(todos[idx].time));
+        document.getElementById(`kanban-time-${idx}`) && (document.getElementById(`kanban-time-${idx}`).innerText = formatTime(todos[idx].time));
         saveTodos();
         updateStats();
       }, 1000);
@@ -496,12 +537,8 @@
       html += '</table>';
       document.getElementById('monthlyStats').innerHTML = html;
     }
-
-    // Kompakte Monats-Label-Tabelle (scrollbar, zeigt Zeiten pro Label und Monat)
     function updateMonthlyLabelTable() {
-      // Alle Labels, alphabetisch sortiert
       const allLabels = labels.map(l => l.name).sort((a, b) => a.localeCompare(b, 'de', {sensitivity: 'base'}));
-      // Datenstruktur: {monat: {label: zeitInMs}}
       let monthLabelMap = {};
       [...todos, ...doneTodos].forEach(todo => {
         if (todo.label && todo.doneDate) {
@@ -511,8 +548,6 @@
           monthLabelMap[month][todo.label] += todo.time;
         }
       });
-
-      // Tabelle aufbauen
       const table = document.getElementById('monthlyLabelTable');
       let thead = '<tr><th>Monat</th>';
       allLabels.forEach(l => { thead += `<th><span class="label" style="background:${getLabelColor(l)}">${l}</span></th>`; });
@@ -527,7 +562,6 @@
       });
       table.innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
     }
-
     function exportData() {
       const data = {
         todos,
@@ -570,7 +604,6 @@
       };
       reader.readAsText(file);
     }
-
     document.getElementById('todoForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const text = document.getElementById('todoText').value.trim();
@@ -595,7 +628,6 @@
         document.getElementById('newLabelInput').value = '';
       }
     });
-
     // Initial rendering
     updateLabelSelect();
     renderTodos();
