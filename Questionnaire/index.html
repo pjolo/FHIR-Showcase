@@ -1,30 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demo Form</title>
-  <link href="https://lhcforms-static.nlm.nih.gov/lforms-versions/34.0.0/webcomponent/styles.css" media="screen" rel="stylesheet" />
+  <title>FHIR Questionnaire Viewer Demo</title>
   <link rel="stylesheet" href="styles.css">
+  <!-- LForms CSS & JS (aktuell, falls direkt nutzbar!) -->
+  <link href="https://cdn.jsdelivr.net/npm/lforms@30.0.2/dist/lforms.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lforms@30.0.2/dist/lforms.min.js"></script>
 </head>
 <body>
+  <h1>FHIR Questionnaire Viewer Demo</h1>
+
+  <!-- Formular-Container -->
   <div id="formContainer"></div>
 
-  <button id="addFormButton">Add Form</button>
+  <!-- Button für das JSON Modal -->
+  <button id="addFormButton">Formular als JSON laden</button>
 
-<div id="jsonModal" style="display:none;">
-  <textarea id="jsonInput" rows="20" cols="50" placeholder="Enter JSON here..."></textarea>
+  <!-- MODAL zum Laden eigener Questionnaire-JSON -->
+  <div id="jsonModal" style="display:none;">
+    <h2>FHIR Questionnaire JSON einfügen</h2>
+    <textarea id="jsonInput" rows="10" cols="50" placeholder='Paste Questionnaire JSON here'></textarea>
+    <br>
+    <button id="renderFormButton">Formular anzeigen</button>
+    <button id="closeModalButton">Schließen</button>
+  </div>
+
+  <!-- Bereich für die FHIR QuestionnaireResponse -->
+  <h2>FHIR QuestionnaireResponse einfügen</h2>
+  <textarea id="responseInput" rows="10" cols="50" placeholder='Paste QuestionnaireResponse JSON here'></textarea>
   <br>
-  <button id="renderFormButton">Render Form</button>
-  <button id="closeModalButton">Close</button>
-</div>
+  <button id="loadResponseButton">FHIR Response laden</button>
 
-
-  <script src="https://lhcforms-static.nlm.nih.gov/lforms-versions/34.0.0/webcomponent/assets/lib/zone.min.js"></script>
-  <script src="https://lhcforms-static.nlm.nih.gov/lforms-versions/34.0.0/webcomponent/lhc-forms.js"></script>
-  <script src="https://lhcforms-static.nlm.nih.gov/lforms-versions/34.0.0/fhir/R4/lformsFHIR.min.js"></script>
+  <!-- Dein JS -->
   <script src="script.js"></script>
-  
-  
 </body>
 </html>
