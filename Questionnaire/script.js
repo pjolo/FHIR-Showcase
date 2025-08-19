@@ -1,5 +1,4 @@
 // This is the form definition
-
 var formDef = {
   "status": "draft",
   "title": "Demo form",
@@ -57,7 +56,6 @@ var formDef = {
     }
   ]
 };
-
 LForms.Util.addFormToPage(formDef, 'formContainer');
 
 document.getElementById('addFormButton').addEventListener('click', function() {
@@ -79,40 +77,3 @@ document.getElementById('renderFormButton').addEventListener('click', function()
   }
 });
 
-// NEU: Funktion zum Laden einer FHIR QuestionnaireResponse
-function loadFHIRResponse(responseJSON) {
-  // Annahme: responseJSON ist das JSON-Objekt einer QuestionnaireResponse
-  var lfData = LForms.Util.getFormFHIRData('R4', responseJSON, 'QuestionnaireResponse');
-
-  // Fix: für coded values immer nur code oder display übergeben
-  (lfData.item || []).forEach(function(item) {
-    if (Array.isArray(item.answer)) {
-      item.answer.forEach(function(answer) {
-        if (answer.valueCoding) {
-          answer.value = answer.valueCoding.display || answer.valueCoding.code || '';
-        } else if (answer.valueString) {
-          answer.value = answer.valueString;
-        } else if (answer.valueInteger) {
-          answer.value = answer.valueInteger;
-        } else if (answer.valueBoolean !== undefined) {
-          answer.value = answer.valueBoolean;
-        } else if (answer.valueDate) {
-          answer.value = answer.valueDate;
-        } // weitere Types nach Bedarf...
-      });
-    }
-  });
-
-  LForms.Util.addFormToPage(lfData, 'formContainer');
-}
-
-// Beispiel-Button zum Laden einer Response
-document.getElementById('loadResponseButton').addEventListener('click', function() {
-  const jsonInput = document.getElementById('responseInput').value;
-  try {
-    const responseObj = JSON.parse(jsonInput);
-    loadFHIRResponse(responseObj);
-  } catch (error) {
-    alert('Invalid QuestionnaireResponse JSON!');
-  }
-});
