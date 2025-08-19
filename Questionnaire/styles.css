@@ -1,6 +1,35 @@
 body {
   padding: 0.5em;
 }
+
+.tab {
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 1em;
+}
+.tab button {
+  background-color: #f1f1f1;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 12px 20px;
+  transition: background-color 0.2s;
+  font-size: 17px;
+}
+.tab button:hover {
+  background-color: #ddd;
+}
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabcontent {
+  display: none;
+  padding: 1em 0;
+  border-top: none;
+}
+
 #jsonModal {
   position: fixed;
   top: 50%;
