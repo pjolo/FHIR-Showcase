@@ -1,21 +1,42 @@
-<!-- Tab-Leiste -->
-<ul id="tabs">
-  <!-- ...vorhandene Tabs -->
-  <li class="tab"><a href="#" onclick="showTab('formTab')">Formular</a></li>
-  <li class="tab"><a href="#" onclick="showTab('questionnaireResponseTab')">QuestionnaireResponse</a></li>
-</ul>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>FHIR Questionnaire Demo</title>
+  <!-- LForms und ggf. weiteres CSS hier einbinden -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- <script src="pfadZuLForms.js"></script> -->
+</head>
+<body>
+  <ul id="tabs">
+    <li class="tab"><a href="#" onclick="showTab('formTab')">Formular</a></li>
+    <li class="tab"><a href="#" onclick="showTab('questionnaireResponseTab')">QuestionnaireResponse</a></li>
+  </ul>
 
-<!-- ...vorhandene Tab-Inhalte -->
-<div id="formTab" class="tab-content">
-  <!-- schon vorhandener Form-Inhalt -->
-  <div id="formContainer"></div>
-</div>
+  <div id="formTab" class="tab-content">
+    <h2>FHIR Questionnaire Demo</h2>
+    <div id="formContainer"></div>
+    <button id="addFormButton">Formular aus JSON einfügen</button>
+  </div>
 
-<!-- NEU: Tab für QuestionnaireResponse -->
-<div id="questionnaireResponseTab" class="tab-content" style="display: none;">
-  <h2>QuestionnaireResponse Rendern</h2>
-  <textarea id="qrInput" rows="10" cols="80" placeholder="QuestionnaireResponse JSON hier einfügen"></textarea>
-  <br>
-  <button id="renderQRButton">Antwort anzeigen</button>
-  <div id="qrRenderContainer"></div>
-</div>
+  <div id="questionnaireResponseTab" class="tab-content" style="display: none;">
+    <h2>QuestionnaireResponse Rendern</h2>
+    <textarea id="qrInput" rows="10" cols="80" placeholder="QuestionnaireResponse JSON hier einfügen"></textarea>
+    <br>
+    <button id="renderQRButton">Antwort anzeigen</button>
+    <div id="qrRenderContainer"></div>
+  </div>
+
+  <!-- Modal für neues Formular -->
+  <div id="jsonModal" style="display:none;">
+    <h3>Formular JSON einfügen</h3>
+    <textarea id="jsonInput" rows="10" cols="80"></textarea>
+    <br>
+    <button id="renderFormButton">Formular anzeigen</button>
+    <button id="closeModalButton">Schließen</button>
+  </div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
