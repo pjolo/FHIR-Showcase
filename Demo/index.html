@@ -1,0 +1,21 @@
+<!-- Tab-Leiste -->
+<ul id="tabs">
+  <!-- ...vorhandene Tabs -->
+  <li class="tab"><a href="#" onclick="showTab('formTab')">Formular</a></li>
+  <li class="tab"><a href="#" onclick="showTab('questionnaireResponseTab')">QuestionnaireResponse</a></li>
+</ul>
+
+<!-- ...vorhandene Tab-Inhalte -->
+<div id="formTab" class="tab-content">
+  <!-- schon vorhandener Form-Inhalt -->
+  <div id="formContainer"></div>
+</div>
+
+<!-- NEU: Tab für QuestionnaireResponse -->
+<div id="questionnaireResponseTab" class="tab-content" style="display: none;">
+  <h2>QuestionnaireResponse Rendern</h2>
+  <textarea id="qrInput" rows="10" cols="80" placeholder="QuestionnaireResponse JSON hier einfügen"></textarea>
+  <br>
+  <button id="renderQRButton">Antwort anzeigen</button>
+  <div id="qrRenderContainer"></div>
+</div>
