@@ -1,4 +1,23 @@
-// This is the form definition
+// Tab-Handling
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+// Set Standardtab
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("defaultTab").click();
+});
+
+// Questionnaire Definition (Demo)
 var formDef = {
   "status": "draft",
   "title": "Demo form",
@@ -56,16 +75,17 @@ var formDef = {
     }
   ]
 };
+
+// Initiales Questionnaire anzeigen
 LForms.Util.addFormToPage(formDef, 'formContainer');
 
+// Modal-Logik (Questionnaire als JSON laden)
 document.getElementById('addFormButton').addEventListener('click', function() {
   document.getElementById('jsonModal').style.display = 'block';
 });
-
 document.getElementById('closeModalButton').addEventListener('click', function() {
   document.getElementById('jsonModal').style.display = 'none';
 });
-
 document.getElementById('renderFormButton').addEventListener('click', function() {
   const jsonInput = document.getElementById('jsonInput').value;
   try {
@@ -77,3 +97,34 @@ document.getElementById('renderFormButton').addEventListener('click', function()
   }
 });
 
+// Funktion zum Anzeigen einer FHIR QuestionnaireResponse im zweiten Tab
+document.getElementById('loadResponseButton').addEventListener('click', function() {
+  const jsonInput = document.getElementById('responseInput').value;
+  try {
+    const responseObj = JSON.parse(jsonInput);
+    // Umwandlung der Response in eine LForms-Struktur
+    var lfData = LForms.Util.convertFHIRDataToLForms('QuestionnaireResponse', responseObj, 'R4');
+    // Hier: Werte extrahieren und Coded-Werte als String anzeigen
+    (lfData.item || []).forEach(function(item) {
+      if (Array.isArray(item.answer)) {
+        item.answer.forEach(function(answer) {
+          if (answer.valueCoding) {
+            answer.value = answer.valueCoding.display || answer.valueCoding.code || '';
+          } else if (answer.valueString) {
+            answer.value = answer.valueString;
+          } else if (answer.valueInteger) {
+            answer.value = answer.valueInteger;
+          } else if (typeof answer.valueBoolean !== "undefined") {
+            answer.value = answer.valueBoolean;
+          } else if (answer.valueDate) {
+            answer.value = answer.valueDate;
+          }
+        });
+      }
+    });
+    // Rendern im zweiten Container
+    LForms.Util.addFormToPage(lfData, 'responseContainer');
+  } catch (error) {
+    alert('Invalid QuestionnaireResponse JSON!');
+  }
+});
