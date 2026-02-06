@@ -1,0 +1,416 @@
+{
+  "item": [
+    {
+      "item": [
+        {
+          "type": "choice",
+          "linkId": "3889819847080",
+          "text": "Anrede",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Herr"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Frau"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Dr. med."
+              }
+            }
+          ]
+        },
+        {
+          "text": "Name",
+          "linkId": "7636120695127",
+          "type": "string"
+        },
+        {
+          "text": "Vorname",
+          "linkId": "119278448259",
+          "type": "string"
+        },
+        {
+          "text": "Geburtsdatum",
+          "linkId": "4854378197641",
+          "type": "date"
+        },
+        {
+          "type": "choice",
+          "linkId": "4526083098530",
+          "text": "Geschlecht",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Männlich"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Weiblich"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Andere"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "7095424337885",
+          "text": "Adresse (Strasse, Nr.)"
+        },
+        {
+          "text": "PLZ, Ort",
+          "linkId": "6988734934844",
+          "type": "string"
+        },
+        {
+          "text": "Land",
+          "linkId": "902397801809",
+          "type": "string"
+        },
+        {
+          "text": "AHV-Nummer",
+          "linkId": "9465616311534",
+          "type": "string",
+          "maxLength": 16
+        },
+        {
+          "text": "Nationalität",
+          "linkId": "4868443775464",
+          "type": "string"
+        },
+        {
+          "text": "Mobiltelefon",
+          "linkId": "7488618161227",
+          "type": "string"
+        },
+        {
+          "text": "Telefonnummer (Festnetz)",
+          "linkId": "3767439861241",
+          "type": "string"
+        },
+        {
+          "text": "E-Mail Adresse",
+          "linkId": "3323685976043",
+          "type": "string"
+        },
+        {
+          "text": "Name Berufsunfallversicherung beim Arbeitgeber",
+          "linkId": "4136804692481",
+          "type": "string"
+        },
+        {
+          "text": "Name und Adresse Krankenkasse",
+          "linkId": "4112533478978",
+          "type": "string"
+        },
+        {
+          "type": "string",
+          "linkId": "5355698680933",
+          "text": "Nummer der Versichertenkarte"
+        }
+      ],
+      "type": "group",
+      "linkId": "2818202626304",
+      "text": "Patientendaten"
+    },
+    {
+      "item": [
+        {
+          "type": "string",
+          "linkId": "8550571298395",
+          "text": "Beziehung (z.B. Vater, Tochter, Ehefrau, Arzt, Sozialarbeiter, usw.)"
+        },
+        {
+          "type": "string",
+          "linkId": "9207565307160",
+          "text": "Welche Entscheidungsbefugnisse hat dieser Notfallkontakt?"
+        },
+        {
+          "type": "string",
+          "linkId": "2794242885482",
+          "text": "Wo ist diese Entscheidungsbefugnis dokumentiert?"
+        },
+        {
+          "text": "Anrede",
+          "linkId": "1385519020357",
+          "type": "string"
+        },
+        {
+          "text": "Name",
+          "linkId": "3030974429993",
+          "type": "string"
+        },
+        {
+          "text": "Vorname",
+          "linkId": "7028432577930",
+          "type": "string"
+        },
+        {
+          "text": "Adresse (Strasse, Nr.)",
+          "linkId": "1050788869967",
+          "type": "string"
+        },
+        {
+          "text": "PLZ, Ort",
+          "linkId": "4739388620599",
+          "type": "string"
+        },
+        {
+          "text": "Land",
+          "linkId": "2659403085821",
+          "type": "string"
+        },
+        {
+          "text": "Mobiltelefon",
+          "linkId": "8812505148761",
+          "type": "string"
+        },
+        {
+          "text": "Telefonnummer (Festnetz)",
+          "linkId": "663425580290",
+          "type": "string"
+        },
+        {
+          "text": "Telefonnummer (Büro)",
+          "linkId": "5120472512933",
+          "type": "string"
+        },
+        {
+          "text": "E-Mail Adresse",
+          "linkId": "9323117848381",
+          "type": "string"
+        },
+        {
+          "text": "Bemerkungen",
+          "linkId": "521715015429",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "linkId": "9428692538016",
+      "text": "Notfallkontakt",
+      "repeats": true
+    },
+    {
+      "item": [
+        {
+          "type": "choice",
+          "linkId": "9016602862540",
+          "text": "Rolle (z.B. Hausarzt, Facharzt, Therapeut, Spitex, usw.)",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "display": "Hausarzt"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Facharzt"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Therapeut"
+              }
+            },
+            {
+              "valueCoding": {
+                "display": "Spitex"
+              }
+            }
+          ]
+        },
+        {
+          "type": "string",
+          "linkId": "2970478254031",
+          "text": "Spezialisierung, Fachrichtung, Facharzttitel"
+        },
+        {
+          "text": "Anrede",
+          "linkId": "4715486505969",
+          "type": "string"
+        },
+        {
+          "text": "Name",
+          "linkId": "126165360325",
+          "type": "string"
+        },
+        {
+          "text": "Vorname",
+          "linkId": "4772042166233",
+          "type": "string"
+        },
+        {
+          "text": "Adresse (Strasse, Nr.)",
+          "linkId": "5663999025053",
+          "type": "string"
+        },
+        {
+          "text": "PLZ, Ort",
+          "linkId": "4104804517028",
+          "type": "string"
+        },
+        {
+          "text": "Land",
+          "linkId": "5760294189369",
+          "type": "string"
+        },
+        {
+          "text": "Mobiltelefon",
+          "linkId": "9309290052217",
+          "type": "string"
+        },
+        {
+          "text": "Telefonnummer (Festnetz)",
+          "linkId": "6163791743267",
+          "type": "string"
+        },
+        {
+          "text": "Telefonnummer (Büro)",
+          "linkId": "4627974996363",
+          "type": "string"
+        },
+        {
+          "text": "E-Mail Adresse",
+          "linkId": "1422668921503",
+          "type": "string"
+        },
+        {
+          "text": "Bemerkungen",
+          "linkId": "8021601111474",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "linkId": "3121192663534",
+      "text": "Behandelnde Gesundheitsfachperson",
+      "repeats": true
+    },
+    {
+      "item": [
+        {
+          "text": "Blutgruppe und Rhesusfaktor",
+          "linkId": "1596359081638",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "linkId": "1701773602231",
+      "text": "Blutgruppe"
+    },
+    {
+      "item": [
+        {
+          "text": "Bezeichnung der Allergie oder Unverträglichkeit",
+          "linkId": "5340354597416",
+          "type": "string"
+        },
+        {
+          "text": "Beschreibung der Reaktion bei  Eintritt der Allergie oder Unverträglichkeit",
+          "linkId": "560851176806",
+          "type": "string"
+        },
+        {
+          "text": "Bemerkungen",
+          "linkId": "9994378025563",
+          "type": "string"
+        },
+        {
+          "text": "Gibt es weitere Dokumente im  EPD zu dieser Allergie oder Unverträglichkeit?",
+          "linkId": "5351600961049",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "linkId": "1324536424076",
+      "text": "Allergien oder Unverträglichkeiten",
+      "repeats": true
+    },
+    {
+      "item": [
+        {
+          "text": "Titel und Beschreibung",
+          "linkId": "1295322885756",
+          "type": "string"
+        },
+        {
+          "text": "Gibt es weitere Dokumente im  EPD zu diesem Risikofaktor?",
+          "linkId": "2760881545866",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "linkId": "6679131967546",
+      "text": "Risikofaktoren",
+      "repeats": true
+    },
+    {
+      "item": [
+        {
+          "text": "Titel und Beschreibung",
+          "linkId": "9092114659643",
+          "type": "string"
+        },
+        {
+          "text": "Gibt es weitere Dokumente im  EPD zu dieser Krankheit oder Unfallfolge",
+          "linkId": "5382028938869",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "linkId": "18724457274",
+      "text": "Krankheiten und Unfallfolgen",
+      "repeats": true
+    },
+    {
+      "item": [
+        {
+          "text": "Gibt es in Ihrem EPD Gesundheitspässe (z.B. Brillenpass, Organspendeausweis, Blutspendeausweis, Impfdaten usw.)",
+          "linkId": "213852082486",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "linkId": "6501995795479",
+      "text": "Gesundheitsausweise",
+      "repeats": true
+    },
+    {
+      "item": [
+        {
+          "text": "Gibt es in Ihrem EPD eine Patientenverfügung?",
+          "linkId": "7925545711288",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "linkId": "4351344386967",
+      "text": "Patientenverfügung"
+    },
+    {
+      "item": [
+        {
+          "text": "Welche wichtigen gesundheitsrelevanten Informationen gibt es sonst noch über Sie?",
+          "linkId": "2754455221167",
+          "type": "string"
+        }
+      ],
+      "type": "group",
+      "linkId": "7254109121551",
+      "text": "Sonstige Bemerkungen",
+      "repeats": false
+    }
+  ],
+  "resourceType": "Questionnaire",
+  "title": "Notfalldaten für das EPD",
+  "status": "draft"
+}
