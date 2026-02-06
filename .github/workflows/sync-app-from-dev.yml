@@ -1,7 +1,7 @@
 name: 🔄 Sync App from Dev
 
 on:
-  workflow_dispatch:  # Manueller Start
+  workflow_dispatch:
 
 jobs:
   sync-app:
@@ -12,17 +12,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
       
       - name: ⚙️ Git konfigurieren
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
       
-      - name: 📥 Dev-Repo in temp-Ordner clonen
+      - name: 📥 Dev-Repo (FHIR-Showcase) clonen
         run: |
-          echo "📦 Clone Dev-Repo..."
-          git clone --depth 1 https://github.com/pjolo/app_develop.git temp-dev
+          echo "📦 Clone FHIR-Showcase Repo..."
+          git clone --depth 1 https://${{ secrets.PAT_TOKEN }}@github.com/pjolo/FHIR-Showcase.git temp-dev
           echo "✅ Clone erfolgreich"
       
       - name: 🗑️ Alten app/ Inhalt löschen
@@ -36,7 +36,6 @@ jobs:
           echo "📋 Kopiere Dateien..."
           mkdir -p app
           cp -r temp-dev/* app/
-          # README nicht kopieren
           rm -f app/README.md
           echo "✅ Dateien kopiert"
           echo "📂 Inhalt von app/:"
@@ -45,20 +44,16 @@ jobs:
       - name: 🧹 temp-dev Ordner aufräumen
         run: |
           rm -rf temp-dev
-          echo "✅ Aufgeräumt"
+          echo "✅ Temporäre Dateien gelöscht"
       
-      - name: 📝 Änderungen committen
+      - name: 📤 Änderungen committen und pushen
         run: |
           git add app/
           if git diff --staged --quiet; then
-            echo "ℹ️ Keine Änderungen zum Committen"
+            echo "ℹ️ Keine Änderungen zu committen"
           else
-            git commit -m "🚀 Update app from dev repo [$(date +'%Y-%m-%d %H:%M')]"
-            echo "✅ Commit erstellt"
+            git commit -m "🚀 Update app from FHIR-Showcase [$(date +'%Y-%m-%d %H:%M')]"
+            git push origin main
+            echo "✅ Push erfolgreich!"
+            echo "🌐 Deine App ist live auf: https://pjolo.github.io/app/"
           fi
-      
-      - name: 📤 Zu main pushen
-        run: |
-          git push origin main
-          echo "✅ Push erfolgreich!"
-          echo "🌐 Deine App ist live auf: https://pjolo/FHIR-Showcase/app/"
