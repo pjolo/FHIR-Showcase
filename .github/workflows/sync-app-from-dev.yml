@@ -1,0 +1,64 @@
+name: 🔄 Sync App from Dev
+
+on:
+  workflow_dispatch:  # Manueller Start
+
+jobs:
+  sync-app:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Haupt-Repo auschecken
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: ⚙️ Git konfigurieren
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: 📥 Dev-Repo in temp-Ordner clonen
+        run: |
+          echo "📦 Clone Dev-Repo..."
+          git clone --depth 1 https://github.com/pjolo/app_develop.git temp-dev
+          echo "✅ Clone erfolgreich"
+      
+      - name: 🗑️ Alten app/ Inhalt löschen
+        run: |
+          echo "🗑️ Lösche alte Dateien in app/..."
+          rm -rf app/*
+          echo "✅ app/ Ordner geleert"
+      
+      - name: 📋 Neue Dateien nach app/ kopieren
+        run: |
+          echo "📋 Kopiere Dateien..."
+          mkdir -p app
+          cp -r temp-dev/* app/
+          # README nicht kopieren
+          rm -f app/README.md
+          echo "✅ Dateien kopiert"
+          echo "📂 Inhalt von app/:"
+          ls -la app/
+      
+      - name: 🧹 temp-dev Ordner aufräumen
+        run: |
+          rm -rf temp-dev
+          echo "✅ Aufgeräumt"
+      
+      - name: 📝 Änderungen committen
+        run: |
+          git add app/
+          if git diff --staged --quiet; then
+            echo "ℹ️ Keine Änderungen zum Committen"
+          else
+            git commit -m "🚀 Update app from dev repo [$(date +'%Y-%m-%d %H:%M')]"
+            echo "✅ Commit erstellt"
+          fi
+      
+      - name: 📤 Zu main pushen
+        run: |
+          git push origin main
+          echo "✅ Push erfolgreich!"
+          echo "🌐 Deine App ist live auf: https://pjolo/FHIR-Showcase/app/"
