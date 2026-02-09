@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Das vergessene Observatorium</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #scene {
+            width: 90vw;
+            height: 90vh;
+            max-width: 1200px;
+            max-height: 800px;
+            position: relative;
+            border: 3px solid #8b6914;
+            box-shadow: 0 0 50px rgba(139, 105, 20, 0.5);
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hotspot {
+            position: absolute;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .hotspot:hover {
+            border: 2px solid rgba(255, 215, 0, 0.7);
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        #inventory {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 20, 20, 0.9);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 2px solid #8b6914;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .inventory-item {
+            width: 60px;
+            height: 60px;
+            background: rgba(50, 50, 50, 0.8);
+            border: 2px solid #666;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .inventory-item:hover {
+            transform: scale(1.1);
+            border-color: gold;
+        }
+
+        .inventory-item.selected {
+            border-color: gold;
+            box-shadow: 0 0 15px gold;
+        }
+
+        #message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.95);
+            padding: 30px 40px;
+            border-radius: 10px;
+            border: 3px solid #8b6914;
+            max-width: 600px;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+        }
+
+        #message-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        #message-btn {
+            background: #8b6914;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        #message-btn:hover {
+            background: #b8860b;
+        }
+
+        #notebook {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(139, 105, 20, 0.9);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+        }
+
+        #notebook:hover {
+            background: rgba(184, 134, 11, 0.9);
+        }
+
+        #notes-panel {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 300px;
+            max-height: 500px;
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid #8b6914;
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .note {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(50, 50, 50, 0.5);
+            border-left: 3px solid gold;
+            font-size: 14px;
+        }
+
+        #puzzle-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .puzzle-container {
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 15px;
+            border: 3px solid #8b6914;
+            text-align: center;
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .symbol-btn {
+            width: 80px;
+            height: 80px;
+            font-size: 36px;
+            background: #2a2a2a;
+            border: 2px solid #666;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .symbol-btn:hover {
+            background: #3a3a3a;
+            border-color: gold;
+        }
+
+        .symbol-btn.active {
+            background: #8b6914;
+            border-color: gold;
+        }
+
+        #close-puzzle {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: #444;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #telescope-view {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #001a33 0%, #000 70%);
+            border: 5px solid #333;
+            display: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .constellation-star {
+            width: 8px;
+            height: 8px;
+            background: gold;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .constellation-star:hover {
+            box-shadow: 0 0 10px gold;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="scene"></div>
+        
+        <div id="inventory">
+            <div style="margin-right: 10px; font-size: 14px;">Inventar:</div>
+        </div>
+
+        <div id="notebook">📓 Notizbuch</div>
+        <div id="notes-panel"></div>
+
+        <div id="message-box">
+            <div id="message-text"></div>
+            <button id="message-btn">Weiter</button>
+        </div>
+
+        <div id="puzzle-overlay">
+            <div class="puzzle-container">
+                <h2 id="puzzle-title">Rätsel</h2>
+                <div id="puzzle-content"></div>
+                <button id="close-puzzle">Schließen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== GAME STATE =====
+        const gameState = {
+            currentScene: 'entrance',
+            inventory: [],
+            selectedItem: null,
+            notes: [],
+            puzzlesSolved: {
+                symbolPuzzle: false,
+                telescope: false,
+                finalDoor: false
+            },
+            symbolSequence: [],
+            correctSequence: ['⭐', '🌙', '☀️'],
+            telescopeStarsClicked: [],
+            correctConstellation: ['star1', 'star3', 'star5']
+        };
+
+        // ===== SCENES DEFINITION =====
+        const scenes = {
+            entrance: {
+                description: "Du stehst vor einem alten, verlassenen Observatorium. Die Tür ist schwer und mit seltsamen Symbolen verziert.",
+                background: "linear-gradient(to bottom, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+                image: "🌌",
+                hotspots: [
+                    { id: 'door', x: '40%', y: '30%', w: '20%', h: '40%', action: 'examineDoor' },
+                    { id: 'sign', x: '70%', y: '50%', w: '15%', h: '20%', action: 'examineSign' },
+                    { id: 'forward', x: '45%', y: '70%', w: '10%', h: '10%', action: 'goToHall' }
+                ]
+            },
+            hall: {
+                description: "Eine große Halle mit hohen Decken. Staub tanzt im Licht, das durch zerbrochene Fenster fällt.",
+                background: "linear-gradient(135deg, #2c3e50 0%, #34495e 100%)",
+                image: "🏛️",
+                hotspots: [
+                    { id: 'left-door', x: '20%', y: '30%', w: '15%', h: '30%', action: 'goToLibrary' },
+                    { id: 'right-door', x: '65%', y: '30%', w: '15%', h: '30%', action: 'goToObservatory' },
+                    { id: 'pedestal', x: '40%', y: '55%', w: '20%', h: '25%', action: 'examinePedestal' },
+                    { id: 'back', x: '45%', y: '85%', w: '10%', h: '10%', action: 'goToEntrance' }
+                ]
+            },
+            library: {
+                description: "Eine alte Bibliothek mit verstaubten Büchern. Die Luft riecht nach altem Papier und Geheimnissen.",
+                background: "linear-gradient(to right, #4a3f35 0%, #2c2416 100%)",
+                image: "📚",
+                hotspots: [
+                    { id: 'book', x: '30%', y: '40%', w: '20%', h: '25%', action: 'examineBook' },
+                    { id: 'desk', x: '55%', y: '50%', w: '25%', h: '30%', action: 'examineDesk' },
+                    { id: 'back', x: '45%', y: '85%', w: '10%', h: '10%', action: 'goToHall' }
+                ]
+            },
+            observatory: {
+                description: "Das Herzstück des Gebäudes - ein großes Teleskop ragt in die Kuppel.",
+                background: "radial-gradient(circle, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+                image: "🔭",
+                hotspots: [
+                    { id: 'telescope', x: '35%', y: '25%', w: '30%', h: '45%', action: 'useTelescope' },
+                    { id: 'control-panel', x: '65%', y: '50%', w: '20%', h: '25%', action: 'examinePanel' },
+                    { id: 'back', x: '45%', y: '85%', w: '10%', h: '10%', action: 'goToHall' }
+                ]
+            },
+            secretRoom: {
+                description: "Eine verborgene Kammer öffnet sich. Goldenes Licht erfüllt den Raum. Du hast das Geheimnis gelüftet!",
+                background: "radial-gradient(circle, #f7971e 0%, #ffd200 100%)",
+                image: "✨",
+                hotspots: [
+                    { id: 'treasure', x: '35%', y: '40%', w: '30%', h: '35%', action: 'examinetreasure' }
+                ]
+            }
+        };
+
+        // ===== INITIALIZE GAME =====
+        function initGame() {
+            showMessage("Willkommen im vergessenen Observatorium!\n\nVor langer Zeit verschwand ein berühmter Astronom spurlos. Sein Observatorium wurde verschlossen und vergessen. Du hast alte Aufzeichnungen gefunden, die von einem verborgenen Schatz sprechen...\n\nErforsche die Räume, löse die Rätsel und enthülle das Geheimnis!", () => {
+                loadScene('entrance');
+            });
+        }
+
+        // ===== SCENE MANAGEMENT =====
+        function loadScene(sceneId) {
+            gameState.currentScene = sceneId;
+            const scene = scenes[sceneId];
+            const sceneEl = document.getElementById('scene');
+            
+            sceneEl.style.background = scene.background;
+            sceneEl.innerHTML = '';
+            
+            // Scene title
+            const title = document.createElement('div');
+            title.style.cssText = 'position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 48px;';
+            title.textContent = scene.image;
+            sceneEl.appendChild(title);
+
+            // Description
+            const desc = document.createElement('div');
+            desc.style.cssText = 'position: absolute; top: 80px; left: 50%; transform: translateX(-50%); width: 80%; text-align: center; font-size: 16px; background: rgba(0,0,0,0.7); padding: 15px; border-radius: 10px;';
+            desc.textContent = scene.description;
+            sceneEl.appendChild(desc);
+
+            // Hotspots
+            scene.hotspots.forEach(hotspot => {
+                const el = document.createElement('div');
+                el.className = 'hotspot';
+                el.style.left = hotspot.x;
+                el.style.top = hotspot.y;
+                el.style.width = hotspot.w;
+                el.style.height = hotspot.h;
+                el.onclick = () => handleAction(hotspot.action);
+                
+                // Tooltip
+                el.title = 'Klicken zum Untersuchen';
+                
+                sceneEl.appendChild(el);
+            });
+
+            sceneEl.classList.add('fade-in');
+        }
+
+        // ===== ACTION HANDLERS =====
+        function handleAction(action) {
+            const actions = {
+                examineDoor: () => {
+                    if (gameState.puzzlesSolved.symbolPuzzle && gameState.puzzlesSolved.telescope) {
+                        showMessage("Die Tür leuchtet hell auf und öffnet sich langsam...", () => {
+                            loadScene('secretRoom');
+                        });
+                    } else {
+                        showMessage("Die Tür ist fest verschlossen. Seltsame Symbole leuchten schwach: ⭐ 🌙 ☀️\n\nVielleicht gibt es Hinweise im Inneren des Gebäudes...");
+                    }
+                },
+                examineSign: () => {
+                    showMessage("Ein verwittertes Schild:\n\n'Nur wer die Sterne versteht und die uralten Symbole kennt, wird Einlass finden.'\n\n⭐ für Hoffnung\n🌙 für Weisheit\n☀️ für Erleuchtung");
+                    addNote("Hinweis am Eingang: ⭐ Hoffnung, 🌙 Weisheit, ☀️ Erleuchtung");
+                },
+                goToHall: () => {
+                    if (gameState.puzzlesSolved.symbolPuzzle || gameState.inventory.includes('🔑')) {
+                        loadScene('hall');
+                    } else {
+                        showMessage("Die Tür zum Observatorium ist verschlossen. Du musst einen Weg finden, sie zu öffnen...");
+                    }
+                },
+                goToEntrance: () => loadScene('entrance'),
+                goToLibrary: () => loadScene('library'),
+                goToObservatory: () => loadScene('observatory'),
+                examinePedestal: () => {
+                    if (!gameState.puzzlesSolved.symbolPuzzle) {
+                        showSymbolPuzzle();
+                    } else {
+                        showMessage("Der Sockel leuchtet friedlich. Das Rätsel wurde bereits gelöst.");
+                    }
+                },
+                examineBook: () => {
+                    showMessage("Ein altes Tagebuch des Astronomen:\n\n'Tag 127: Die Sterne haben mir ein Muster gezeigt. Drei Sterne bilden das Dreieck der Erkenntnis. Sie zeigen den Weg...'\n\nDarunter eine verblasste Zeichnung eines Dreiecks.");
+                    addNote("Tagebuch: 3 Sterne bilden Dreieck der Erkenntnis");
+                },
+                examineDesk: () => {
+                    if (!gameState.inventory.includes('🔑')) {
+                        showMessage("Auf dem Schreibtisch liegt ein alter Schlüssel! Du nimmst ihn an dich.");
+                        addToInventory('🔑');
+                        gameState.puzzlesSolved.symbolPuzzle = true;
+                        addNote("Schlüssel gefunden - kann zur Haupthalle führen");
+                    } else {
+                        showMessage("Der Schreibtisch ist leer bis auf alte Papiere.");
+                    }
+                },
+                useTelescope: () => {
+                    if (gameState.puzzlesSolved.telescope) {
+                        showMessage("Das Teleskop zeigt immer noch die drei besonderen Sterne.");
+                    } else {
+                        showTelescopePuzzle();
+                    }
+                },
+                examinePanel: () => {
+                    if (gameState.puzzlesSolved.telescope) {
+                        showMessage("Das Kontrolpanel zeigt: 'Ausrichtung korrekt. System aktiviert.'");
+                    } else {
+                        showMessage("Das Kontrolpanel ist dunkel. Das Teleskop muss auf die richtigen Sterne ausgerichtet werden.");
+                        addNote("Kontrolpanel: Teleskop muss ausgerichtet werden");
+                    }
+                },
+                examinetreasure: () => {
+                    showMessage("✨ HERZLICHEN GLÜCKWUNSCH! ✨\n\nDu hast das geheime Vermächtnis des Astronomen gefunden!\n\nVor dir liegt sein letztes Werk: Eine Karte der Sterne mit Aufzeichnungen verlorener Konstellationen. Sein Wissen ist nun dein Erbe.\n\n'Die wahren Schätze liegen nicht in Gold, sondern im Verständnis des Universums.'\n\n🌟 SPIEL BEENDET 🌟");
+                }
+            };
+
+            if (actions[action]) {
+                actions[action]();
+            }
+        }
+
+        // ===== SYMBOL PUZZLE =====
+        function showSymbolPuzzle() {
+            const overlay = document.getElementById('puzzle-overlay');
+            const content = document.getElementById('puzzle-content');
+            const title = document.getElementById('puzzle-title');
+            
+            title.textContent = 'Symbol-Rätsel';
+            content.innerHTML = `
+                <p style="margin-bottom: 20px;">Drücke die Symbole in der richtigen Reihenfolge:</p>
+                <div style="margin-bottom: 20px; font-size: 24px;" id="current-sequence"></div>
+                <div class="symbol-grid">
+                    <button class="symbol-btn" onclick="addSymbol('⭐')">⭐</button>
+                    <button class="symbol-btn" onclick="addSymbol('🌙')">🌙</button>
+                    <button class="symbol-btn" onclick="addSymbol('☀️')">☀️</button>
+                </div>
+                <button onclick="resetSymbols()" style="padding: 10px 20px; background: #c0392b; border: none; color: white; cursor: pointer; border-radius: 5px; margin-right: 10px;">Zurücksetzen</button>
+                <button onclick="checkSymbols()" style="padding: 10px 20px; background: #27ae60; border: none; color: white; cursor: pointer; border-radius: 5px;">Prüfen</button>
+            `;
+            
+            overlay.style.display = 'flex';
+            gameState.symbolSequence = [];
+            updateSymbolDisplay();
+        }
+
+        function addSymbol(symbol) {
+            if (gameState.symbolSequence.length < 3) {
+                gameState.symbolSequence.push(symbol);
+                updateSymbolDisplay();
+            }
+        }
+
+        function resetSymbols() {
+            gameState.symbolSequence = [];
+            updateSymbolDisplay();
+        }
+
+        function updateSymbolDisplay() {
+            const display = document.getElementById('current-sequence');
+            if (display) {
+                display.textContent = gameState.symbolSequence.join(' ') || 'Keine Symbole gewählt';
+            }
+        }
+
+        function checkSymbols() {
+            if (JSON.stringify(gameState.symbolSequence) === JSON.stringify(gameState.correctSequence)) {
+                gameState.puzzlesSolved.symbolPuzzle = true;
+                closePuzzle();
+                showMessage("✅ Korrekt! Die Symbole leuchten hell auf und der Sockel öffnet sich. Ein goldener Schlüssel erscheint!", () => {
+                    addToInventory('🔑');
+                    addNote("Symbolrätsel gelöst: ⭐ 🌙 ☀️");
+                });
+            } else {
+                showMessage("❌ Das ist nicht die richtige Kombination. Versuche es erneut.");
+                resetSymbols();
+            }
+        }
+
+        // ===== TELESCOPE PUZZLE =====
+        function showTelescopePuzzle() {
+            const overlay = document.getElementById('puzzle-overlay');
+            const content = document.getElementById('puzzle-content');
+            const title = document.getElementById('puzzle-title');
+            
+            title.textContent = 'Teleskop-Sternenkarte';
+            content.innerHTML = `
+                <p style="margin-bottom: 20px;">Klicke auf die drei Sterne, die das Dreieck der Erkenntnis bilden:</p>
+                <div style="position: relative; width: 400px; height: 400px; background: radial-gradient(circle, #001a33 0%, #000 70%); border-radius: 10px; margin: 0 auto;">
+                    ${generateStars()}
+                </div>
+                <div style="margin-top: 20px; font-size: 14px;" id="stars-selected">Ausgewählt: 0/3</div>
+                <button onclick="checkConstellation()" style="padding: 10px 20px; background: #27ae60; border: none; color: white; cursor: pointer; border-radius: 5px; margin-top: 10px;">Prüfen</button>
+            `;
+            
+            overlay.style.display = 'flex';
+            gameState.telescopeStarsClicked = [];
+        }
+
+        function generateStars() {
+            let html = '';
+            // Random stars
+            for (let i = 0; i < 30; i++) {
+                const x = Math.random() * 90 + 5;
+                const y = Math.random() * 90 + 5;
+                html += `<div class="star" style="left: ${x}%; top: ${y}%;"></div>`;
+            }
+            // Constellation stars (forming triangle)
+            const constellation = [
+                { id: 'star1', x: '30%', y: '20%' },
+                { id: 'star2', x: '50%', y: '70%' },
+                { id: 'star3', x: '70%', y: '20%' },
+                { id: 'star4', x: '20%', y: '60%' },
+                { id: 'star5', x: '80%', y: '60%' }
+            ];
+            
+            constellation.forEach(star => {
+                html += `<div class="star constellation-star" id="${star.id}" style="left: ${star.x}; top: ${star.y};" onclick="selectStar('${star.id}')"></div>`;
+            });
+            
+            return html;
+        }
+
+        function selectStar(starId) {
+            const star = document.getElementById(starId);
+            if (!star) return;
+            
+            if (gameState.telescopeStarsClicked.includes(starId)) {
+                gameState.telescopeStarsClicked = gameState.telescopeStarsClicked.filter(s => s !== starId);
+                star.style.background = 'gold';
+                star.style.boxShadow = 'none';
+            } else if (gameState.telescopeStarsClicked.length < 3) {
+                gameState.telescopeStarsClicked.push(starId);
+                star.style.background = 'lime';
+                star.style.boxShadow = '0 0 20px lime';
+            }
+            
+            document.getElementById('stars-selected').textContent = `Ausgewählt: ${gameState.telescopeStarsClicked.length}/3`;
+        }
+
+        function checkConstellation() {
+            const correct = gameState.correctConstellation.every(star => 
+                gameState.telescopeStarsClicked.includes(star)
+            ) && gameState.telescopeStarsClicked.length === 3;
+            
+            if (correct) {
+                gameState.puzzlesSolved.telescope = true;
+                closePuzzle();
+                showMessage("✅ Perfekt! Die drei Sterne bilden das Dreieck der Erkenntnis. Das Teleskop surrt und richtet sich aus. Ein leises Klicken ist zu hören - irgendwo hat sich etwas geöffnet...");
+                addNote("Teleskop-Rätsel gelöst: Dreieck der Erkenntnis gefunden");
+            } else {
+                showMessage("❌ Das ist nicht die richtige Konstellation. Die Sterne müssen ein perfektes Dreieck bilden.");
+                gameState.telescopeStarsClicked = [];
+                setTimeout(() => showTelescopePuzzle(), 500);
+            }
+        }
+
+        // ===== INVENTORY =====
+        function addToInventory(item) {
+            if (!gameState.inventory.includes(item)) {
+                gameState.inventory.push(item);
+                updateInventory();
+            }
+        }
+
+        function updateInventory() {
+            const inventory = document.getElementById('inventory');
+            const items = gameState.inventory.map(item => 
+                `<div class="inventory-item" title="${item}">${item}</div>`
+            ).join('');
+            inventory.innerHTML = '<div style="margin-right: 10px; font-size: 14px;">Inventar:</div>' + items;
+        }
+
+        // ===== NOTES =====
+        function addNote(note) {
+            if (!gameState.notes.includes(note)) {
+                gameState.notes.push(note);
+                updateNotes();
+            }
+        }
+
+        function updateNotes() {
+            const panel = document.getElementById('notes-panel');
+            panel.innerHTML = '<h3 style="margin-bottom: 15px;">📔 Notizen</h3>' +
+                gameState.notes.map(note => `<div class="note">${note}</div>`).join('');
+        }
+
+        // ===== UI FUNCTIONS =====
+        function showMessage(text, callback) {
+            const box = document.getElementById('message-box');
+            const textEl = document.getElementById('message-text');
+            const btn = document.getElementById('message-btn');
+            
+            textEl.textContent = text;
+            box.style.display = 'block';
+            
+            btn.onclick = () => {
+                box.style.display = 'none';
+                if (callback) callback();
+            };
+        }
+
+        function closePuzzle() {
+            document.getElementById('puzzle-overlay').style.display = 'none';
+        }
+
+        // ===== EVENT LISTENERS =====
+        document.getElementById('notebook').onclick = () => {
+            const panel = document.getElementById('notes-panel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        };
+
+        document.getElementById('close-puzzle').onclick = closePuzzle;
+
+        // ===== START GAME =====
+        initGame();
+    </script>
+</body>
+</html>
