@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Das vergessene Observatorium</title>
+    <title>Die Insel der Zeit - Point & Click Adventure</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -12,250 +14,250 @@
         }
 
         body {
-            font-family: 'Georgia', serif;
+            font-family: 'Cormorant Garamond', serif;
             background: #000;
             color: #fff;
             overflow: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><circle cx="12" cy="12" r="8" fill="rgba(255,255,255,0.3)" stroke="white" stroke-width="2"/></svg>') 12 12, auto;
         }
 
         #game-container {
             width: 100vw;
             height: 100vh;
             position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden;
         }
 
         #scene {
-            width: 90vw;
-            height: 90vh;
-            max-width: 1200px;
-            max-height: 800px;
+            width: 100%;
+            height: 100%;
             position: relative;
-            border: 3px solid #8b6914;
-            box-shadow: 0 0 50px rgba(139, 105, 20, 0.5);
-            cursor: pointer;
+            transition: opacity 1.5s ease-in-out;
             background-size: cover;
             background-position: center;
         }
 
+        .scene-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+        }
+
+        /* Animated particles */
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+        }
+
+        /* Hotspots with beautiful hover effects */
         .hotspot {
             position: absolute;
-            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            transition: all 0.3s;
+            border-radius: 10px;
+        }
+
+        .hotspot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, rgba(255,215,0,0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.4s;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+
+        .hotspot:hover::before {
+            opacity: 1;
+            animation: none;
+            width: 50px;
+            height: 50px;
         }
 
         .hotspot:hover {
-            border: 2px solid rgba(255, 215, 0, 0.7);
-            background: rgba(255, 215, 0, 0.1);
+            filter: brightness(1.3);
+            transform: scale(1.05);
         }
 
-        #inventory {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(20, 20, 20, 0.9);
-            padding: 15px 25px;
-            border-radius: 10px;
-            border: 2px solid #8b6914;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .inventory-item {
-            width: 60px;
-            height: 60px;
-            background: rgba(50, 50, 50, 0.8);
-            border: 2px solid #666;
-            border-radius: 5px;
+        /* Navigation arrows */
+        .nav-arrow {
+            position: absolute;
+            bottom: 50px;
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 3px solid rgba(255, 215, 0, 0.5);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 30px;
+            font-size: 36px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.4s;
+            backdrop-filter: blur(10px);
         }
 
-        .inventory-item:hover {
+        .nav-arrow:hover {
+            background: rgba(139, 105, 20, 0.8);
+            border-color: gold;
             transform: scale(1.1);
-            border-color: gold;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
         }
 
-        .inventory-item.selected {
-            border-color: gold;
-            box-shadow: 0 0 15px gold;
+        .nav-arrow.left { left: 50px; }
+        .nav-arrow.right { right: 50px; }
+        .nav-arrow.forward { 
+            left: 50%; 
+            transform: translateX(-50%);
+            bottom: 30px;
+        }
+        .nav-arrow.back { 
+            left: 50%; 
+            transform: translateX(-50%);
+            bottom: 30px;
         }
 
-        #message-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.95);
-            padding: 30px 40px;
-            border-radius: 10px;
-            border: 3px solid #8b6914;
-            max-width: 600px;
-            text-align: center;
-            display: none;
-            z-index: 1000;
-        }
-
-        #message-text {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        #message-btn {
-            background: #8b6914;
-            color: white;
-            border: none;
-            padding: 10px 30px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-
-        #message-btn:hover {
-            background: #b8860b;
-        }
-
-        #notebook {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(139, 105, 20, 0.9);
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 18px;
-        }
-
-        #notebook:hover {
-            background: rgba(184, 134, 11, 0.9);
-        }
-
-        #notes-panel {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            width: 300px;
-            max-height: 500px;
-            background: rgba(20, 20, 20, 0.95);
-            border: 2px solid #8b6914;
-            border-radius: 10px;
-            padding: 20px;
-            display: none;
-            overflow-y: auto;
-        }
-
-        .note {
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(50, 50, 50, 0.5);
-            border-left: 3px solid gold;
-            font-size: 14px;
-        }
-
-        #puzzle-overlay {
+        /* UI Elements */
+        #ui-panel {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-
-        .puzzle-container {
-            background: #1a1a1a;
-            padding: 40px;
-            border-radius: 15px;
-            border: 3px solid #8b6914;
-            text-align: center;
-        }
-
-        .symbol-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 30px 0;
-        }
-
-        .symbol-btn {
-            width: 80px;
+            right: 0;
             height: 80px;
-            font-size: 36px;
-            background: #2a2a2a;
-            border: 2px solid #666;
+            background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, transparent 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        #game-title {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            color: gold;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            letter-spacing: 3px;
+        }
+
+        #inventory {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .inventory-slot {
+            width: 60px;
+            height: 60px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 2px solid rgba(139, 105, 20, 0.6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .inventory-slot:hover {
+            border-color: gold;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .inventory-slot.has-item {
+            background: rgba(139, 105, 20, 0.3);
+            border-color: gold;
+        }
+
+        .inventory-slot::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .inventory-slot:hover::after {
+            opacity: 1;
+        }
+
+        #action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .ui-button {
+            padding: 12px 25px;
+            background: rgba(139, 105, 20, 0.6);
+            border: 2px solid rgba(255, 215, 0, 0.4);
             color: white;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
             cursor: pointer;
             border-radius: 8px;
             transition: all 0.3s;
+            backdrop-filter: blur(5px);
+            letter-spacing: 1px;
         }
 
-        .symbol-btn:hover {
-            background: #3a3a3a;
+        .ui-button:hover {
+            background: rgba(139, 105, 20, 0.9);
             border-color: gold;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
         }
 
-        .symbol-btn.active {
-            background: #8b6914;
-            border-color: gold;
-        }
-
-        #close-puzzle {
-            margin-top: 20px;
-            padding: 10px 30px;
-            background: #444;
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        #telescope-view {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #001a33 0%, #000 70%);
-            border: 5px solid #333;
+        /* Message Box with beautiful styling */
+        #message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
             display: none;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            overflow: hidden;
-        }
-
-        .star {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: white;
-            border-radius: 50%;
-        }
-
-        .constellation-star {
-            width: 8px;
-            height: 8px;
-            background: gold;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .constellation-star:hover {
-            box-shadow: 0 0 10px gold;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.5s;
         }
 
         @keyframes fadeIn {
@@ -263,420 +265,1182 @@
             to { opacity: 1; }
         }
 
-        .fade-in {
-            animation: fadeIn 1s;
+        #message-box {
+            max-width: 700px;
+            background: linear-gradient(135deg, rgba(20, 20, 30, 0.95) 0%, rgba(40, 30, 20, 0.95) 100%);
+            border: 3px solid gold;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
+            position: relative;
+            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        #message-box::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, gold, #ff6b6b, #4ecdc4, gold);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0.3;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        #message-title {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            color: gold;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        #message-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #e0e0e0;
+        }
+
+        #message-button {
+            display: block;
+            margin: 0 auto;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #8b6914 0%, #daa520 100%);
+            border: none;
+            color: white;
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #message-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Journal/Notes */
+        #journal {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(30, 20, 10, 0.98) 0%, rgba(50, 35, 20, 0.98) 100%);
+            border-left: 3px solid gold;
+            padding: 30px;
+            z-index: 200;
+            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        #journal.open {
+            right: 0;
+        }
+
+        #journal h2 {
+            font-family: 'Cinzel', serif;
+            color: gold;
+            font-size: 32px;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .journal-entry {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid rgba(255, 215, 0, 0.5);
+            border-radius: 8px;
+            animation: slideInRight 0.5s;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .journal-entry-title {
+            font-family: 'Cinzel', serif;
+            color: gold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .journal-entry-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d0d0d0;
+        }
+
+        /* Puzzle Overlay */
+        #puzzle-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .puzzle-container {
+            background: linear-gradient(135deg, rgba(20, 20, 40, 0.95) 0%, rgba(40, 30, 50, 0.95) 100%);
+            padding: 50px;
+            border-radius: 20px;
+            border: 3px solid gold;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.4);
+        }
+
+        .puzzle-title {
+            font-family: 'Cinzel', serif;
+            font-size: 36px;
+            color: gold;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Mechanical Puzzle */
+        .gear-puzzle {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .gear {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #8b7355 0%, #5c4a3a 100%);
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 5px solid #3a2f23;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .gear:hover {
+            transform: scale(1.05);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 5px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .gear::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #2a1f1a;
+            border-radius: 50%;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .gear-tooth {
+            position: absolute;
+            width: 20px;
+            height: 40px;
+            background: linear-gradient(135deg, #8b7355 0%, #5c4a3a 100%);
+            left: 50%;
+            transform-origin: center;
+        }
+
+        .gear.rotating {
+            animation: rotateGear 2s linear infinite;
+        }
+
+        @keyframes rotateGear {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Crystal Puzzle */
+        .crystal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 500px;
+            margin: 40px auto;
+        }
+
+        .crystal {
+            width: 120px;
+            height: 140px;
+            background: linear-gradient(135deg, rgba(100, 200, 255, 0.3) 0%, rgba(0, 100, 200, 0.5) 100%);
+            clip-path: polygon(50% 0%, 100% 30%, 100% 70%, 50% 100%, 0% 70%, 0% 30%);
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 100, 200, 0.3);
+        }
+
+        .crystal:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(100, 200, 255, 0.5);
+        }
+
+        .crystal.active {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.6) 0%, rgba(255, 165, 0, 0.8) 100%);
+            animation: crystalGlow 1s ease-in-out infinite;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.6);
+        }
+
+        @keyframes crystalGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5); }
+        }
+
+        /* Symbol Constellation Puzzle */
+        .constellation-canvas {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, #001a33 0%, #000 70%);
+            border-radius: 15px;
+            position: relative;
+            margin: 30px auto;
+            box-shadow: inset 0 0 50px rgba(0, 50, 100, 0.5), 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 4px white;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .constellation-star {
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, gold 0%, rgba(255, 215, 0, 0.5) 100%);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .constellation-star:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 20px gold;
+        }
+
+        .constellation-star.selected {
+            background: radial-gradient(circle, lime 0%, rgba(0, 255, 0, 0.5) 100%);
+            box-shadow: 0 0 30px lime;
+            animation: selectedPulse 0.5s;
+        }
+
+        @keyframes selectedPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1.2); }
+        }
+
+        .constellation-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, gold 50%, transparent 100%);
+            transform-origin: left center;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .constellation-line.visible {
+            opacity: 1;
+        }
+
+        /* Puzzle buttons */
+        .puzzle-button {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #8b6914 0%, #daa520 100%);
+            border: 2px solid gold;
+            color: white;
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 10px;
+            margin: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .puzzle-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .puzzle-button.secondary {
+            background: linear-gradient(135deg, #555 0%, #777 100%);
+        }
+
+        /* Sound wave effect */
+        @keyframes soundWave {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .sound-wave {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 3px solid gold;
+            border-radius: 50%;
+            animation: soundWave 2s ease-out;
+        }
+
+        /* Loading screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 1s;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-title {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            color: gold;
+            margin-bottom: 40px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .loading-bar {
+            width: 400px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            border: 2px solid gold;
+        }
+
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, gold 0%, #ff6b6b 50%, #4ecdc4 100%);
+            transition: width 0.3s;
+            box-shadow: 0 0 20px gold;
+        }
+
+        /* Ambient sounds indicator */
+        #sound-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid gold;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        #sound-indicator:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        #sound-indicator.muted {
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #game-title { font-size: 20px; }
+            #ui-panel { padding: 0 20px; height: 60px; }
+            .nav-arrow { width: 60px; height: 60px; font-size: 24px; }
+            #journal { width: 100%; }
+            .puzzle-container { padding: 30px; }
+            .constellation-canvas { width: 100%; height: 400px; }
         }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-title">DIE INSEL DER ZEIT</div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loading-progress"></div>
+        </div>
+        <p style="margin-top: 20px; font-family: 'Cormorant Garamond', serif; color: #999;">Lade Geheimnisse...</p>
+    </div>
+
+    <!-- Main Game Container -->
     <div id="game-container">
-        <div id="scene"></div>
-        
-        <div id="inventory">
-            <div style="margin-right: 10px; font-size: 14px;">Inventar:</div>
-        </div>
-
-        <div id="notebook">📓 Notizbuch</div>
-        <div id="notes-panel"></div>
-
-        <div id="message-box">
-            <div id="message-text"></div>
-            <button id="message-btn">Weiter</button>
-        </div>
-
-        <div id="puzzle-overlay">
-            <div class="puzzle-container">
-                <h2 id="puzzle-title">Rätsel</h2>
-                <div id="puzzle-content"></div>
-                <button id="close-puzzle">Schließen</button>
+        <!-- UI Panel -->
+        <div id="ui-panel">
+            <div id="game-title">DIE INSEL DER ZEIT</div>
+            
+            <div id="inventory">
+                <div class="inventory-slot" data-tooltip="Leer"></div>
+                <div class="inventory-slot" data-tooltip="Leer"></div>
+                <div class="inventory-slot" data-tooltip="Leer"></div>
+                <div class="inventory-slot" data-tooltip="Leer"></div>
             </div>
+
+            <div id="action-buttons">
+                <button class="ui-button" onclick="toggleJournal()">📖 Tagebuch</button>
+                <button class="ui-button" onclick="showHelp()">❓ Hilfe</button>
+            </div>
+        </div>
+
+        <!-- Main Scene -->
+        <div id="scene">
+            <div class="scene-overlay"></div>
+        </div>
+
+        <!-- Sound Indicator -->
+        <div id="sound-indicator" onclick="toggleSound()">🔊</div>
+
+        <!-- Journal Panel -->
+        <div id="journal">
+            <h2>⚜️ Tagebuch ⚜️</h2>
+            <div id="journal-entries"></div>
+        </div>
+    </div>
+
+    <!-- Message Overlay -->
+    <div id="message-overlay">
+        <div id="message-box">
+            <div id="message-title"></div>
+            <div id="message-text"></div>
+            <button id="message-button">Weiter</button>
+        </div>
+    </div>
+
+    <!-- Puzzle Overlay -->
+    <div id="puzzle-overlay">
+        <div class="puzzle-container" id="puzzle-container">
+            <!-- Puzzle content will be inserted here -->
         </div>
     </div>
 
     <script>
         // ===== GAME STATE =====
         const gameState = {
-            currentScene: 'entrance',
+            currentScene: 'beach',
             inventory: [],
-            selectedItem: null,
-            notes: [],
+            journal: [],
+            soundEnabled: true,
             puzzlesSolved: {
-                symbolPuzzle: false,
-                telescope: false,
+                gears: false,
+                crystals: false,
+                constellation: false,
                 finalDoor: false
             },
-            symbolSequence: [],
-            correctSequence: ['⭐', '🌙', '☀️'],
-            telescopeStarsClicked: [],
-            correctConstellation: ['star1', 'star3', 'star5']
+            gearRotations: [0, 0, 0],
+            crystalPattern: [],
+            constellationStars: [],
+            correctCrystalPattern: [0, 2, 4, 6, 8],
+            correctConstellation: ['star-2', 'star-5', 'star-8']
         };
 
-        // ===== SCENES DEFINITION =====
+        // ===== SCENE DEFINITIONS =====
         const scenes = {
-            entrance: {
-                description: "Du stehst vor einem alten, verlassenen Observatorium. Die Tür ist schwer und mit seltsamen Symbolen verziert.",
-                background: "linear-gradient(to bottom, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
-                image: "🌌",
+            beach: {
+                name: 'Strand der Ankunft',
+                background: 'linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 50%, #F4E4C1 100%)',
+                description: 'Du erwachst am Strand einer geheimnisvollen Insel. Kristallklares Wasser leckt an deinen Füßen. Vor dir erhebt sich ein dichter, mystischer Wald.',
                 hotspots: [
-                    { id: 'door', x: '40%', y: '30%', w: '20%', h: '40%', action: 'examineDoor' },
-                    { id: 'sign', x: '70%', y: '50%', w: '15%', h: '20%', action: 'examineSign' },
-                    { id: 'forward', x: '45%', y: '70%', w: '10%', h: '10%', action: 'goToHall' }
+                    { 
+                        id: 'shell', 
+                        left: '20%', 
+                        top: '70%', 
+                        width: '80px', 
+                        height: '80px',
+                        content: '🐚',
+                        action: 'examineShell'
+                    },
+                    {
+                        id: 'bottle',
+                        left: '70%',
+                        top: '65%',
+                        width: '60px',
+                        height: '80px',
+                        content: '🍾',
+                        action: 'examineBottle'
+                    }
+                ],
+                navigation: [
+                    { direction: 'forward', target: 'forest', icon: '⬆️' }
                 ]
             },
-            hall: {
-                description: "Eine große Halle mit hohen Decken. Staub tanzt im Licht, das durch zerbrochene Fenster fällt.",
-                background: "linear-gradient(135deg, #2c3e50 0%, #34495e 100%)",
-                image: "🏛️",
+            forest: {
+                name: 'Uralter Wald',
+                background: 'linear-gradient(to bottom, #1a3a1a 0%, #2d5a2d 50%, #4a7c4a 100%)',
+                description: 'Gigantische Bäume ragen in den Himmel. Seltsame Runen leuchten schwach auf ihrer Rinde. Ein schmaler Pfad führt tiefer hinein.',
                 hotspots: [
-                    { id: 'left-door', x: '20%', y: '30%', w: '15%', h: '30%', action: 'goToLibrary' },
-                    { id: 'right-door', x: '65%', y: '30%', w: '15%', h: '30%', action: 'goToObservatory' },
-                    { id: 'pedestal', x: '40%', y: '55%', w: '20%', h: '25%', action: 'examinePedestal' },
-                    { id: 'back', x: '45%', y: '85%', w: '10%', h: '10%', action: 'goToEntrance' }
+                    {
+                        id: 'rune-tree',
+                        left: '40%',
+                        top: '30%',
+                        width: '100px',
+                        height: '200px',
+                        content: '🌳',
+                        action: 'examineRunes'
+                    },
+                    {
+                        id: 'mushrooms',
+                        left: '65%',
+                        top: '60%',
+                        width: '80px',
+                        height: '60px',
+                        content: '🍄',
+                        action: 'examineMushrooms'
+                    }
+                ],
+                navigation: [
+                    { direction: 'back', target: 'beach', icon: '⬇️' },
+                    { direction: 'forward', target: 'clearing', icon: '⬆️' }
                 ]
             },
-            library: {
-                description: "Eine alte Bibliothek mit verstaubten Büchern. Die Luft riecht nach altem Papier und Geheimnissen.",
-                background: "linear-gradient(to right, #4a3f35 0%, #2c2416 100%)",
-                image: "📚",
+            clearing: {
+                name: 'Lichtung der Mechanik',
+                background: 'linear-gradient(135deg, #3a6186 0%, #89253e 100%)',
+                description: 'Eine kreisrunde Lichtung öffnet sich vor dir. In der Mitte steht eine uralte mechanische Konstruktion mit drei großen Zahnrädern.',
                 hotspots: [
-                    { id: 'book', x: '30%', y: '40%', w: '20%', h: '25%', action: 'examineBook' },
-                    { id: 'desk', x: '55%', y: '50%', w: '25%', h: '30%', action: 'examineDesk' },
-                    { id: 'back', x: '45%', y: '85%', w: '10%', h: '10%', action: 'goToHall' }
+                    {
+                        id: 'gear-machine',
+                        left: '35%',
+                        top: '35%',
+                        width: '200px',
+                        height: '200px',
+                        content: '⚙️',
+                        action: 'activateGearPuzzle'
+                    },
+                    {
+                        id: 'stone-tablet',
+                        left: '70%',
+                        top: '60%',
+                        width: '80px',
+                        height: '100px',
+                        content: '📜',
+                        action: 'examineTablet'
+                    }
+                ],
+                navigation: [
+                    { direction: 'back', target: 'forest', icon: '⬇️' },
+                    { direction: 'forward', target: 'temple', icon: '⬆️', locked: true, unlockCondition: 'gears' }
+                ]
+            },
+            temple: {
+                name: 'Kristalltempel',
+                background: 'radial-gradient(ellipse at center, #667eea 0%, #764ba2 100%)',
+                description: 'Ein prächtiger Tempel aus schimmernden Kristallen. Neun Kristalle sind in einem magischen Muster angeordnet.',
+                hotspots: [
+                    {
+                        id: 'crystal-altar',
+                        left: '40%',
+                        top: '40%',
+                        width: '150px',
+                        height: '150px',
+                        content: '💎',
+                        action: 'activateCrystalPuzzle'
+                    },
+                    {
+                        id: 'ancient-book',
+                        left: '15%',
+                        top: '65%',
+                        width: '70px',
+                        height: '70px',
+                        content: '📖',
+                        action: 'examineAncientBook'
+                    }
+                ],
+                navigation: [
+                    { direction: 'back', target: 'clearing', icon: '⬇️' },
+                    { direction: 'forward', target: 'observatory', icon: '⬆️', locked: true, unlockCondition: 'crystals' }
                 ]
             },
             observatory: {
-                description: "Das Herzstück des Gebäudes - ein großes Teleskop ragt in die Kuppel.",
-                background: "radial-gradient(circle, #0f2027 0%, #203a43 50%, #2c5364 100%)",
-                image: "🔭",
+                name: 'Sternenobservatorium',
+                background: 'radial-gradient(circle, #0f2027 0%, #203a43 50%, #2c5364 100%)',
+                description: 'Die Kuppel eines uralten Observatoriums. Ein riesiges Teleskop zeigt auf den Nachthimmel voller Sterne.',
                 hotspots: [
-                    { id: 'telescope', x: '35%', y: '25%', w: '30%', h: '45%', action: 'useTelescope' },
-                    { id: 'control-panel', x: '65%', y: '50%', w: '20%', h: '25%', action: 'examinePanel' },
-                    { id: 'back', x: '45%', y: '85%', w: '10%', h: '10%', action: 'goToHall' }
+                    {
+                        id: 'telescope',
+                        left: '40%',
+                        top: '30%',
+                        width: '150px',
+                        height: '250px',
+                        content: '🔭',
+                        action: 'activateConstellationPuzzle'
+                    },
+                    {
+                        id: 'star-map',
+                        left: '70%',
+                        top: '50%',
+                        width: '90px',
+                        height: '90px',
+                        content: '🗺️',
+                        action: 'examineStarMap'
+                    }
+                ],
+                navigation: [
+                    { direction: 'back', target: 'temple', icon: '⬇️' },
+                    { direction: 'forward', target: 'sanctum', icon: '⬆️', locked: true, unlockCondition: 'constellation' }
                 ]
             },
-            secretRoom: {
-                description: "Eine verborgene Kammer öffnet sich. Goldenes Licht erfüllt den Raum. Du hast das Geheimnis gelüftet!",
-                background: "radial-gradient(circle, #f7971e 0%, #ffd200 100%)",
-                image: "✨",
+            sanctum: {
+                name: 'Sanctum der Zeit',
+                background: 'radial-gradient(circle, #f7971e 0%, #ffd200 50%, #f7971e 100%)',
+                description: '✨ Du hast es geschafft! Das innere Heiligtum erstrahlt in goldenem Licht. Eine schwebende Sanduhr schwebt in der Mitte - der Zeitsplitter!',
                 hotspots: [
-                    { id: 'treasure', x: '35%', y: '40%', w: '30%', h: '35%', action: 'examinetreasure' }
-                ]
+                    {
+                        id: 'time-shard',
+                        left: '42%',
+                        top: '35%',
+                        width: '120px',
+                        height: '180px',
+                        content: '⌛',
+                        action: 'examineTimeShard'
+                    }
+                ],
+                navigation: []
             }
         };
 
-        // ===== INITIALIZE GAME =====
+        // ===== INITIALIZATION =====
         function initGame() {
-            showMessage("Willkommen im vergessenen Observatorium!\n\nVor langer Zeit verschwand ein berühmter Astronom spurlos. Sein Observatorium wurde verschlossen und vergessen. Du hast alte Aufzeichnungen gefunden, die von einem verborgenen Schatz sprechen...\n\nErforsche die Räume, löse die Rätsel und enthülle das Geheimnis!", () => {
-                loadScene('entrance');
-            });
+            simulateLoading();
+        }
+
+        function simulateLoading() {
+            const progress = document.getElementById('loading-progress');
+            let width = 0;
+            const interval = setInterval(() => {
+                width += 10;
+                progress.style.width = width + '%';
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('loading-screen').classList.add('hidden');
+                        showIntroMessage();
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        function showIntroMessage() {
+            showMessage(
+                '⚜️ Willkommen ⚜️',
+                'Du erwachst an einem unbekannten Strand. Die Wellen haben dich hier angeschwemmt.\n\nVor dir liegt eine mysteriöse Insel voller Geheimnisse und uralter Magie.\n\nIrgendwo hier verbirgt sich der legendäre Zeitsplitter - ein Artefakt von unvorstellbarer Macht.\n\nErforsche die Insel, löse ihre Rätsel und enthülle ihr größtes Geheimnis...',
+                () => {
+                    loadScene('beach');
+                    addJournalEntry('Ankunft', 'Ich bin auf einer mysteriösen Insel gestrandet. Mein Ziel: Den Zeitsplitter finden.');
+                }
+            );
         }
 
         // ===== SCENE MANAGEMENT =====
         function loadScene(sceneId) {
-            gameState.currentScene = sceneId;
             const scene = scenes[sceneId];
+            if (!scene) return;
+
+            gameState.currentScene = sceneId;
             const sceneEl = document.getElementById('scene');
             
-            sceneEl.style.background = scene.background;
-            sceneEl.innerHTML = '';
+            // Fade out
+            sceneEl.style.opacity = '0';
             
-            // Scene title
-            const title = document.createElement('div');
-            title.style.cssText = 'position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 48px;';
-            title.textContent = scene.image;
-            sceneEl.appendChild(title);
-
-            // Description
-            const desc = document.createElement('div');
-            desc.style.cssText = 'position: absolute; top: 80px; left: 50%; transform: translateX(-50%); width: 80%; text-align: center; font-size: 16px; background: rgba(0,0,0,0.7); padding: 15px; border-radius: 10px;';
-            desc.textContent = scene.description;
-            sceneEl.appendChild(desc);
-
-            // Hotspots
-            scene.hotspots.forEach(hotspot => {
-                const el = document.createElement('div');
-                el.className = 'hotspot';
-                el.style.left = hotspot.x;
-                el.style.top = hotspot.y;
-                el.style.width = hotspot.w;
-                el.style.height = hotspot.h;
-                el.onclick = () => handleAction(hotspot.action);
+            setTimeout(() => {
+                sceneEl.innerHTML = '<div class="scene-overlay"></div>';
+                sceneEl.style.background = scene.background;
                 
-                // Tooltip
-                el.title = 'Klicken zum Untersuchen';
+                // Add particles
+                createParticles(sceneEl);
                 
-                sceneEl.appendChild(el);
-            });
+                // Add scene title
+                const title = document.createElement('div');
+                title.style.cssText = `
+                    position: absolute;
+                    top: 100px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    font-family: 'Cinzel', serif;
+                    font-size: 42px;
+                    color: gold;
+                    text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.4);
+                    text-align: center;
+                    animation: fadeIn 2s;
+                    z-index: 10;
+                `;
+                title.textContent = scene.name;
+                sceneEl.appendChild(title);
 
-            sceneEl.classList.add('fade-in');
+                // Add description
+                const desc = document.createElement('div');
+                desc.style.cssText = `
+                    position: absolute;
+                    top: 160px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 70%;
+                    max-width: 800px;
+                    font-size: 20px;
+                    text-align: center;
+                    color: rgba(255, 255, 255, 0.9);
+                    background: rgba(0, 0, 0, 0.6);
+                    padding: 20px 30px;
+                    border-radius: 15px;
+                    backdrop-filter: blur(10px);
+                    border: 2px solid rgba(255, 215, 0, 0.3);
+                    animation: slideIn 1s;
+                    z-index: 10;
+                `;
+                desc.textContent = scene.description;
+                sceneEl.appendChild(desc);
+
+                // Add hotspots
+                scene.hotspots.forEach((hotspot, index) => {
+                    setTimeout(() => {
+                        createHotspot(sceneEl, hotspot);
+                    }, index * 200);
+                });
+
+                // Add navigation
+                scene.navigation.forEach(nav => {
+                    createNavArrow(sceneEl, nav);
+                });
+
+                // Fade in
+                sceneEl.style.opacity = '1';
+            }, 1000);
+        }
+
+        function createParticles(container) {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = (Math.random() * 3 + 1) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        function createHotspot(container, hotspot) {
+            const el = document.createElement('div');
+            el.className = 'hotspot';
+            el.style.left = hotspot.left;
+            el.style.top = hotspot.top;
+            el.style.width = hotspot.width;
+            el.style.height = hotspot.height;
+            el.style.fontSize = '48px';
+            el.style.display = 'flex';
+            el.style.alignItems = 'center';
+            el.style.justifyContent = 'center';
+            el.textContent = hotspot.content;
+            el.onclick = () => handleAction(hotspot.action);
+            el.style.animation = 'fadeIn 1s';
+            container.appendChild(el);
+        }
+
+        function createNavArrow(container, nav) {
+            if (nav.locked && !gameState.puzzlesSolved[nav.unlockCondition]) {
+                return; // Don't show locked paths
+            }
+
+            const arrow = document.createElement('div');
+            arrow.className = `nav-arrow ${nav.direction}`;
+            arrow.textContent = nav.icon;
+            arrow.onclick = () => loadScene(nav.target);
+            container.appendChild(arrow);
         }
 
         // ===== ACTION HANDLERS =====
         function handleAction(action) {
             const actions = {
-                examineDoor: () => {
-                    if (gameState.puzzlesSolved.symbolPuzzle && gameState.puzzlesSolved.telescope) {
-                        showMessage("Die Tür leuchtet hell auf und öffnet sich langsam...", () => {
-                            loadScene('secretRoom');
-                        });
-                    } else {
-                        showMessage("Die Tür ist fest verschlossen. Seltsame Symbole leuchten schwach: ⭐ 🌙 ☀️\n\nVielleicht gibt es Hinweise im Inneren des Gebäudes...");
+                examineShell: () => {
+                    showMessage('🐚 Meeresmuschel', 'Eine wunderschöne Muschel. Du hörst das Rauschen des Meeres, wenn du sie ans Ohr hältst.');
+                    if (!gameState.inventory.includes('🐚')) {
+                        addToInventory('🐚', 'Meeresmuschel');
+                        addJournalEntry('Muschel gefunden', 'Eine schöne Muschel vom Strand. Vielleicht nützlich?');
                     }
                 },
-                examineSign: () => {
-                    showMessage("Ein verwittertes Schild:\n\n'Nur wer die Sterne versteht und die uralten Symbole kennt, wird Einlass finden.'\n\n⭐ für Hoffnung\n🌙 für Weisheit\n☀️ für Erleuchtung");
-                    addNote("Hinweis am Eingang: ⭐ Hoffnung, 🌙 Weisheit, ☀️ Erleuchtung");
+                examineBottle: () => {
+                    showMessage('🍾 Flaschenpost', 'Eine alte Flasche mit einer Nachricht darin:\n\n"Drei mal drei im Kristallschein,\nmuss das Muster richtig sein.\nEckpunkte sind der Schlüssel hier,\nzum Öffnen dieser Tür zu dir."');
+                    addJournalEntry('Flaschenpost', 'Hinweis auf Kristallmuster: 3x3, Eckpunkte wichtig');
                 },
-                goToHall: () => {
-                    if (gameState.puzzlesSolved.symbolPuzzle || gameState.inventory.includes('🔑')) {
-                        loadScene('hall');
+                examineRunes: () => {
+                    showMessage('🌳 Runenbäume', 'Uralte Runen bedecken die Baumrinde. Sie scheinen eine Geschichte zu erzählen:\n\n"Die Zahnräder der Zeit drehen sich im Einklang.\nLinks dreht rechts, rechts dreht links.\nDas mittlere verbindet beide Welten."');
+                    addJournalEntry('Runen der Bäume', 'Zahnräder-Hinweis: Links-Rechts-Verbindung beachten');
+                },
+                examineMushrooms: () => {
+                    showMessage('🍄 Leuchtpilze', 'Biolumineszente Pilze erhellen den Waldboden. Sie pulsieren in einem hypnotischen Rhythmus.');
+                },
+                examineTablet: () => {
+                    showMessage('📜 Steintafel', 'Eine Inschrift auf der Tafel:\n\n"Wenn die Zahnräder sich im Gleichklang drehen,\nwird der Weg sich öffnen und bestehen.\nDrei Umdrehungen für jeden Zahn,\nzeigt dir den weiteren Pfad hinan."');
+                    addJournalEntry('Steintafel', 'Zahnräder müssen 3 Umdrehungen machen - alle gleichzeitig!');
+                },
+                examineAncientBook: () => {
+                    showMessage('📖 Altes Buch', 'Ein verstaubtes Buch mit Diagrammen:\n\n[Skizze zeigt 3x3 Gitter]\n"Die fünf Ecken und das Zentrum formen das Portal.\nAktiviere sie in der Reihenfolge: Oben links, oben rechts, Mitte, unten links, unten rechts."');
+                    addJournalEntry('Kristallbuch', 'Kristallmuster: 5 Positionen - Ecken + Zentrum');
+                },
+                examineStarMap: () => {
+                    showMessage('🗺️ Sternenkarte', 'Eine alte Karte des Nachthimmels. Drei Sterne sind mit goldenen Linien markiert - sie bilden ein perfektes Dreieck.\n\n"Das Dreieck der Zeit zeigt den Weg."');
+                    addJournalEntry('Sternenkarte', 'Drei Sterne bilden Dreieck - das ist das Muster!');
+                },
+                examineTimeShard: () => {
+                    showMessage(
+                        '⌛ DER ZEITSPLITTER ⌛',
+                        '✨ HERZLICHEN GLÜCKWUNSCH! ✨\n\nDu hast den legendären Zeitsplitter gefunden!\n\nDieses uralte Artefakt besitzt die Macht, den Lauf der Zeit zu beeinflussen. Die Insel hat dich für würdig befunden, ihr größtes Geheimnis zu kennen.\n\nDu hast alle Rätsel gelöst und die verborgene Weisheit der Insel entdeckt.\n\n🏆 SPIEL ERFOLGREICH ABGESCHLOSSEN 🏆\n\nDanke fürs Spielen!',
+                        null
+                    );
+                    addToInventory('⌛', 'Zeitsplitter');
+                    addJournalEntry('SIEG!', 'Ich habe den Zeitsplitter gefunden! Die Reise ist vollendet.');
+                },
+                activateGearPuzzle: () => {
+                    if (gameState.puzzlesSolved.gears) {
+                        showMessage('⚙️ Zahnräder', 'Die Mechanik arbeitet perfekt. Der Weg ist frei.');
                     } else {
-                        showMessage("Die Tür zum Observatorium ist verschlossen. Du musst einen Weg finden, sie zu öffnen...");
+                        showGearPuzzle();
                     }
                 },
-                goToEntrance: () => loadScene('entrance'),
-                goToLibrary: () => loadScene('library'),
-                goToObservatory: () => loadScene('observatory'),
-                examinePedestal: () => {
-                    if (!gameState.puzzlesSolved.symbolPuzzle) {
-                        showSymbolPuzzle();
+                activateCrystalPuzzle: () => {
+                    if (gameState.puzzlesSolved.crystals) {
+                        showMessage('💎 Kristalle', 'Die Kristalle leuchten in perfekter Harmonie.');
                     } else {
-                        showMessage("Der Sockel leuchtet friedlich. Das Rätsel wurde bereits gelöst.");
+                        showCrystalPuzzle();
                     }
                 },
-                examineBook: () => {
-                    showMessage("Ein altes Tagebuch des Astronomen:\n\n'Tag 127: Die Sterne haben mir ein Muster gezeigt. Drei Sterne bilden das Dreieck der Erkenntnis. Sie zeigen den Weg...'\n\nDarunter eine verblasste Zeichnung eines Dreiecks.");
-                    addNote("Tagebuch: 3 Sterne bilden Dreieck der Erkenntnis");
-                },
-                examineDesk: () => {
-                    if (!gameState.inventory.includes('🔑')) {
-                        showMessage("Auf dem Schreibtisch liegt ein alter Schlüssel! Du nimmst ihn an dich.");
-                        addToInventory('🔑');
-                        gameState.puzzlesSolved.symbolPuzzle = true;
-                        addNote("Schlüssel gefunden - kann zur Haupthalle führen");
+                activateConstellationPuzzle: () => {
+                    if (gameState.puzzlesSolved.constellation) {
+                        showMessage('🔭 Sterne', 'Das Dreieck der Zeit erstrahlt am Himmel.');
                     } else {
-                        showMessage("Der Schreibtisch ist leer bis auf alte Papiere.");
+                        showConstellationPuzzle();
                     }
-                },
-                useTelescope: () => {
-                    if (gameState.puzzlesSolved.telescope) {
-                        showMessage("Das Teleskop zeigt immer noch die drei besonderen Sterne.");
-                    } else {
-                        showTelescopePuzzle();
-                    }
-                },
-                examinePanel: () => {
-                    if (gameState.puzzlesSolved.telescope) {
-                        showMessage("Das Kontrolpanel zeigt: 'Ausrichtung korrekt. System aktiviert.'");
-                    } else {
-                        showMessage("Das Kontrolpanel ist dunkel. Das Teleskop muss auf die richtigen Sterne ausgerichtet werden.");
-                        addNote("Kontrolpanel: Teleskop muss ausgerichtet werden");
-                    }
-                },
-                examinetreasure: () => {
-                    showMessage("✨ HERZLICHEN GLÜCKWUNSCH! ✨\n\nDu hast das geheime Vermächtnis des Astronomen gefunden!\n\nVor dir liegt sein letztes Werk: Eine Karte der Sterne mit Aufzeichnungen verlorener Konstellationen. Sein Wissen ist nun dein Erbe.\n\n'Die wahren Schätze liegen nicht in Gold, sondern im Verständnis des Universums.'\n\n🌟 SPIEL BEENDET 🌟");
                 }
             };
 
             if (actions[action]) {
+                playSound('click');
                 actions[action]();
             }
         }
 
-        // ===== SYMBOL PUZZLE =====
-        function showSymbolPuzzle() {
+        // ===== GEAR PUZZLE =====
+        function showGearPuzzle() {
             const overlay = document.getElementById('puzzle-overlay');
-            const content = document.getElementById('puzzle-content');
-            const title = document.getElementById('puzzle-title');
+            const container = document.getElementById('puzzle-container');
             
-            title.textContent = 'Symbol-Rätsel';
-            content.innerHTML = `
-                <p style="margin-bottom: 20px;">Drücke die Symbole in der richtigen Reihenfolge:</p>
-                <div style="margin-bottom: 20px; font-size: 24px;" id="current-sequence"></div>
-                <div class="symbol-grid">
-                    <button class="symbol-btn" onclick="addSymbol('⭐')">⭐</button>
-                    <button class="symbol-btn" onclick="addSymbol('🌙')">🌙</button>
-                    <button class="symbol-btn" onclick="addSymbol('☀️')">☀️</button>
+            container.innerHTML = `
+                <div class="puzzle-title">⚙️ Mechanisches Rätsel ⚙️</div>
+                <p style="text-align: center; font-size: 18px; margin-bottom: 30px; color: #ddd;">
+                    Drehe die Zahnräder so, dass alle drei gleichzeitig rotieren!<br>
+                    <small>Hinweis: Jedes Zahnrad beeinflusst seine Nachbarn</small>
+                </p>
+                <div class="gear-puzzle" id="gear-container"></div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="puzzle-button" onclick="checkGears()">Prüfen</button>
+                    <button class="puzzle-button secondary" onclick="resetGears()">Zurücksetzen</button>
+                    <button class="puzzle-button secondary" onclick="closePuzzle()">Schließen</button>
                 </div>
-                <button onclick="resetSymbols()" style="padding: 10px 20px; background: #c0392b; border: none; color: white; cursor: pointer; border-radius: 5px; margin-right: 10px;">Zurücksetzen</button>
-                <button onclick="checkSymbols()" style="padding: 10px 20px; background: #27ae60; border: none; color: white; cursor: pointer; border-radius: 5px;">Prüfen</button>
             `;
-            
+
+            const gearContainer = document.getElementById('gear-container');
+            for (let i = 0; i < 3; i++) {
+                const gear = document.createElement('div');
+                gear.className = 'gear';
+                gear.id = `gear-${i}`;
+                gear.onclick = () => rotateGear(i);
+                
+                // Add gear teeth
+                for (let j = 0; j < 8; j++) {
+                    const tooth = document.createElement('div');
+                    tooth.className = 'gear-tooth';
+                    tooth.style.transform = `translateX(-50%) rotate(${j * 45}deg) translateY(-50px)`;
+                    gear.appendChild(tooth);
+                }
+                
+                gearContainer.appendChild(gear);
+            }
+
             overlay.style.display = 'flex';
-            gameState.symbolSequence = [];
-            updateSymbolDisplay();
         }
 
-        function addSymbol(symbol) {
-            if (gameState.symbolSequence.length < 3) {
-                gameState.symbolSequence.push(symbol);
-                updateSymbolDisplay();
-            }
-        }
-
-        function resetSymbols() {
-            gameState.symbolSequence = [];
-            updateSymbolDisplay();
-        }
-
-        function updateSymbolDisplay() {
-            const display = document.getElementById('current-sequence');
-            if (display) {
-                display.textContent = gameState.symbolSequence.join(' ') || 'Keine Symbole gewählt';
-            }
-        }
-
-        function checkSymbols() {
-            if (JSON.stringify(gameState.symbolSequence) === JSON.stringify(gameState.correctSequence)) {
-                gameState.puzzlesSolved.symbolPuzzle = true;
-                closePuzzle();
-                showMessage("✅ Korrekt! Die Symbole leuchten hell auf und der Sockel öffnet sich. Ein goldener Schlüssel erscheint!", () => {
-                    addToInventory('🔑');
-                    addNote("Symbolrätsel gelöst: ⭐ 🌙 ☀️");
-                });
-            } else {
-                showMessage("❌ Das ist nicht die richtige Kombination. Versuche es erneut.");
-                resetSymbols();
-            }
-        }
-
-        // ===== TELESCOPE PUZZLE =====
-        function showTelescopePuzzle() {
-            const overlay = document.getElementById('puzzle-overlay');
-            const content = document.getElementById('puzzle-content');
-            const title = document.getElementById('puzzle-title');
+        function rotateGear(index) {
+            playSound('gear');
+            gameState.gearRotations[index]++;
             
-            title.textContent = 'Teleskop-Sternenkarte';
-            content.innerHTML = `
-                <p style="margin-bottom: 20px;">Klicke auf die drei Sterne, die das Dreieck der Erkenntnis bilden:</p>
-                <div style="position: relative; width: 400px; height: 400px; background: radial-gradient(circle, #001a33 0%, #000 70%); border-radius: 10px; margin: 0 auto;">
-                    ${generateStars()}
-                </div>
-                <div style="margin-top: 20px; font-size: 14px;" id="stars-selected">Ausgewählt: 0/3</div>
-                <button onclick="checkConstellation()" style="padding: 10px 20px; background: #27ae60; border: none; color: white; cursor: pointer; border-radius: 5px; margin-top: 10px;">Prüfen</button>
-            `;
-            
-            overlay.style.display = 'flex';
-            gameState.telescopeStarsClicked = [];
+            // Each gear affects its neighbors
+            if (index === 0) gameState.gearRotations[1]++;
+            if (index === 1) {
+                gameState.gearRotations[0]++;
+                gameState.gearRotations[2]++;
+            }
+            if (index === 2) gameState.gearRotations[1]++;
+
+            updateGearDisplay();
         }
 
-        function generateStars() {
-            let html = '';
-            // Random stars
-            for (let i = 0; i < 30; i++) {
-                const x = Math.random() * 90 + 5;
-                const y = Math.random() * 90 + 5;
-                html += `<div class="star" style="left: ${x}%; top: ${y}%;"></div>`;
-            }
-            // Constellation stars (forming triangle)
-            const constellation = [
-                { id: 'star1', x: '30%', y: '20%' },
-                { id: 'star2', x: '50%', y: '70%' },
-                { id: 'star3', x: '70%', y: '20%' },
-                { id: 'star4', x: '20%', y: '60%' },
-                { id: 'star5', x: '80%', y: '60%' }
-            ];
-            
-            constellation.forEach(star => {
-                html += `<div class="star constellation-star" id="${star.id}" style="left: ${star.x}; top: ${star.y};" onclick="selectStar('${star.id}')"></div>`;
+        function updateGearDisplay() {
+            gameState.gearRotations.forEach((rotation, index) => {
+                const gear = document.getElementById(`gear-${index}`);
+                if (gear) {
+                    gear.style.transform = `rotate(${rotation * 45}deg)`;
+                }
             });
-            
-            return html;
         }
 
-        function selectStar(starId) {
-            const star = document.getElementById(starId);
-            if (!star) return;
+        function resetGears() {
+            gameState.gearRotations = [0, 0, 0];
+            updateGearDisplay();
+        }
+
+        function checkGears() {
+            // Check if all gears have exactly 3 full rotations (24 clicks = 3 * 360/45)
+            const allCorrect = gameState.gearRotations.every(r => r % 8 === 0 && r >= 24);
             
-            if (gameState.telescopeStarsClicked.includes(starId)) {
-                gameState.telescopeStarsClicked = gameState.telescopeStarsClicked.filter(s => s !== starId);
-                star.style.background = 'gold';
-                star.style.boxShadow = 'none';
-            } else if (gameState.telescopeStarsClicked.length < 3) {
-                gameState.telescopeStarsClicked.push(starId);
-                star.style.background = 'lime';
-                star.style.boxShadow = '0 0 20px lime';
+            if (allCorrect) {
+                gameState.puzzlesSolved.gears = true;
+                playSound('success');
+                closePuzzle();
+                showMessage(
+                    '✅ Zahnräder gelöst!',
+                    'Die Mechanik erwacht zum Leben! Die Zahnräder drehen sich in perfekter Harmonie.\n\nEin lautes Klicken ertönt - der Weg nach vorne ist nun frei!',
+                    () => {
+                        loadScene('clearing');
+                        addJournalEntry('Zahnrad-Mechanik', 'Ich habe die Mechanik aktiviert. Der Weg zum Tempel ist offen!');
+                    }
+                );
+            } else {
+                showMessage('❌ Nicht ganz...', 'Die Zahnräder sind noch nicht im richtigen Rhythmus. Versuche es erneut!');
             }
+        }
+
+        // ===== CRYSTAL PUZZLE =====
+        function showCrystalPuzzle() {
+            const overlay = document.getElementById('puzzle-overlay');
+            const container = document.getElementById('puzzle-container');
             
-            document.getElementById('stars-selected').textContent = `Ausgewählt: ${gameState.telescopeStarsClicked.length}/3`;
+            container.innerHTML = `
+                <div class="puzzle-title">💎 Kristall-Rätsel 💎</div>
+                <p style="text-align: center; font-size: 18px; margin-bottom: 30px; color: #ddd;">
+                    Aktiviere die richtigen Kristalle, um das Portal zu öffnen!<br>
+                    <small>Hinweis: Die Ecken und die Mitte sind der Schlüssel</small>
+                </p>
+                <div class="crystal-grid" id="crystal-grid"></div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <div id="crystal-status" style="margin-bottom: 15px; font-size: 16px;">Aktiviert: 0/5</div>
+                    <button class="puzzle-button" onclick="checkCrystals()">Prüfen</button>
+                    <button class="puzzle-button secondary" onclick="resetCrystals()">Zurücksetzen</button>
+                    <button class="puzzle-button secondary" onclick="closePuzzle()">Schließen</button>
+                </div>
+            `;
+
+            const grid = document.getElementById('crystal-grid');
+            for (let i = 0; i < 9; i++) {
+                const crystal = document.createElement('div');
+                crystal.className = 'crystal';
+                crystal.id = `crystal-${i}`;
+                crystal.onclick = () => toggleCrystal(i);
+                grid.appendChild(crystal);
+            }
+
+            overlay.style.display = 'flex';
+        }
+
+        function toggleCrystal(index) {
+            playSound('crystal');
+            const crystal = document.getElementById(`crystal-${index}`);
+            
+            if (gameState.crystalPattern.includes(index)) {
+                gameState.crystalPattern = gameState.crystalPattern.filter(i => i !== index);
+                crystal.classList.remove('active');
+            } else if (gameState.crystalPattern.length < 5) {
+                gameState.crystalPattern.push(index);
+                crystal.classList.add('active');
+            }
+
+            document.getElementById('crystal-status').textContent = `Aktiviert: ${gameState.crystalPattern.length}/5`;
+        }
+
+        function resetCrystals() {
+            gameState.crystalPattern = [];
+            for (let i = 0; i < 9; i++) {
+                const crystal = document.getElementById(`crystal-${i}`);
+                if (crystal) crystal.classList.remove('active');
+            }
+            document.getElementById('crystal-status').textContent = 'Aktiviert: 0/5';
+        }
+
+        function checkCrystals() {
+            // Correct pattern: corners and center (0, 2, 4, 6, 8)
+            const sorted = [...gameState.crystalPattern].sort((a, b) => a - b);
+            const correct = JSON.stringify(sorted) === JSON.stringify(gameState.correctCrystalPattern);
+            
+            if (correct) {
+                gameState.puzzlesSolved.crystals = true;
+                playSound('success');
+                closePuzzle();
+                showMessage(
+                    '✅ Kristalle gelöst!',
+                    'Die Kristalle beginnen in einem harmonischen Licht zu pulsieren!\n\nEine Welle magischer Energie erfüllt den Tempel. Eine verborgene Tür öffnet sich und gibt den Weg zum Observatorium frei!',
+                    () => {
+                        loadScene('temple');
+                        addJournalEntry('Kristall-Portal', 'Das Kristallmuster war richtig! Der Weg zu den Sternen ist offen.');
+                    }
+                );
+            } else {
+                showMessage('❌ Falsche Kombination', 'Diese Kristalle formen nicht das richtige Muster. Denke an die Ecken...');
+            }
+        }
+
+        // ===== CONSTELLATION PUZZLE =====
+        function showConstellationPuzzle() {
+            const overlay = document.getElementById('puzzle-overlay');
+            const container = document.getElementById('puzzle-container');
+            
+            container.innerHTML = `
+                <div class="puzzle-title">🔭 Sternbild-Rätsel 🔭</div>
+                <p style="text-align: center; font-size: 18px; margin-bottom: 20px; color: #ddd;">
+                    Finde die drei Sterne, die das Dreieck der Zeit bilden!<br>
+                    <small>Hinweis: Sie formen ein perfektes gleichseitiges Dreieck</small>
+                </p>
+                <div class="constellation-canvas" id="star-canvas"></div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <div id="constellation-status" style="margin-bottom: 15px; font-size: 16px;">Ausgewählt: 0/3</div>
+                    <button class="puzzle-button" onclick="checkConstellation()">Prüfen</button>
+                    <button class="puzzle-button secondary" onclick="resetConstellation()">Zurücksetzen</button>
+                    <button class="puzzle-button secondary" onclick="closePuzzle()">Schließen</button>
+                </div>
+            `;
+
+            const canvas = document.getElementById('star-canvas');
+            
+            // Add random background stars
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                canvas.appendChild(star);
+            }
+
+            // Add constellation stars (forming triangle)
+            const constellationPositions = [
+                { id: 'star-0', left: '20%', top: '30%' },
+                { id: 'star-1', left: '40%', top: '50%' },
+                { id: 'star-2', left: '30%', top: '20%' }, // Top of triangle
+                { id: 'star-3', left: '60%', top: '40%' },
+                { id: 'star-4', left: '80%', top: '60%' },
+                { id: 'star-5', left: '70%', top: '20%' }, // Top right of triangle
+                { id: 'star-6', left: '45%', top: '70%' },
+                { id: 'star-7', left: '25%', top: '65%' },
+                { id: 'star-8', left: '50%', top: '65%' }  // Bottom of triangle
+            ];
+
+            constellationPositions.forEach(pos => {
+                const star = document.createElement('div');
+                star.className = 'star constellation-star';
+                star.id = pos.id;
+                star.style.left = pos.left;
+                star.style.top = pos.top;
+                star.onclick = () => selectConstellationStar(pos.id);
+                canvas.appendChild(star);
+            });
+
+            overlay.style.display = 'flex';
+        }
+
+        function selectConstellationStar(starId) {
+            playSound('star');
+            const star = document.getElementById(starId);
+            
+            if (gameState.constellationStars.includes(starId)) {
+                gameState.constellationStars = gameState.constellationStars.filter(s => s !== starId);
+                star.classList.remove('selected');
+            } else if (gameState.constellationStars.length < 3) {
+                gameState.constellationStars.push(starId);
+                star.classList.add('selected');
+            }
+
+            document.getElementById('constellation-status').textContent = `Ausgewählt: ${gameState.constellationStars.length}/3`;
+        }
+
+        function resetConstellation() {
+            gameState.constellationStars.forEach(starId => {
+                const star = document.getElementById(starId);
+                if (star) star.classList.remove('selected');
+            });
+            gameState.constellationStars = [];
+            document.getElementById('constellation-status').textContent = 'Ausgewählt: 0/3';
         }
 
         function checkConstellation() {
-            const correct = gameState.correctConstellation.every(star => 
-                gameState.telescopeStarsClicked.includes(star)
-            ) && gameState.telescopeStarsClicked.length === 3;
+            const sorted = [...gameState.constellationStars].sort();
+            const correct = JSON.stringify(sorted) === JSON.stringify(gameState.correctConstellation);
             
             if (correct) {
-                gameState.puzzlesSolved.telescope = true;
+                gameState.puzzlesSolved.constellation = true;
+                playSound('success');
                 closePuzzle();
-                showMessage("✅ Perfekt! Die drei Sterne bilden das Dreieck der Erkenntnis. Das Teleskop surrt und richtet sich aus. Ein leises Klicken ist zu hören - irgendwo hat sich etwas geöffnet...");
-                addNote("Teleskop-Rätsel gelöst: Dreieck der Erkenntnis gefunden");
-            } else {
-                showMessage("❌ Das ist nicht die richtige Konstellation. Die Sterne müssen ein perfektes Dreieck bilden.");
-                gameState.telescopeStarsClicked = [];
-                setTimeout(() => showTelescopePuzzle(), 500);
-            }
-        }
-
-        // ===== INVENTORY =====
-        function addToInventory(item) {
-            if (!gameState.inventory.includes(item)) {
-                gameState.inventory.push(item);
-                updateInventory();
-            }
-        }
-
-        function updateInventory() {
-            const inventory = document.getElementById('inventory');
-            const items = gameState.inventory.map(item => 
-                `<div class="inventory-item" title="${item}">${item}</div>`
-            ).join('');
-            inventory.innerHTML = '<div style="margin-right: 10px; font-size: 14px;">Inventar:</div>' + items;
-        }
-
-        // ===== NOTES =====
-        function addNote(note) {
-            if (!gameState.notes.includes(note)) {
-                gameState.notes.push(note);
-                updateNotes();
-            }
-        }
-
-        function updateNotes() {
-            const panel = document.getElementById('notes-panel');
-            panel.innerHTML = '<h3 style="margin-bottom: 15px;">📔 Notizen</h3>' +
-                gameState.notes.map(note => `<div class="note">${note}</div>`).join('');
-        }
-
-        // ===== UI FUNCTIONS =====
-        function showMessage(text, callback) {
-            const box = document.getElementById('message-box');
-            const textEl = document.getElementById('message-text');
-            const btn = document.getElementById('message-btn');
-            
-            textEl.textContent = text;
-            box.style.display = 'block';
-            
-            btn.onclick = () => {
-                box.style.display = 'none';
-                if (callback) callback();
-            };
-        }
-
-        function closePuzzle() {
-            document.getElementById('puzzle-overlay').style.display = 'none';
-        }
-
-        // ===== EVENT LISTENERS =====
-        document.getElementById('notebook').onclick = () => {
-            const panel = document.getElementById('notes-panel');
-            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-        };
-
-        document.getElementById('close-puzzle').onclick = closePuzzle;
-
-        // ===== START GAME =====
-        initGame();
-    </script>
-</body>
-</html>
+                showMessage(
+                    '✅ Konstellation gefunden!',
+                    'Das Dreieck der Zeit erstrahlt am Himmel!\n\nDie drei Sterne verbinden sich mit goldenen Linien. Das Teleskop richtet sich aus und ein tiefes Brummen erfüllt das Observatorium.\n\nDer Weg zum innersten Heiligtum ist nun offen!',
+                    () => {
+                        loadScene('observatory');
+                        addJournalEntry('Dreieck der Zeit', 'Die Sternkonstellation ist komplett!
