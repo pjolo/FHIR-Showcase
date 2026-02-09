@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Die Insel der Zeit - 3D Adventure</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@0,400;0,600&display=swap');
-
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +12,7 @@
         }
 
         body {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Georgia', serif;
             background: #000;
             color: #fff;
             overflow: hidden;
@@ -23,56 +21,8 @@
         #canvas-container {
             width: 100vw;
             height: 100vh;
-            position: relative;
         }
 
-        #loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 1s;
-        }
-
-        #loading-screen h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 3em;
-            margin-bottom: 30px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            color: #ffd700;
-        }
-
-        .loading-bar {
-            width: 300px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .loading-progress {
-            height: 100%;
-            background: linear-gradient(90deg, #ffd700, #ffed4e);
-            width: 0%;
-            transition: width 0.3s;
-            box-shadow: 0 0 10px #ffd700;
-        }
-
-        .loading-text {
-            margin-top: 20px;
-            font-size: 1.2em;
-            opacity: 0.8;
-        }
-
-        /* UI Overlay */
         #ui-overlay {
             position: fixed;
             top: 0;
@@ -85,41 +35,15 @@
 
         #scene-title {
             position: absolute;
-            top: 40px;
+            top: 30px;
             left: 50%;
             transform: translateX(-50%);
-            font-family: 'Cinzel', serif;
             font-size: 2.5em;
             color: #ffd700;
-            text-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.3);
-            opacity: 0;
-            transition: opacity 1s;
-        }
-
-        #scene-title.show {
-            opacity: 1;
-        }
-
-        /* Cursor */
-        #custom-cursor {
-            position: fixed;
-            width: 40px;
-            height: 40px;
-            border: 2px solid rgba(255, 215, 0, 0.8);
-            border-radius: 50%;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
             pointer-events: none;
-            z-index: 10000;
-            transition: transform 0.15s, background-color 0.3s;
-            background: rgba(255, 215, 0, 0.1);
-            display: none;
         }
 
-        #custom-cursor.hover {
-            transform: scale(1.5);
-            background: rgba(255, 215, 0, 0.3);
-        }
-
-        /* Inventory */
         #inventory {
             position: fixed;
             bottom: 20px;
@@ -132,7 +56,6 @@
             pointer-events: all;
             display: flex;
             gap: 15px;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
         }
 
         .inventory-item {
@@ -145,129 +68,13 @@
             align-items: center;
             justify-content: center;
             font-size: 2em;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
         }
 
-        .inventory-item:hover {
+        .inventory-item.filled {
             border-color: #ffd700;
             background: rgba(255, 215, 0, 0.2);
-            transform: translateY(-5px);
         }
 
-        .inventory-item.empty {
-            opacity: 0.3;
-        }
-
-        .item-tooltip {
-            position: absolute;
-            bottom: 100%;
-            margin-bottom: 10px;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 0.4em;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .inventory-item:hover .item-tooltip {
-            opacity: 1;
-        }
-
-        /* Journal */
-        #journal-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: rgba(139, 69, 19, 0.9);
-            border: 2px solid #ffd700;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            cursor: pointer;
-            pointer-events: all;
-            transition: all 0.3s;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        }
-
-        #journal-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-        }
-
-        #journal-panel {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 600px;
-            max-width: 90vw;
-            max-height: 80vh;
-            background: rgba(20, 15, 10, 0.98);
-            border: 3px solid #8b4513;
-            border-radius: 10px;
-            padding: 30px;
-            pointer-events: all;
-            display: none;
-            overflow-y: auto;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
-        }
-
-        #journal-panel h2 {
-            font-family: 'Cinzel', serif;
-            color: #ffd700;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 2em;
-        }
-
-        .journal-entry {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-left: 3px solid #ffd700;
-            border-radius: 5px;
-        }
-
-        .journal-entry h3 {
-            color: #ffd700;
-            margin-bottom: 10px;
-        }
-
-        .journal-entry p {
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-
-        #close-journal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 30px;
-            height: 30px;
-            border: none;
-            background: rgba(255, 0, 0, 0.7);
-            color: white;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: all 0.3s;
-        }
-
-        #close-journal:hover {
-            background: rgba(255, 0, 0, 1);
-            transform: rotate(90deg);
-        }
-
-        /* Message Box */
         #message-box {
             position: fixed;
             top: 50%;
@@ -275,18 +82,16 @@
             transform: translate(-50%, -50%);
             min-width: 400px;
             max-width: 600px;
-            background: linear-gradient(135deg, rgba(10, 10, 30, 0.98), rgba(20, 20, 40, 0.98));
+            background: rgba(10, 10, 30, 0.98);
             border: 3px solid #ffd700;
             border-radius: 15px;
             padding: 40px;
             pointer-events: all;
             display: none;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
             z-index: 2000;
         }
 
         #message-title {
-            font-family: 'Cinzel', serif;
             color: #ffd700;
             font-size: 1.8em;
             margin-bottom: 20px;
@@ -304,296 +109,89 @@
             display: block;
             margin: 0 auto;
             padding: 12px 40px;
-            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            background: #ffd700;
             color: #000;
             border: none;
             border-radius: 25px;
-            font-family: 'Cinzel', serif;
             font-size: 1.1em;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            font-weight: bold;
         }
 
         #message-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(255, 215, 0, 0.5);
-        }
-
-        /* Puzzle Overlay */
-        #puzzle-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1500;
-            pointer-events: all;
-        }
-
-        #puzzle-container {
-            background: linear-gradient(135deg, #1a1a2e, #0f0f1e);
-            padding: 40px;
-            border-radius: 20px;
-            border: 3px solid #ffd700;
-            max-width: 90vw;
-            max-height: 90vh;
-            position: relative;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.4);
-        }
-
-        #puzzle-title {
-            font-family: 'Cinzel', serif;
-            font-size: 2em;
-            color: #ffd700;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        #close-puzzle {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 35px;
-            height: 35px;
-            background: rgba(255, 0, 0, 0.7);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 1.3em;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        #close-puzzle:hover {
-            background: rgba(255, 0, 0, 1);
-            transform: rotate(90deg);
-        }
-
-        /* Symbol Puzzle */
-        .symbol-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            gap: 20px;
-            justify-content: center;
-            margin: 30px 0;
-        }
-
-        .symbol-slot {
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 3px solid #666;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3em;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .symbol-slot:hover {
-            border-color: #ffd700;
-            background: rgba(255, 215, 0, 0.1);
+            background: #ffed4e;
             transform: scale(1.05);
         }
 
-        .symbol-slot.active {
-            border-color: #ffd700;
-            background: rgba(255, 215, 0, 0.2);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #ffd700;
+            z-index: 3000;
         }
 
-        .symbol-options {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .symbol-option {
-            width: 80px;
-            height: 80px;
-            background: rgba(100, 100, 150, 0.3);
-            border: 2px solid #999;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5em;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .symbol-option:hover {
-            border-color: #ffd700;
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-        }
-
-        #puzzle-check-btn {
-            display: block;
-            margin: 30px auto 0;
-            padding: 15px 50px;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-family: 'Cinzel', serif;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        #puzzle-check-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(76, 175, 80, 0.4);
-        }
-
-        /* Controls Info */
-        #controls-info {
+        .hint-text {
             position: fixed;
             bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 215, 0, 0.9);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .hint-text.show {
+            opacity: 1;
+        }
+
+        #controls {
+            position: fixed;
+            top: 20px;
             left: 20px;
             background: rgba(0, 0, 0, 0.7);
             padding: 15px;
             border-radius: 10px;
             font-size: 0.9em;
-            opacity: 0.7;
-            pointer-events: none;
-        }
-
-        #controls-info p {
-            margin: 5px 0;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            #scene-title {
-                font-size: 1.5em;
-            }
-            
-            #inventory {
-                padding: 10px 15px;
-                gap: 10px;
-            }
-            
-            .inventory-item {
-                width: 50px;
-                height: 50px;
-                font-size: 1.5em;
-            }
-        }
-
-        /* Smooth transitions */
-        .fade-in {
-            animation: fadeIn 1s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Hint system */
-        .hint-bubble {
-            position: absolute;
-            background: rgba(255, 215, 0, 0.95);
-            color: #000;
-            padding: 10px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s;
-            max-width: 200px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .hint-bubble.show {
-            opacity: 1;
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <h1>Die Insel der Zeit</h1>
-        <div class="loading-bar">
-            <div class="loading-progress" id="loading-progress"></div>
-        </div>
-        <div class="loading-text">Lade Mysterien...</div>
-    </div>
-
-    <!-- Canvas Container -->
+    <div id="loading">Lade Spiel...</div>
+    
     <div id="canvas-container"></div>
 
-    <!-- Custom Cursor -->
-    <div id="custom-cursor"></div>
-
-    <!-- UI Overlay -->
     <div id="ui-overlay">
-        <div id="scene-title"></div>
+        <div id="scene-title">🏖️ Mysteriöser Strand</div>
         
-        <!-- Journal Button -->
-        <div id="journal-button">📖</div>
-        
-        <!-- Inventory -->
+        <div id="controls">
+            🖱️ Rechte Maustaste + Ziehen: Umsehen<br>
+            🖱️ Mausrad: Zoom<br>
+            🖱️ Linke Maustaste: Interagieren
+        </div>
+
         <div id="inventory">
-            <div class="inventory-item empty" data-slot="0">
-                <div class="item-tooltip">Leer</div>
-            </div>
-            <div class="inventory-item empty" data-slot="1">
-                <div class="item-tooltip">Leer</div>
-            </div>
-            <div class="inventory-item empty" data-slot="2">
-                <div class="item-tooltip">Leer</div>
-            </div>
-            <div class="inventory-item empty" data-slot="3">
-                <div class="item-tooltip">Leer</div>
-            </div>
-        </div>
-
-        <!-- Controls Info -->
-        <div id="controls-info">
-            <p>🖱️ Linke Maustaste: Interagieren</p>
-            <p>🖱️ Rechte Maustaste + Ziehen: Umsehen</p>
-            <p>⚙️ Mausrad: Zoom</p>
+            <div class="inventory-item" id="slot0"></div>
+            <div class="inventory-item" id="slot1"></div>
+            <div class="inventory-item" id="slot2"></div>
         </div>
     </div>
 
-    <!-- Journal Panel -->
-    <div id="journal-panel">
-        <button id="close-journal">✕</button>
-        <h2>📜 Tagebuch des Forschers</h2>
-        <div id="journal-entries"></div>
-    </div>
+    <div class="hint-text" id="hint"></div>
 
-    <!-- Message Box -->
     <div id="message-box">
         <h3 id="message-title"></h3>
         <p id="message-text"></p>
         <button id="message-btn">Weiter</button>
     </div>
 
-    <!-- Puzzle Overlay -->
-    <div id="puzzle-overlay">
-        <div id="puzzle-container">
-            <button id="close-puzzle">✕</button>
-            <h2 id="puzzle-title">Rätsel</h2>
-            <div id="puzzle-content"></div>
-        </div>
-    </div>
-
-    <!-- Three.js -->
     <script type="importmap">
     {
         "imports": {
@@ -606,731 +204,225 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-        import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-        import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
-        // ==========================================
-        // GAME STATE
-        // ==========================================
+        // Game State
         const gameState = {
-            currentScene: 'beach',
             inventory: [],
-            journalEntries: [],
-            puzzlesSolved: {
-                symbolPuzzle: false,
-                clockPuzzle: false,
-                finalPuzzle: false
-            },
-            interactions: {
-                readSign: false,
-                foundKey: false,
-                doorUnlocked: false
-            },
-            selectedSymbolSlot: null,
-            symbolSequence: ['', '', ''],
-            correctSymbols: ['🌙', '⭐', '☀️']
+            foundKey: false,
+            puzzleSolved: false
         };
 
-        // ==========================================
-        // SCENE SETUP
-        // ==========================================
+        // Three.js Setup
         let scene, camera, renderer, controls;
-        let raycaster, mouse, intersectObjects = [];
-        let loadingManager, textureLoader;
-        let currentEnvironment = null;
+        let raycaster, mouse;
+        let clickableObjects = [];
 
-        function initThreeJS() {
+        function init() {
             // Scene
             scene = new THREE.Scene();
-            scene.fog = new THREE.Fog(0x000000, 50, 200);
+            scene.background = new THREE.Color(0x87CEEB);
+            scene.fog = new THREE.Fog(0x87CEEB, 50, 200);
 
             // Camera
-            camera = new THREE.PerspectiveCamera(
-                75,
-                window.innerWidth / window.innerHeight,
-                0.1,
-                1000
-            );
-            camera.position.set(0, 1.6, 5);
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 2, 8);
 
             // Renderer
-            renderer = new THREE.WebGLRenderer({ 
-                antialias: true,
-                alpha: true 
-            });
+            renderer = new THREE.WebGLRenderer({ antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
             renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.2;
-            
             document.getElementById('canvas-container').appendChild(renderer.domElement);
 
             // Controls
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.minDistance = 2;
-            controls.maxDistance = 15;
-            controls.maxPolarAngle = Math.PI / 1.5;
-            controls.target.set(0, 1, 0);
+            controls.maxPolarAngle = Math.PI / 2;
+            controls.minDistance = 3;
+            controls.maxDistance = 20;
 
-            // Raycaster for clicking
+            // Raycaster
             raycaster = new THREE.Raycaster();
             mouse = new THREE.Vector2();
 
-            // Loaders
-            loadingManager = new THREE.LoadingManager();
-            loadingManager.onProgress = (url, loaded, total) => {
-                const progress = (loaded / total) * 100;
-                document.getElementById('loading-progress').style.width = progress + '%';
-            };
-            loadingManager.onLoad = () => {
-                setTimeout(() => {
-                    document.getElementById('loading-screen').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('loading-screen').style.display = 'none';
-                        showSceneTitle('Strand der Ewigkeit');
-                        showMessage('Willkommen', 'Du erwachst am Strand einer mysteriösen Insel.\n\nDie Wellen rauschen sanft, doch etwas Uraltes scheint in der Luft zu liegen...\n\nSieh dich um und finde heraus, was diesen Ort so besonders macht.');
-                        addJournalEntry('Ankunft', 'Ich bin auf einer seltsamen Insel gestrandet. Die Luft ist erfüllt von einer magischen Energie. Ich muss mehr herausfinden...');
-                    }, 1000);
-                }, 500);
-            };
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
 
-            textureLoader = new THREE.TextureLoader(loadingManager);
+            const sunLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            sunLight.position.set(10, 20, 5);
+            sunLight.castShadow = true;
+            scene.add(sunLight);
 
-            // Lighting
-            setupLighting();
+            // Create Scene
+            createBeachScene();
 
-            // Initial scene
-            loadBeachScene();
-
-            // Event listeners
+            // Events
             window.addEventListener('resize', onWindowResize);
-            renderer.domElement.addEventListener('click', onMouseClick);
+            renderer.domElement.addEventListener('click', onClick);
             renderer.domElement.addEventListener('mousemove', onMouseMove);
-            renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
 
-            // Start animation
+            document.getElementById('loading').style.display = 'none';
+
+            // Start
+            showMessage(
+                '🏝️ Willkommen auf der Insel der Zeit',
+                'Du erwachst an einem mysteriösen Strand. Vor dir erhebt sich ein uralter Tempel.\n\nFinde den Schlüssel und enthülle das Geheimnis!',
+                null
+            );
+
             animate();
         }
 
-        function setupLighting() {
-            // Ambient light
-            const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
-            scene.add(ambientLight);
+        function createBeachScene() {
+            clickableObjects = [];
 
-            // Directional light (sun)
-            const sunLight = new THREE.DirectionalLight(0xffffff, 1.5);
-            sunLight.position.set(50, 50, 50);
-            sunLight.castShadow = true;
-            sunLight.shadow.camera.left = -50;
-            sunLight.shadow.camera.right = 50;
-            sunLight.shadow.camera.top = 50;
-            sunLight.shadow.camera.bottom = -50;
-            sunLight.shadow.mapSize.width = 2048;
-            sunLight.shadow.mapSize.height = 2048;
-            scene.add(sunLight);
-
-            // Hemisphere light
-            const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x8B4513, 0.6);
-            scene.add(hemiLight);
-
-            // Point lights for atmosphere
-            const pointLight1 = new THREE.PointLight(0xffd700, 0.5, 30);
-            pointLight1.position.set(-10, 5, -10);
-            scene.add(pointLight1);
-        }
-
-        // ==========================================
-        // BEACH SCENE
-        // ==========================================
-        function loadBeachScene() {
-            clearScene();
-            gameState.currentScene = 'beach';
-
-            // Skybox
-            createSkybox();
-
-            // Ground (sand)
+            // Ground
             const groundGeometry = new THREE.PlaneGeometry(100, 100);
-            const groundMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0xC2B280,
-                roughness: 0.8,
-                metalness: 0.2
-            });
+            const groundMaterial = new THREE.MeshStandardMaterial({ color: 0xF4A460 });
             const ground = new THREE.Mesh(groundGeometry, groundMaterial);
             ground.rotation.x = -Math.PI / 2;
             ground.receiveShadow = true;
             scene.add(ground);
 
             // Water
-            const waterGeometry = new THREE.PlaneGeometry(100, 50);
+            const waterGeometry = new THREE.PlaneGeometry(100, 30);
             const waterMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x006994,
+                color: 0x4169E1,
                 transparent: true,
-                opacity: 0.7,
-                roughness: 0.1,
-                metalness: 0.9
+                opacity: 0.7
             });
             const water = new THREE.Mesh(waterGeometry, waterMaterial);
             water.rotation.x = -Math.PI / 2;
-            water.position.z = -25;
-            water.position.y = -0.5;
+            water.position.z = -30;
+            water.position.y = 0.05;
             scene.add(water);
 
-            // Animated water
-            let waterTime = 0;
-            function animateWater() {
-                waterTime += 0.01;
-                water.position.y = -0.5 + Math.sin(waterTime) * 0.1;
-            }
-            renderer.setAnimationLoop(() => {
-                animateWater();
-            });
-
-            // Palm trees
-            createPalmTree(-8, 0, 2);
-            createPalmTree(10, 0, -5);
-            createPalmTree(-15, 0, -8);
-
-            // Rocks
-            for (let i = 0; i < 10; i++) {
-                const rock = createRock();
-                rock.position.set(
-                    (Math.random() - 0.5) * 40,
-                    0,
-                    (Math.random() - 0.5) * 40
-                );
-                scene.add(rock);
-            }
-
-            // Interactive sign
-            const sign = createSign();
-            sign.position.set(5, 0, 0);
-            sign.userData = { 
-                interactive: true, 
-                action: 'readSign',
-                hint: 'Untersuche das Schild'
-            };
-            intersectObjects.push(sign);
-            scene.add(sign);
-
-            // Path to temple
-            createPath();
-
-            // Temple entrance (locked initially)
-            const templeDoor = createTempleDoor();
-            templeDoor.position.set(0, 0, -30);
-            templeDoor.userData = { 
-                interactive: true, 
-                action: 'openTemple',
-                hint: 'Tempel-Eingang'
-            };
-            intersectObjects.push(templeDoor);
-            scene.add(templeDoor);
-
-            // Hidden key
-            const key = createKey();
-            key.position.set(-12, 0.2, -15);
-            key.userData = { 
-                interactive: true, 
-                action: 'pickupKey',
-                hint: 'Mysteriöser Schlüssel'
-            };
-            intersectObjects.push(key);
-            scene.add(key);
-
-            // Particles (fireflies)
-            createParticles();
-        }
-
-        function createSkybox() {
-            const skyGeometry = new THREE.SphereGeometry(500, 32, 32);
-            const skyMaterial = new THREE.MeshBasicMaterial({
-                color: 0x87CEEB,
-                side: THREE.BackSide
-            });
-            const sky = new THREE.Mesh(skyGeometry, skyMaterial);
-            scene.add(sky);
-
-            // Add sun
-            const sunGeometry = new THREE.SphereGeometry(20, 32, 32);
-            const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xFDB813 });
-            const sun = new THREE.Mesh(sunGeometry, sunMaterial);
-            sun.position.set(200, 150, -300);
-            scene.add(sun);
-        }
-
-        function createPalmTree(x, y, z) {
-            const group = new THREE.Group();
-
-            // Trunk
-            const trunkGeometry = new THREE.CylinderGeometry(0.3, 0.4, 6, 8);
-            const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
-            const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
-            trunk.position.y = 3;
-            trunk.castShadow = true;
-            group.add(trunk);
-
-            // Leaves
-            const leafMaterial = new THREE.MeshStandardMaterial({ color: 0x228B22 });
-            for (let i = 0; i < 6; i++) {
-                const leafGeometry = new THREE.ConeGeometry(2, 4, 4);
-                const leaf = new THREE.Mesh(leafGeometry, leafMaterial);
-                leaf.position.y = 6;
-                leaf.rotation.z = (Math.PI / 3) * i;
-                leaf.rotation.x = Math.PI / 6;
-                group.add(leaf);
-            }
-
-            group.position.set(x, y, z);
-            scene.add(group);
-        }
-
-        function createRock() {
-            const size = Math.random() * 0.5 + 0.3;
-            const geometry = new THREE.DodecahedronGeometry(size, 0);
-            const material = new THREE.MeshStandardMaterial({ 
-                color: 0x808080,
-                roughness: 0.9
-            });
-            const rock = new THREE.Mesh(geometry, material);
-            rock.castShadow = true;
-            rock.receiveShadow = true;
-            rock.rotation.set(
-                Math.random() * Math.PI,
-                Math.random() * Math.PI,
-                Math.random() * Math.PI
+            // Temple
+            const templeGroup = new THREE.Group();
+            
+            const templeBase = new THREE.Mesh(
+                new THREE.BoxGeometry(8, 0.5, 8),
+                new THREE.MeshStandardMaterial({ color: 0x808080 })
             );
-            return rock;
-        }
+            templeBase.position.y = 0.25;
+            templeGroup.add(templeBase);
 
-        function createSign() {
-            const group = new THREE.Group();
+            const templeWall = new THREE.Mesh(
+                new THREE.BoxGeometry(7, 6, 6),
+                new THREE.MeshStandardMaterial({ color: 0x696969 })
+            );
+            templeWall.position.y = 3.5;
+            templeWall.castShadow = true;
+            templeGroup.add(templeWall);
 
-            // Post
-            const postGeometry = new THREE.CylinderGeometry(0.1, 0.1, 2, 8);
-            const postMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
-            const post = new THREE.Mesh(postGeometry, postMaterial);
-            post.position.y = 1;
-            group.add(post);
-
-            // Sign board
-            const boardGeometry = new THREE.BoxGeometry(2, 1, 0.1);
-            const boardMaterial = new THREE.MeshStandardMaterial({ color: 0xDEB887 });
-            const board = new THREE.Mesh(boardGeometry, boardMaterial);
-            board.position.y = 2;
-            board.castShadow = true;
-            group.add(board);
-
-            // Glow effect
-            const glowGeometry = new THREE.BoxGeometry(2.1, 1.1, 0.1);
-            const glowMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0xffd700,
-                transparent: true,
-                opacity: 0
-            });
-            const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-            glow.position.y = 2;
-            group.add(glow);
-
-            // Animate glow
-            let glowOpacity = 0;
-            let glowDirection = 1;
-            group.userData.animate = () => {
-                glowOpacity += 0.01 * glowDirection;
-                if (glowOpacity > 0.3 || glowOpacity < 0) glowDirection *= -1;
-                glow.material.opacity = glowOpacity;
-            };
-
-            return group;
-        }
-
-        function createPath() {
-            const pathGeometry = new THREE.PlaneGeometry(3, 35);
-            const pathMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0xA0826D,
-                roughness: 0.9
-            });
-            const path = new THREE.Mesh(pathGeometry, pathMaterial);
-            path.rotation.x = -Math.PI / 2;
-            path.position.z = -15;
-            path.position.y = 0.01;
-            path.receiveShadow = true;
-            scene.add(path);
-        }
-
-        function createTempleDoor() {
-            const group = new THREE.Group();
-
-            // Door frame
-            const frameGeometry = new THREE.BoxGeometry(6, 8, 1);
-            const frameMaterial = new THREE.MeshStandardMaterial({ color: 0x696969 });
-            const frame = new THREE.Mesh(frameGeometry, frameMaterial);
-            frame.position.y = 4;
-            frame.castShadow = true;
-            group.add(frame);
-
-            // Door
-            const doorGeometry = new THREE.BoxGeometry(4, 6, 0.3);
+            // Temple Door
+            const doorGeometry = new THREE.BoxGeometry(2, 3, 0.3);
             const doorMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
             const door = new THREE.Mesh(doorGeometry, doorMaterial);
-            door.position.y = 3;
-            door.position.z = 0.5;
-            door.castShadow = true;
-            group.add(door);
+            door.position.set(0, 1.5, 3.2);
+            door.userData = { type: 'door', interactive: true };
+            templeGroup.add(door);
+            clickableObjects.push(door);
 
-            // Lock symbol
-            const lockGeometry = new THREE.TorusGeometry(0.3, 0.1, 16, 100);
-            const lockMaterial = new THREE.MeshStandardMaterial({ 
+            templeGroup.position.set(0, 0, -10);
+            scene.add(templeGroup);
+
+            // Palm Trees
+            for (let i = 0; i < 5; i++) {
+                const palm = createPalmTree();
+                palm.position.set(
+                    (Math.random() - 0.5) * 30,
+                    0,
+                    (Math.random() - 0.5) * 20 + 5
+                );
+                scene.add(palm);
+            }
+
+            // Key (hidden near third palm)
+            const keyGeometry = new THREE.TorusGeometry(0.3, 0.1, 16, 100);
+            const keyMaterial = new THREE.MeshStandardMaterial({ 
                 color: 0xFFD700,
                 emissive: 0xFFD700,
                 emissiveIntensity: 0.5
             });
-            const lock = new THREE.Mesh(lockGeometry, lockMaterial);
-            lock.position.set(1, 3, 0.7);
-            group.add(lock);
+            const key = new THREE.Mesh(keyGeometry, keyMaterial);
+            key.position.set(5, 0.5, 3);
+            key.rotation.x = Math.PI / 2;
+            key.userData = { type: 'key', interactive: true };
+            scene.add(key);
+            clickableObjects.push(key);
 
-            return group;
-        }
-
-        function createKey() {
-            const group = new THREE.Group();
-
-            // Key head
-            const headGeometry = new THREE.TorusGeometry(0.2, 0.05, 16, 100);
-            const keyMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0xFFD700,
-                metalness: 0.9,
-                roughness: 0.1,
-                emissive: 0xFFD700,
-                emissiveIntensity: 0.3
-            });
-            const head = new THREE.Mesh(headGeometry, keyMaterial);
-            group.add(head);
-
-            // Key shaft
-            const shaftGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.5, 8);
-            const shaft = new THREE.Mesh(shaftGeometry, keyMaterial);
-            shaft.rotation.z = Math.PI / 2;
-            shaft.position.x = 0.25;
-            group.add(shaft);
-
-            // Teeth
-            const toothGeometry = new THREE.BoxGeometry(0.05, 0.1, 0.05);
-            const tooth1 = new THREE.Mesh(toothGeometry, keyMaterial);
-            tooth1.position.set(0.45, -0.05, 0);
-            group.add(tooth1);
-
-            const tooth2 = new THREE.Mesh(toothGeometry, keyMaterial);
-            tooth2.position.set(0.5, -0.05, 0);
-            group.add(tooth2);
-
-            // Rotation animation
-            group.userData.animate = () => {
-                group.rotation.y += 0.02;
-                group.position.y = 0.2 + Math.sin(Date.now() * 0.002) * 0.1;
-            };
-
-            return group;
-        }
-
-        function createParticles() {
+            // Glowing particles around key
             const particlesGeometry = new THREE.BufferGeometry();
-            const particleCount = 100;
-            const positions = new Float32Array(particleCount * 3);
-
-            for (let i = 0; i < particleCount * 3; i += 3) {
-                positions[i] = (Math.random() - 0.5) * 50;
-                positions[i + 1] = Math.random() * 10;
-                positions[i + 2] = (Math.random() - 0.5) * 50;
+            const particlesCount = 50;
+            const positions = new Float32Array(particlesCount * 3);
+            for (let i = 0; i < particlesCount * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 2;
             }
-
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
             const particlesMaterial = new THREE.PointsMaterial({
                 color: 0xFFD700,
-                size: 0.1,
+                size: 0.05,
                 transparent: true,
-                opacity: 0.6,
-                blending: THREE.AdditiveBlending
+                opacity: 0.6
             });
-
             const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            particles.position.copy(key.position);
             scene.add(particles);
 
-            // Animate particles
-            particles.userData.animate = () => {
-                const positions = particles.geometry.attributes.position.array;
-                for (let i = 1; i < positions.length; i += 3) {
-                    positions[i] += Math.sin(Date.now() * 0.001 + i) * 0.01;
-                    if (positions[i] > 10) positions[i] = 0;
-                }
-                particles.geometry.attributes.position.needsUpdate = true;
-                particles.rotation.y += 0.0005;
-            };
+            // Sign
+            const signPost = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.1, 0.1, 2),
+                new THREE.MeshStandardMaterial({ color: 0x8B4513 })
+            );
+            signPost.position.set(-5, 1, 2);
+            scene.add(signPost);
+
+            const signBoard = new THREE.Mesh(
+                new THREE.BoxGeometry(1.5, 1, 0.1),
+                new THREE.MeshStandardMaterial({ color: 0xD2691E })
+            );
+            signBoard.position.set(-5, 2.5, 2);
+            signBoard.userData = { type: 'sign', interactive: true };
+            scene.add(signBoard);
+            clickableObjects.push(signBoard);
         }
 
-        // ==========================================
-        // TEMPLE INTERIOR SCENE
-        // ==========================================
-        function loadTempleScene() {
-            clearScene();
-            gameState.currentScene = 'temple';
-            showSceneTitle('Tempel der Zeit');
+        function createPalmTree() {
+            const group = new THREE.Group();
 
-            // Darker ambient
-            scene.fog = new THREE.Fog(0x000000, 10, 50);
+            // Trunk
+            const trunkGeometry = new THREE.CylinderGeometry(0.2, 0.3, 4, 8);
+            const trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+            const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+            trunk.position.y = 2;
+            trunk.castShadow = true;
+            group.add(trunk);
 
-            // Floor
-            const floorGeometry = new THREE.PlaneGeometry(30, 30);
-            const floorMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x2F4F4F,
-                roughness: 0.8
-            });
-            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-            floor.rotation.x = -Math.PI / 2;
-            floor.receiveShadow = true;
-            scene.add(floor);
-
-            // Walls
-            createTempleWalls();
-
-            // Torches
-            createTorch(-10, 2, -10);
-            createTorch(10, 2, -10);
-            createTorch(-10, 2, 10);
-            createTorch(10, 2, 10);
-
-            // Central pedestal with puzzle
-            const pedestal = createPedestal();
-            pedestal.position.set(0, 0, -5);
-            pedestal.userData = { 
-                interactive: true, 
-                action: 'symbolPuzzle',
-                hint: 'Uraltes Symbol-Rätsel'
-            };
-            intersectObjects.push(pedestal);
-            scene.add(pedestal);
-
-            // Exit door
-            const exitDoor = createExitDoor();
-            exitDoor.position.set(0, 0, 12);
-            exitDoor.userData = { 
-                interactive: true, 
-                action: 'backToBeach',
-                hint: 'Zurück zum Strand'
-            };
-            intersectObjects.push(exitDoor);
-            scene.add(exitDoor);
-
-            // Mystical orb (appears after puzzle solved)
-            if (gameState.puzzlesSolved.symbolPuzzle) {
-                const orb = createMysticalOrb();
-                orb.position.set(0, 3, -5);
-                orb.userData = { 
-                    interactive: true, 
-                    action: 'takeOrb',
-                    hint: 'Zeitkristall'
-                };
-                intersectObjects.push(orb);
-                scene.add(orb);
+            // Leaves
+            for (let i = 0; i < 6; i++) {
+                const leafGeometry = new THREE.ConeGeometry(0.5, 2, 4);
+                const leafMaterial = new THREE.MeshStandardMaterial({ color: 0x228B22 });
+                const leaf = new THREE.Mesh(leafGeometry, leafMaterial);
+                leaf.position.y = 4;
+                leaf.rotation.z = (i / 6) * Math.PI * 2;
+                leaf.rotation.x = Math.PI / 3;
+                group.add(leaf);
             }
 
-            // Camera position
-            camera.position.set(0, 1.6, 10);
-            controls.target.set(0, 2, 0);
-
-            addJournalEntry('Der Tempel', 'Ich habe den Tempel betreten. Die Luft ist dick vor Magie. Ein Rätsel wartet auf mich...');
-        }
-
-        function createTempleWalls() {
-            const wallMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x3C3C3C,
-                roughness: 0.9
-            });
-
-            // Back wall
-            const backWall = new THREE.Mesh(
-                new THREE.BoxGeometry(30, 10, 1),
-                wallMaterial
-            );
-            backWall.position.set(0, 5, -15);
-            backWall.receiveShadow = true;
-            scene.add(backWall);
-
-            // Left wall
-            const leftWall = new THREE.Mesh(
-                new THREE.BoxGeometry(1, 10, 30),
-                wallMaterial
-            );
-            leftWall.position.set(-15, 5, 0);
-            leftWall.receiveShadow = true;
-            scene.add(leftWall);
-
-            // Right wall
-            const rightWall = new THREE.Mesh(
-                new THREE.BoxGeometry(1, 10, 30),
-                wallMaterial
-            );
-            rightWall.position.set(15, 5, 0);
-            rightWall.receiveShadow = true;
-            scene.add(rightWall);
-
-            // Ceiling
-            const ceiling = new THREE.Mesh(
-                new THREE.PlaneGeometry(30, 30),
-                wallMaterial
-            );
-            ceiling.rotation.x = Math.PI / 2;
-            ceiling.position.y = 10;
-            scene.add(ceiling);
-        }
-
-        function createTorch(x, y, z) {
-            const group = new THREE.Group();
-
-            // Torch holder
-            const holderGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1, 8);
-            const holderMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
-            const holder = new THREE.Mesh(holderGeometry, holderMaterial);
-            group.add(holder);
-
-            // Flame
-            const flameGeometry = new THREE.ConeGeometry(0.2, 0.5, 8);
-            const flameMaterial = new THREE.MeshBasicMaterial({ color: 0xFF4500 });
-            const flame = new THREE.Mesh(flameGeometry, flameMaterial);
-            flame.position.y = 0.7;
-            group.add(flame);
-
-            // Light
-            const light = new THREE.PointLight(0xFF4500, 1, 10);
-            light.position.y = 0.7;
-            group.add(light);
-
-            // Animate flame
-            group.userData.animate = () => {
-                flame.scale.y = 1 + Math.sin(Date.now() * 0.005) * 0.2;
-                light.intensity = 1 + Math.sin(Date.now() * 0.005) * 0.3;
-            };
-
-            group.position.set(x, y, z);
-            scene.add(group);
-        }
-
-        function createPedestal() {
-            const group = new THREE.Group();
-
-            // Base
-            const baseGeometry = new THREE.CylinderGeometry(1.5, 2, 0.5, 8);
-            const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x696969 });
-            const base = new THREE.Mesh(baseGeometry, baseMaterial);
-            base.position.y = 0.25;
-            group.add(base);
-
-            // Column
-            const columnGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2, 8);
-            const column = new THREE.Mesh(columnGeometry, baseMaterial);
-            column.position.y = 1.5;
-            group.add(column);
-
-            // Top
-            const topGeometry = new THREE.CylinderGeometry(1.2, 1, 0.3, 8);
-            const top = new THREE.Mesh(topGeometry, baseMaterial);
-            top.position.y = 2.65;
-            group.add(top);
-
-            // Glowing runes
-            const runeGeometry = new THREE.RingGeometry(0.5, 0.6, 32);
-            const runeMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0x00FFFF,
-                side: THREE.DoubleSide,
-                transparent: true,
-                opacity: 0.7
-            });
-            const rune = new THREE.Mesh(runeGeometry, runeMaterial);
-            rune.rotation.x = -Math.PI / 2;
-            rune.position.y = 2.81;
-            group.add(rune);
-
-            // Animate runes
-            group.userData.animate = () => {
-                rune.rotation.z += 0.01;
-                runeMaterial.opacity = 0.5 + Math.sin(Date.now() * 0.003) * 0.2;
-            };
-
             return group;
         }
 
-        function createExitDoor() {
-            const doorGeometry = new THREE.BoxGeometry(3, 5, 0.3);
-            const doorMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
-            const door = new THREE.Mesh(doorGeometry, doorMaterial);
-            door.position.y = 2.5;
-            return door;
-        }
-
-        function createMysticalOrb() {
-            const group = new THREE.Group();
-
-            // Orb
-            const orbGeometry = new THREE.SphereGeometry(0.3, 32, 32);
-            const orbMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0x00FFFF,
-                transparent: true,
-                opacity: 0.8
-            });
-            const orb = new THREE.Mesh(orbGeometry, orbMaterial);
-            group.add(orb);
-
-            // Glow
-            const glowGeometry = new THREE.SphereGeometry(0.4, 32, 32);
-            const glowMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0x00FFFF,
-                transparent: true,
-                opacity: 0.3
-            });
-            const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-            group.add(glow);
-
-            // Point light
-            const light = new THREE.PointLight(0x00FFFF, 2, 10);
-            group.add(light);
-
-            // Animate
-            group.userData.animate = () => {
-                group.rotation.y += 0.02;
-                orb.position.y = Math.sin(Date.now() * 0.002) * 0.2;
-                glow.scale.setScalar(1 + Math.sin(Date.now() * 0.003) * 0.1);
-            };
-
-            return group;
-        }
-
-        // ==========================================
-        // INTERACTION SYSTEM
-        // ==========================================
-        function onMouseClick(event) {
+        function onClick(event) {
             mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(intersectObjects, true);
+            const intersects = raycaster.intersectObjects(clickableObjects);
 
             if (intersects.length > 0) {
-                let object = intersects[0].object;
-                
-                // Find parent with userData
-                while (object && !object.userData.interactive) {
-                    object = object.parent;
-                }
-
-                if (object && object.userData.interactive) {
-                    handleInteraction(object.userData.action);
-                    playSound('click');
-                }
+                const object = intersects[0].object;
+                handleInteraction(object.userData.type);
             }
         }
 
@@ -1339,264 +431,101 @@
             mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
             raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(intersectObjects, true);
+            const intersects = raycaster.intersectObjects(clickableObjects);
 
-            const cursor = document.getElementById('custom-cursor');
-            cursor.style.left = event.clientX - 20 + 'px';
-            cursor.style.top = event.clientY - 20 + 'px';
-            cursor.style.display = 'block';
-
+            const hint = document.getElementById('hint');
             if (intersects.length > 0) {
-                let object = intersects[0].object;
-                while (object && !object.userData.interactive) {
-                    object = object.parent;
-                }
-
-                if (object && object.userData.interactive) {
-                    cursor.classList.add('hover');
-                    document.body.style.cursor = 'pointer';
-                    showHint(object.userData.hint, event.clientX, event.clientY);
-                    return;
-                }
-            }
-
-            cursor.classList.remove('hover');
-            document.body.style.cursor = 'default';
-            hideHint();
-        }
-
-        let currentHintBubble = null;
-
-        function showHint(text, x, y) {
-            if (!currentHintBubble) {
-                currentHintBubble = document.createElement('div');
-                currentHintBubble.className = 'hint-bubble';
-                document.body.appendChild(currentHintBubble);
-            }
-
-            currentHintBubble.textContent = text;
-            currentHintBubble.style.left = (x + 20) + 'px';
-            currentHintBubble.style.top = (y - 40) + 'px';
-            currentHintBubble.classList.add('show');
-        }
-
-        function hideHint() {
-            if (currentHintBubble) {
-                currentHintBubble.classList.remove('show');
-            }
-        }
-
-        function handleInteraction(action) {
-            switch (action) {
-                case 'readSign':
-                    if (!gameState.interactions.readSign) {
-                        showMessage(
-                            '📜 Uraltes Schild',
-                            '"Jene, die den Weg suchen, müssen erst den Schlüssel der Zeit finden.\nEr ruht dort, wo der Schatten der dritten Palme auf den Stein fällt."',
-                            () => {
-                                addJournalEntry('Hinweis', 'Das Schild spricht von einem Schlüssel. Dritte Palme... Schatten... Ich sollte die Gegend erkunden.');
-                            }
-                        );
-                        gameState.interactions.readSign = true;
-                    }
-                    break;
-
-                case 'pickupKey':
-                    if (!gameState.interactions.foundKey) {
-                        addToInventory('🔑', 'Zeitschlüssel');
-                        showMessage(
-                            '🔑 Schlüssel gefunden!',
-                            'Du hast den mystischen Zeitschlüssel gefunden!\n\nEr pulsiert mit einer seltsamen Energie. Vielleicht öffnet er den Tempel?'
-                        );
-                        gameState.interactions.foundKey = true;
-                        addJournalEntry('Der Schlüssel', 'Ich habe den Zeitschlüssel gefunden! Seine Energie ist spürbar. Er wird den Tempel öffnen.');
-                        
-                        // Remove key from scene
-                        const keyObject = intersectObjects.find(obj => obj.userData.action === 'pickupKey');
-                        if (keyObject) {
-                            scene.remove(keyObject);
-                            intersectObjects = intersectObjects.filter(obj => obj !== keyObject);
-                        }
-                    }
-                    break;
-
-                case 'openTemple':
-                    if (gameState.inventory.includes('🔑')) {
-                        showMessage(
-                            '🚪 Tempel geöffnet',
-                            'Der Schlüssel passt perfekt!\n\nDie schwere Tür öffnet sich knarrend und gibt den Blick frei in eine dunkle, von Fackeln erleuchtete Halle...',
-                            () => {
-                                loadTempleScene();
-                            }
-                        );
-                        gameState.interactions.doorUnlocked = true;
-                    } else {
-                        showMessage(
-                            '🔒 Verschlossen',
-                            'Die Tür ist fest verschlossen.\n\nEin goldenes Schlüsselloch leuchtet schwach. Du brauchst den passenden Schlüssel.'
-                        );
-                    }
-                    break;
-
-                case 'symbolPuzzle':
-                    openSymbolPuzzle();
-                    break;
-
-                case 'backToBeach':
-                    showMessage(
-                        '🏖️ Zurück zum Strand',
-                        'Möchtest du zum Strand zurückkehren?',
-                        () => {
-                            loadBeachScene();
-                        }
-                    );
-                    break;
-
-                case 'takeOrb':
-                    addToInventory('🔮', 'Zeitkristall');
-                    showMessage(
-                        '🔮 Zeitkristall erhalten!',
-                        'Du hast den legendären Zeitkristall erhalten!\n\nSeine Macht durchströmt dich. Die Geheimnisse der Insel beginnen sich zu enthüllen...\n\n🎉 Glückwunsch! Du hast das Spiel gemeistert!',
-                        () => {
-                            addJournalEntry('Sieg!', 'Ich habe den Zeitkristall! Die Macht der Insel ist nun in meinen Händen. Was für ein Abenteuer!');
-                        }
-                    );
-                    const orb = intersectObjects.find(obj => obj.userData.action === 'takeOrb');
-                    if (orb) {
-                        scene.remove(orb);
-                        intersectObjects = intersectObjects.filter(obj => obj !== orb);
-                    }
-                    break;
-            }
-        }
-
-        // ==========================================
-        // PUZZLE SYSTEM
-        // ==========================================
-        function openSymbolPuzzle() {
-            const overlay = document.getElementById('puzzle-overlay');
-            const content = document.getElementById('puzzle-content');
-            
-            document.getElementById('puzzle-title').textContent = '🔮 Symbol-Rätsel der Zeit';
-            
-            content.innerHTML = `
-                <p style="text-align: center; margin-bottom: 20px; font-size: 1.2em;">
-                    Ordne die kosmischen Symbole in der richtigen Reihenfolge:<br>
-                    <em>"Von der Nacht, über die Sterne, zur ewigen Sonne"</em>
-                </p>
-                <div class="symbol-grid">
-                    <div class="symbol-slot" data-slot="0" onclick="selectSlot(0)"></div>
-                    <div class="symbol-slot" data-slot="1" onclick="selectSlot(1)"></div>
-                    <div class="symbol-slot" data-slot="2" onclick="selectSlot(2)"></div>
-                </div>
-                <div class="symbol-options">
-                    <div class="symbol-option" onclick="placeSymbol('🌙')">🌙</div>
-                    <div class="symbol-option" onclick="placeSymbol('⭐')">⭐</div>
-                    <div class="symbol-option" onclick="placeSymbol('☀️')">☀️</div>
-                    <div class="symbol-option" onclick="placeSymbol('🌍')">🌍</div>
-                    <div class="symbol-option" onclick="placeSymbol('💫')">💫</div>
-                </div>
-                <button id="puzzle-check-btn" onclick="checkSymbolPuzzle()">Lösung prüfen</button>
-                <p style="text-align: center; margin-top: 15px; opacity: 0.7;">
-                    Tipp: Lese den Hinweis am Strand noch einmal...
-                </p>
-            `;
-            
-            overlay.style.display = 'flex';
-        }
-
-        window.selectSlot = function(slot) {
-            gameState.selectedSymbolSlot = slot;
-            document.querySelectorAll('.symbol-slot').forEach((el, idx) => {
-                el.classList.toggle('active', idx === slot);
-            });
-        };
-
-        window.placeSymbol = function(symbol) {
-            if (gameState.selectedSymbolSlot !== null) {
-                const slot = document.querySelector(`[data-slot="${gameState.selectedSymbolSlot}"]`);
-                slot.textContent = symbol;
-                gameState.symbolSequence[gameState.selectedSymbolSlot] = symbol;
-                playSound('place');
+                const type = intersects[0].object.userData.type;
+                let text = '';
                 
-                // Auto-select next slot
-                const nextSlot = (gameState.selectedSymbolSlot + 1) % 3;
-                selectSlot(nextSlot);
-            }
-        };
+                if (type === 'key' && !gameState.foundKey) text = '✨ Goldener Schlüssel';
+                else if (type === 'door') text = '🚪 Tempeltür';
+                else if (type === 'sign') text = '📜 Schild lesen';
 
-        window.checkSymbolPuzzle = function() {
-            const correct = JSON.stringify(gameState.symbolSequence) === JSON.stringify(gameState.correctSymbols);
-            
-            if (correct) {
-                gameState.puzzlesSolved.symbolPuzzle = true;
-                playSound('success');
-                closePuzzle();
-                showMessage(
-                    '✅ Rätsel gelöst!',
-                    'Die Symbole leuchten auf und verschmelzen zu einem brillanten Licht!\n\nEin mystischer Kristall materialisiert sich über dem Podest...',
-                    () => {
-                        loadTempleScene(); // Reload to show orb
-                    }
-                );
-                addJournalEntry('Puzzle gelöst', 'Das Symbol-Rätsel ist gelöst! Der Zeitkristall ist erschienen!');
+                hint.textContent = text;
+                hint.classList.add('show');
+                renderer.domElement.style.cursor = 'pointer';
             } else {
-                playSound('error');
+                hint.classList.remove('show');
+                renderer.domElement.style.cursor = 'default';
+            }
+        }
+
+        function handleInteraction(type) {
+            if (type === 'key' && !gameState.foundKey) {
+                gameState.foundKey = true;
+                gameState.inventory.push('🔑');
+                updateInventory();
+                
+                // Remove key from scene
+                const keyObj = clickableObjects.find(obj => obj.userData.type === 'key');
+                scene.remove(keyObj);
+                clickableObjects = clickableObjects.filter(obj => obj !== keyObj);
+
                 showMessage(
-                    '❌ Falsche Kombination',
-                    'Die Symbole flackern und verblassen.\n\nDas ist nicht die richtige Reihenfolge. Überlege noch einmal...'
+                    '🔑 Schlüssel gefunden!',
+                    'Du hast den goldenen Zeitschlüssel gefunden!\n\nEr pulsiert mit mystischer Energie. Vielleicht öffnet er den Tempel?',
+                    null
+                );
+            } else if (type === 'door') {
+                if (gameState.foundKey) {
+                    showMessage(
+                        '🎉 Tempel geöffnet!',
+                        'Der Schlüssel passt perfekt!\n\nDie Tür öffnet sich... Ein goldenes Licht strömt heraus!\n\n✨ Du hast das Geheimnis der Insel gelüftet!',
+                        () => {
+                            gameState.puzzleSolved = true;
+                            document.getElementById('scene-title').textContent = '🏆 Sieg!';
+                        }
+                    );
+                } else {
+                    showMessage(
+                        '🔒 Verschlossen',
+                        'Die Tür ist fest verschlossen.\n\nDu benötigst einen Schlüssel...',
+                        null
+                    );
+                }
+            } else if (type === 'sign') {
+                showMessage(
+                    '📜 Altes Schild',
+                    '"Der Schlüssel der Zeit liegt verborgen,\nwo der Schatten der dritten Palme den Boden berührt..."',
+                    null
                 );
             }
-        };
+        }
 
-        // ==========================================
-        // UI FUNCTIONS
-        // ==========================================
+        function updateInventory() {
+            gameState.inventory.forEach((item, index) => {
+                const slot = document.getElementById(`slot${index}`);
+                slot.textContent = item;
+                slot.classList.add('filled');
+            });
+        }
+
         function showMessage(title, text, callback) {
             document.getElementById('message-title').textContent = title;
             document.getElementById('message-text').textContent = text;
             document.getElementById('message-box').style.display = 'block';
-            
+
             document.getElementById('message-btn').onclick = () => {
                 document.getElementById('message-box').style.display = 'none';
                 if (callback) callback();
             };
         }
 
-        function closePuzzle() {
-            document.getElementById('puzzle-overlay').style.display = 'none';
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
-        function addToInventory(item, name) {
-            if (!gameState.inventory.includes(item)) {
-                gameState.inventory.push(item);
-                updateInventoryUI();
-                playSound('pickup');
-            }
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
         }
 
-        function updateInventoryUI() {
-            const slots = document.querySelectorAll('.inventory-item');
-            slots.forEach((slot, index) => {
-                if (gameState.inventory[index]) {
-                    slot.textContent = gameState.inventory[index];
-                    slot.classList.remove('empty');
-                    const tooltip = slot.querySelector('.item-tooltip');
-                    if (tooltip) {
-                        tooltip.textContent = ['Zeitschlüssel', 'Zeitkristall'][index] || 'Item';
-                    }
-                } else {
-                    slot.textContent = '';
-                    slot.classList.add('empty');
-                }
-            });
-        }
-
-        function addJournalEntry(title, text) {
-            gameState.journalEntries.push({ title, text, time: new Date().toLocaleTimeString() });
-            updateJournalUI();
-        }
-
-        function updateJournalUI() {
-            const container = document.getElementById('journal-entries');
-            container.innerHTML = gameState.journalEntries.map(entry
+        // Start Game
+        init();
+    </script>
+</body>
+</html>
