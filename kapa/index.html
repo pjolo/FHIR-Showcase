@@ -117,6 +117,11 @@
             border-color: #e94560;
         }
 
+        .form-group input.auto-filled {
+            border-color: #2ecc71;
+            background: #1a2e1a;
+        }
+
         .info-row {
             display: flex;
             justify-content: space-between;
@@ -153,7 +158,6 @@
             background: #c73652;
         }
 
-        /* Result Display */
         .result-box {
             margin-top: 20px;
             text-align: center;
@@ -212,7 +216,6 @@
             margin-top: 15px;
         }
 
-        /* Color coding */
         .color-green { color: #2ecc71; }
         .color-yellow { color: #f1c40f; }
         .color-orange { color: #e67e22; }
@@ -223,7 +226,6 @@
         .stroke-orange { stroke: #e67e22; }
         .stroke-red { stroke: #e74c3c; }
 
-        /* Responsive */
         @media (max-width: 600px) {
             .tabs {
                 flex-direction: column;
@@ -237,6 +239,9 @@
             }
             h1 {
                 font-size: 1.5em;
+            }
+            .week-inputs {
+                flex-direction: column;
             }
         }
 
@@ -256,6 +261,94 @@
 
         .sprint-info strong {
             color: #e94560;
+        }
+
+        /* Wochen-Eingaben nebeneinander */
+        .week-inputs {
+            display: flex;
+            gap: 15px;
+        }
+
+        .week-inputs .form-group {
+            flex: 1;
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0 15px;
+            color: #555;
+            font-size: 0.85em;
+        }
+
+        .separator::before,
+        .separator::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #2a2a4e;
+        }
+
+        .separator span {
+            white-space: nowrap;
+            color: #888;
+        }
+
+        .hint {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        .week-sum-badge {
+            display: inline-block;
+            background: #2ecc71;
+            color: #1a1a2e;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 700;
+            margin-left: 8px;
+            transition: all 0.3s;
+        }
+
+        .week-sum-badge.empty {
+            background: #333;
+            color: #666;
+        }
+
+        .week-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .week-detail-item {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 10px 15px;
+            flex: 1;
+            margin: 0 4px;
+            text-align: center;
+        }
+
+        .week-detail-item .week-label {
+            font-size: 0.75em;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .week-detail-item .week-val {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #ccc;
+        }
+
+        .week-detail-item .week-percent {
+            font-size: 0.75em;
+            color: #888;
         }
     </style>
 </head>
@@ -330,9 +423,30 @@
                 <h2>Arbeitszeit-Auslastung berechnen</h2>
                 <p class="description">Wie viel Prozent der Soll-Arbeitszeit hast du geleistet?</p>
 
+                <!-- Wochen-Eingaben -->
+                <div class="week-inputs">
+                    <div class="form-group">
+                        <label for="woche1Stunden">📅 Woche 1 (h)</label>
+                        <input type="number" id="woche1Stunden" placeholder="z.B. 42" step="0.5" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="woche2Stunden">📅 Woche 2 (h)</label>
+                        <input type="number" id="woche2Stunden" placeholder="z.B. 43" step="0.5" min="0">
+                    </div>
+                </div>
+
+                <div class="separator">
+                    <span>Summe wird automatisch berechnet — oder manuell überschreiben</span>
+                </div>
+
+                <!-- Sprint-Gesamt -->
                 <div class="form-group">
-                    <label for="arbeitStunden">Geleistete Arbeitsstunden im Sprint (h)</label>
-                    <input type="number" id="arbeitStunden" placeholder="z.B. 85" step="0.5" min="0">
+                    <label for="arbeitStunden">
+                        Geleistete Arbeitsstunden im Sprint (h)
+                        <span id="autoSumBadge" class="week-sum-badge empty">—</span>
+                    </label>
+                    <input type="number" id="arbeitStunden" placeholder="Wird automatisch berechnet oder manuell eingeben" step="0.5" min="0">
+                    <div class="hint" id="autoHint">Tipp: Gib Woche 1 & 2 ein – das Feld wird automatisch befüllt.</div>
                 </div>
 
                 <div class="form-group">
@@ -368,14 +482,31 @@
                     </div>
                     <div class="result-label">Arbeitszeit-Auslastung</div>
                     <div id="detail-arbeit" class="result-detail"></div>
+
+                    <!-- Wochen-Detail Anzeige -->
+                    <div id="weekDetailBox" class="week-detail" style="display:none;">
+                        <div class="week-detail-item">
+                            <div class="week-label">Woche 1</div>
+                            <div class="week-val" id="weekVal1">—</div>
+                            <div class="week-percent" id="weekPct1"></div>
+                        </div>
+                        <div class="week-detail-item">
+                            <div class="week-label">Woche 2</div>
+                            <div class="week-val" id="weekVal2">—</div>
+                            <div class="week-percent" id="weekPct2"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const SPRINT_HOURS = 83; // 2 * 41.5
-        const CIRCUMFERENCE = 2 * Math.PI * 75; // ~471.24
+        const SPRINT_HOURS = 83;
+        const WEEK_HOURS = 41.5;
+        const CIRCUMFERENCE = 2 * Math.PI * 75;
+
+        let manualOverride = false;
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -392,13 +523,11 @@
 
         function getColorClass(percent, isOverwork) {
             if (isOverwork) {
-                // Für Arbeitszeit: >110% = rot, >100% = orange, >80% = grün, sonst gelb
                 if (percent > 110) return 'red';
                 if (percent > 100) return 'orange';
                 if (percent >= 80) return 'green';
                 return 'yellow';
             } else {
-                // Für Sitzungen: je mehr desto schlechter
                 if (percent > 60) return 'red';
                 if (percent > 40) return 'orange';
                 if (percent > 25) return 'yellow';
@@ -410,7 +539,6 @@
             const circle = document.getElementById(circleId);
             const label = document.getElementById(percentId);
 
-            // Remove old color classes
             ['stroke-green','stroke-yellow','stroke-orange','stroke-red'].forEach(c => circle.classList.remove(c));
             ['color-green','color-yellow','color-orange','color-red'].forEach(c => label.classList.remove(c));
 
@@ -440,6 +568,69 @@
             document.getElementById('netto2').textContent = netto.toFixed(1) + ' h';
         }
 
+        // Auto-Summe aus Woche 1 + Woche 2
+        function updateWeekSum() {
+            const w1 = parseFloat(document.getElementById('woche1Stunden').value);
+            const w2 = parseFloat(document.getElementById('woche2Stunden').value);
+            const badge = document.getElementById('autoSumBadge');
+            const sprintInput = document.getElementById('arbeitStunden');
+            const hint = document.getElementById('autoHint');
+
+            const hasW1 = !isNaN(w1) && w1 >= 0;
+            const hasW2 = !isNaN(w2) && w2 >= 0;
+
+            if (hasW1 || hasW2) {
+                const sum = (hasW1 ? w1 : 0) + (hasW2 ? w2 : 0);
+                badge.textContent = '= ' + sum.toFixed(1) + 'h';
+                badge.classList.remove('empty');
+
+                // Nur auto-befüllen wenn nicht manuell überschrieben
+                if (!manualOverride) {
+                    sprintInput.value = sum.toFixed(1);
+                    sprintInput.classList.add('auto-filled');
+                    hint.textContent = '✅ Automatisch berechnet aus Woche 1 + Woche 2';
+                }
+            } else {
+                badge.textContent = '—';
+                badge.classList.add('empty');
+                if (!manualOverride) {
+                    sprintInput.classList.remove('auto-filled');
+                    hint.textContent = 'Tipp: Gib Woche 1 & 2 ein – das Feld wird automatisch befüllt.';
+                }
+            }
+        }
+
+        // Erkennung manuelle Eingabe im Sprint-Feld
+        document.getElementById('arbeitStunden').addEventListener('focus', function() {
+            // User klickt ins Feld → könnte manuell eingeben wollen
+        });
+
+        document.getElementById('arbeitStunden').addEventListener('input', function(e) {
+            // Prüfen ob der Wert von der Auto-Summe abweicht
+            const w1 = parseFloat(document.getElementById('woche1Stunden').value) || 0;
+            const w2 = parseFloat(document.getElementById('woche2Stunden').value) || 0;
+            const autoSum = w1 + w2;
+            const currentVal = parseFloat(this.value);
+
+            if (!isNaN(currentVal) && Math.abs(currentVal - autoSum) > 0.01) {
+                manualOverride = true;
+                this.classList.remove('auto-filled');
+                document.getElementById('autoHint').textContent = '✏️ Manuell eingegeben – Wochenwerte werden ignoriert.';
+            } else {
+                manualOverride = false;
+                this.classList.add('auto-filled');
+                document.getElementById('autoHint').textContent = '✅ Automatisch berechnet aus Woche 1 + Woche 2';
+            }
+        });
+
+        // Reset manualOverride wenn Sprint-Feld geleert wird
+        document.getElementById('arbeitStunden').addEventListener('change', function() {
+            if (this.value === '' || this.value === null) {
+                manualOverride = false;
+                updateWeekSum();
+            }
+        });
+
         function calcSitzungen() {
             const sitzungH = parseFloat(document.getElementById('sitzungStunden').value);
             const abw = parseFloat(document.getElementById('abwesenheit1').value) || 0;
@@ -453,9 +644,7 @@
             const percent = (sitzungH / netto) * 100;
             const colorClass = getColorClass(percent, false);
 
-            const resultBox = document.getElementById('result-sitzung');
-            resultBox.classList.add('show');
-
+            document.getElementById('result-sitzung').classList.add('show');
             animateCircle('circle-sitzung', 'percent-sitzung', percent, colorClass);
 
             const verbleibend = Math.max(netto - sitzungH, 0);
@@ -477,16 +666,14 @@
             const percent = (arbeitH / netto) * 100;
             const colorClass = getColorClass(percent, true);
 
-            const resultBox = document.getElementById('result-arbeit');
-            resultBox.classList.add('show');
-
+            document.getElementById('result-arbeit').classList.add('show');
             animateCircle('circle-arbeit', 'percent-arbeit', percent, colorClass);
 
             const diff = arbeitH - netto;
             let diffText = '';
-            if (diff > 0) {
+            if (diff > 0.05) {
                 diffText = ' (+ ' + diff.toFixed(1) + 'h Überstunden)';
-            } else if (diff < 0) {
+            } else if (diff < -0.05) {
                 diffText = ' (' + diff.toFixed(1) + 'h unter Soll)';
             } else {
                 diffText = ' (exakt auf Soll)';
@@ -494,11 +681,32 @@
 
             document.getElementById('detail-arbeit').textContent =
                 arbeitH.toFixed(1) + 'h geleistet von ' + netto.toFixed(1) + 'h Soll' + diffText;
+
+            // Wochen-Detail anzeigen wenn Wochen eingegeben wurden
+            const w1 = parseFloat(document.getElementById('woche1Stunden').value);
+            const w2 = parseFloat(document.getElementById('woche2Stunden').value);
+            const hasWeeks = (!isNaN(w1) && w1 >= 0) || (!isNaN(w2) && w2 >= 0);
+
+            const weekBox = document.getElementById('weekDetailBox');
+            if (hasWeeks) {
+                weekBox.style.display = 'flex';
+                const v1 = !isNaN(w1) ? w1 : 0;
+                const v2 = !isNaN(w2) ? w2 : 0;
+
+                document.getElementById('weekVal1').textContent = v1.toFixed(1) + 'h';
+                document.getElementById('weekVal2').textContent = v2.toFixed(1) + 'h';
+                document.getElementById('weekPct1').textContent = ((v1 / WEEK_HOURS) * 100).toFixed(1) + '% von ' + WEEK_HOURS + 'h';
+                document.getElementById('weekPct2').textContent = ((v2 / WEEK_HOURS) * 100).toFixed(1) + '% von ' + WEEK_HOURS + 'h';
+            } else {
+                weekBox.style.display = 'none';
+            }
         }
 
-        // Live update info rows
+        // Event Listeners
         document.getElementById('abwesenheit1').addEventListener('input', updateInfo1);
         document.getElementById('abwesenheit2').addEventListener('input', updateInfo2);
+        document.getElementById('woche1Stunden').addEventListener('input', updateWeekSum);
+        document.getElementById('woche2Stunden').addEventListener('input', updateWeekSum);
 
         // Enter key support
         document.querySelectorAll('input').forEach(input => {
