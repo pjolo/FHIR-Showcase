@@ -140,6 +140,13 @@
             font-weight: 600;
         }
 
+        .info-row .percent-badge {
+            color: #aaa;
+            font-weight: 400;
+            font-size: 0.9em;
+            margin-left: 6px;
+        }
+
         .btn-calc {
             width: 100%;
             padding: 14px;
@@ -263,7 +270,6 @@
             color: #e94560;
         }
 
-        /* Wochen-Eingaben nebeneinander */
         .week-inputs {
             display: flex;
             gap: 15px;
@@ -392,11 +398,11 @@
                     </div>
                     <div class="info-row">
                         <span>Abwesenheit</span>
-                        <span id="abwInfo1">0.0 h</span>
+                        <span id="abwInfo1">0.0 h <span class="percent-badge">(0.0%)</span></span>
                     </div>
                     <div class="info-row">
                         <span>Verfügbare Kapazität</span>
-                        <span id="netto1">83.0 h</span>
+                        <span id="netto1">83.0 h <span class="percent-badge">(100.0%)</span></span>
                     </div>
                 </div>
 
@@ -423,7 +429,6 @@
                 <h2>Arbeitszeit-Auslastung berechnen</h2>
                 <p class="description">Wie viel Prozent der Soll-Arbeitszeit hast du geleistet?</p>
 
-                <!-- Wochen-Eingaben -->
                 <div class="week-inputs">
                     <div class="form-group">
                         <label for="woche1Stunden">📅 Woche 1 (h)</label>
@@ -439,7 +444,6 @@
                     <span>Summe wird automatisch berechnet — oder manuell überschreiben</span>
                 </div>
 
-                <!-- Sprint-Gesamt -->
                 <div class="form-group">
                     <label for="arbeitStunden">
                         Geleistete Arbeitsstunden im Sprint (h)
@@ -461,11 +465,11 @@
                     </div>
                     <div class="info-row">
                         <span>Abwesenheit</span>
-                        <span id="abwInfo2">0.0 h</span>
+                        <span id="abwInfo2">0.0 h <span class="percent-badge">(0.0%)</span></span>
                     </div>
                     <div class="info-row">
                         <span>Soll-Arbeitszeit</span>
-                        <span id="netto2">83.0 h</span>
+                        <span id="netto2">83.0 h <span class="percent-badge">(100.0%)</span></span>
                     </div>
                 </div>
 
@@ -483,7 +487,6 @@
                     <div class="result-label">Arbeitszeit-Auslastung</div>
                     <div id="detail-arbeit" class="result-detail"></div>
 
-                    <!-- Wochen-Detail Anzeige -->
                     <div id="weekDetailBox" class="week-detail" style="display:none;">
                         <div class="week-detail-item">
                             <div class="week-label">Woche 1</div>
@@ -555,20 +558,25 @@
         function updateInfo1() {
             const abw = parseFloat(document.getElementById('abwesenheit1').value) || 0;
             const netto = Math.max(SPRINT_HOURS - abw, 0);
+            const abwPct = (abw / SPRINT_HOURS * 100).toFixed(1);
+            const nettoPct = (netto / SPRINT_HOURS * 100).toFixed(1);
+
             document.getElementById('brutto1').textContent = SPRINT_HOURS.toFixed(1) + ' h';
-            document.getElementById('abwInfo1').textContent = abw.toFixed(1) + ' h';
-            document.getElementById('netto1').textContent = netto.toFixed(1) + ' h';
+            document.getElementById('abwInfo1').innerHTML = abw.toFixed(1) + ' h <span class="percent-badge">(' + abwPct + '%)</span>';
+            document.getElementById('netto1').innerHTML = netto.toFixed(1) + ' h <span class="percent-badge">(' + nettoPct + '%)</span>';
         }
 
         function updateInfo2() {
             const abw = parseFloat(document.getElementById('abwesenheit2').value) || 0;
             const netto = Math.max(SPRINT_HOURS - abw, 0);
+            const abwPct = (abw / SPRINT_HOURS * 100).toFixed(1);
+            const nettoPct = (netto / SPRINT_HOURS * 100).toFixed(1);
+
             document.getElementById('brutto2').textContent = SPRINT_HOURS.toFixed(1) + ' h';
-            document.getElementById('abwInfo2').textContent = abw.toFixed(1) + ' h';
-            document.getElementById('netto2').textContent = netto.toFixed(1) + ' h';
+            document.getElementById('abwInfo2').innerHTML = abw.toFixed(1) + ' h <span class="percent-badge">(' + abwPct + '%)</span>';
+            document.getElementById('netto2').innerHTML = netto.toFixed(1) + ' h <span class="percent-badge">(' + nettoPct + '%)</span>';
         }
 
-        // Auto-Summe aus Woche 1 + Woche 2
         function updateWeekSum() {
             const w1 = parseFloat(document.getElementById('woche1Stunden').value);
             const w2 = parseFloat(document.getElementById('woche2Stunden').value);
@@ -584,7 +592,6 @@
                 badge.textContent = '= ' + sum.toFixed(1) + 'h';
                 badge.classList.remove('empty');
 
-                // Nur auto-befüllen wenn nicht manuell überschrieben
                 if (!manualOverride) {
                     sprintInput.value = sum.toFixed(1);
                     sprintInput.classList.add('auto-filled');
@@ -600,13 +607,7 @@
             }
         }
 
-        // Erkennung manuelle Eingabe im Sprint-Feld
-        document.getElementById('arbeitStunden').addEventListener('focus', function() {
-            // User klickt ins Feld → könnte manuell eingeben wollen
-        });
-
         document.getElementById('arbeitStunden').addEventListener('input', function(e) {
-            // Prüfen ob der Wert von der Auto-Summe abweicht
             const w1 = parseFloat(document.getElementById('woche1Stunden').value) || 0;
             const w2 = parseFloat(document.getElementById('woche2Stunden').value) || 0;
             const autoSum = w1 + w2;
@@ -623,7 +624,6 @@
             }
         });
 
-        // Reset manualOverride wenn Sprint-Feld geleert wird
         document.getElementById('arbeitStunden').addEventListener('change', function() {
             if (this.value === '' || this.value === null) {
                 manualOverride = false;
@@ -682,7 +682,6 @@
             document.getElementById('detail-arbeit').textContent =
                 arbeitH.toFixed(1) + 'h geleistet von ' + netto.toFixed(1) + 'h Soll' + diffText;
 
-            // Wochen-Detail anzeigen wenn Wochen eingegeben wurden
             const w1 = parseFloat(document.getElementById('woche1Stunden').value);
             const w2 = parseFloat(document.getElementById('woche2Stunden').value);
             const hasWeeks = (!isNaN(w1) && w1 >= 0) || (!isNaN(w2) && w2 >= 0);
@@ -708,7 +707,6 @@
         document.getElementById('woche1Stunden').addEventListener('input', updateWeekSum);
         document.getElementById('woche2Stunden').addEventListener('input', updateWeekSum);
 
-        // Enter key support
         document.querySelectorAll('input').forEach(input => {
             input.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
